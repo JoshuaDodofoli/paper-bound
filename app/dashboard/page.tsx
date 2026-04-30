@@ -32,7 +32,7 @@ const page = () => {
       </form>
 
       <div className="">
-
+       <p>{}</p>
       </div>
 
       Go <Link href={'/'}>Home</Link>

@@ -1,15 +1,14 @@
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+interface childrenProps {
+  children: React.ReactNode
+}
+
+export default function DashboardLayout({ children }: childrenProps) {
   return (
     <div
-      lang="en"
       className='h-full antialiased'
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <div className="min-h-full flex flex-col">{children}</div>
     </div>
   );
 }
