@@ -1,3 +1,5 @@
+import Wrapper from "../components/Wrapper";
+import Navbar from "./(components)/navbar/Navbar";
 
 interface childrenProps {
   children: React.ReactNode
@@ -5,10 +7,12 @@ interface childrenProps {
 
 export default function DashboardLayout({ children }: childrenProps) {
   return (
-    <div
-      className='h-full antialiased'
-    >
-      <div className="min-h-full flex flex-col">{children}</div>
+
+    <div className="min-h-full flex flex-col">
+      <Wrapper>
+        {children}
+        <Navbar />
+      </Wrapper>
     </div>
   );
 }
