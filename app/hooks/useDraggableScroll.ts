@@ -20,7 +20,7 @@ export const useDraggableScroll = () => {
     if (!isDragging || !ref.current) return;
     e.preventDefault();
     const x = e.pageX - ref.current.offsetLeft;
-    const walk = (x - startX) * 2; 
+    const walk = x - startX; 
     ref.current.scrollLeft = scrollLeft - walk;
   };
 

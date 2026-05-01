@@ -22,10 +22,10 @@ const Page = () => {
             select-none active:cursor-grabbing
           `}
         >
-          {[...Array(10)].map((_, i) => (
+          {[...Array(5)].map((_, i) => (
             <div 
               key={i} 
-              className="min-w-[280px] h-40 bg-red-200 rounded-lg flex-shrink-0 shadow-md"
+              className="min-w-75 min-h-36 bg-red-200 rounded-lg shrink-0 shadow-md"
             >
               {/* Book Content */}
             </div>

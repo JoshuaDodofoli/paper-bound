@@ -3,31 +3,12 @@
 body {
   @apply bg-gray-200;
 }
-/* 
-.reading-list {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 350px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
 
-   scrollbar-width: none; 
+/* globals.css */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
   -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-
-.reading-list::-webkit-scrollbar {
-  display: none; 
-}
-
-@media (max-width: 768px) {
-  .reading-list {
-    grid-auto-columns: 250px;
-  }
-} */
-/* 
-@media (max-width: 480px) {
-  .reading-list {
-    grid-auto-columns: 150px;
-  }
-} */
