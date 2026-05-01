@@ -1,7 +1,55 @@
 @import "tailwindcss";
 
+:root {
+  --grey-1: #f6f4f1;
+  --grey-2: #e4ded2;
+  --grey-3: #454545;
+  --black: #000000;
+  --white: #ffffff;
+  --accent: #fffb00;
+}
+
+@theme inline {
+  --color-paper: var(--grey-1);
+  --color-stone: var(--grey-2);
+  --color-dark-grey: var(--grey-3);
+  --color-black: var(--black);
+  --color-white: var(--white);
+  --color-brand: var(--accent);
+
+  --font-sans: var(--font-inter);
+  --font-serif: var(--font-eb-garamond);
+  /* --font-mono: var(--font-dm-mono); */
+
+  --text-xs: 0.625rem; /* 10px */
+  --text-sm: 0.813rem; /* 13px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.25rem; /* 20px */
+  --text-xl: 1.563rem; /* 25px */
+  --text-2xl: 1.938rem; /* 31px */
+  --text-3xl: 2.438rem; /* 39px */
+  --text-4xl: 3.063rem; /* 49px */
+  --text-5xl: 3.813rem; /* 61px */
+}
+
 body {
-  @apply bg-gray-200;
+  @apply bg-paper/70 ;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+}
+
+p {
+  font-family: var(--font-sans);
+}
+
+.section-gradient {
+  @apply bg-linear-to-b from-white to-paper/70 mt-12 pt-8
+}
+
+.section-title {
+  @apply text-xl font-semibold mb-7 font-medium
 }
 
 /* globals.css */
