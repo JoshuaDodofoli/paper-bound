@@ -14,8 +14,7 @@ const Page = () => {
 
 
   return (
-    <div className="mt-24">
-      <Header />
+    <div className="mt-14">
 
       <section>
         <Wrapper>
@@ -29,7 +28,7 @@ const Page = () => {
             ref={readingScroll.ref}
             {...readingScroll.props}
             className={`
-            flex gap-4 overflow-x-auto pb-4 flex-nowrap no-scrollbar carousel-fade
+            flex gap-4 overflow-x-auto flex-nowrap no-scrollbar carousel-fade
             ${readingScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}

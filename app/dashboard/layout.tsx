@@ -1,5 +1,6 @@
 import Transition from "../components/Transition";
 import Wrapper from "../components/Wrapper";
+import Header from "./(components)/header/Header";
 import Navbar from "./(components)/navbar/Navbar";
 
 interface childrenProps {
@@ -9,8 +10,9 @@ interface childrenProps {
 export default function DashboardLayout({ children }: childrenProps) {
   return (
 
-    <div className="min-h-full flex flex-col">
+    <div className="">
       <Transition>
+        <Header />
         {children}
       </Transition>
       <Navbar />
