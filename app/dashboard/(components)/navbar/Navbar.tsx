@@ -23,7 +23,7 @@ const Navbar = () => {
 
   return (
     <nav
-      className='absolute bottom-5 left-1/2 p-3 -translate-x-1/2  bg-gray-300 text-white flex items-center justify-center'
+      className='fixed bottom-5 left-1/2 p-3 -translate-x-1/2  bg-gray-300 text-white flex items-center justify-center'
     >
       <ul className='flex gap-4'>
         {links.map((link) => (

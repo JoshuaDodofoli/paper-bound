@@ -9,10 +9,8 @@ export default function DashboardLayout({ children }: childrenProps) {
   return (
 
     <div className="min-h-full flex flex-col">
-      <Wrapper>
         {children}
         <Navbar />
-      </Wrapper>
     </div>
   );
 }
