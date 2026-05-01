@@ -3,6 +3,7 @@
 import { useDraggableScroll } from "@/app/hooks/useDraggableScroll";
 import Header from "../(components)/header/Header";
 import Wrapper from "@/app/components/Wrapper";
+import { ChevronRight } from "lucide-react";
 
 
 const Page = () => {
@@ -19,13 +20,16 @@ const Page = () => {
       <section>
         <Wrapper>
 
-          <h2 className="text-xl font-bold mb-4">Reading</h2>
+          <span className="flex w-full items-center mb-4">
+            <h2 className="text-xl font-bold ">Reading</h2>
+             <ChevronRight />
+          </span>
 
           <div
             ref={readingScroll.ref}
             {...readingScroll.props}
             className={`
-            flex gap-4 overflow-x-auto pb-4 flex-nowrap no-scrollbar
+            flex gap-4 overflow-x-auto pb-4 flex-nowrap no-scrollbar carousel-fade
             ${readingScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
@@ -52,7 +56,7 @@ const Page = () => {
             ref={trendingScroll.ref}
             {...trendingScroll.props}
             className={`
-            flex gap-4 overflow-x-auto pb-4 flex-nowrap no-scrollbar
+            flex gap-4 overflow-x-auto pb-4 flex-nowrap no-scrollbar carousel-fade
             ${trendingScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
@@ -77,11 +81,11 @@ const Page = () => {
           <div className="flex flex-col lg:flex-row gap-10">
             <div className="flex w-full shadow-lg items-center justify-between bg-red-200 p-4">
               <h3>Fiction</h3>
-              <div className="bg-blue-300 min-w-40 min-h-52"></div>
+              <div className="bg-blue-300 min-w-30 min-h-40"></div>
             </div>
             <div className="flex w-full shadow-lg items-center justify-between bg-red-200 p-4">
               <h3>Non-Fiction</h3>
-              <div className="bg-blue-300 min-w-40 min-h-52"></div>
+              <div className="bg-blue-300 min-w-30 min-h-40"></div>
             </div>
           </div>
         </Wrapper>
@@ -96,7 +100,7 @@ const Page = () => {
             ref={arrivalsScroll.ref}
             {...arrivalsScroll.props}
             className={`
-            flex gap-4 overflow-x-auto pb-4 flex-nowrap no-scrollbar
+            flex gap-4 overflow-x-auto pb-4 flex-nowrap no-scrollbar carousel-fade
             ${arrivalsScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}

@@ -1,3 +1,4 @@
+import Transition from "../components/Transition";
 import Wrapper from "../components/Wrapper";
 import Navbar from "./(components)/navbar/Navbar";
 
@@ -9,8 +10,10 @@ export default function DashboardLayout({ children }: childrenProps) {
   return (
 
     <div className="min-h-full flex flex-col">
+      <Transition>
         {children}
-        <Navbar />
+      </Transition>
+      <Navbar />
     </div>
   );
 }
