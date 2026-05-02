@@ -22,7 +22,7 @@ const Page = () => {
 
           <Link href="/dashboard/reading" className="flex items-center gap-1 group w-fit mb-4">
             <h2 className="text-xl font-bold">Reading</h2>
-            <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </Link>
 
           <div
@@ -46,13 +46,12 @@ const Page = () => {
         </Wrapper>
       </section>
 
-      <section className="section-gradient
-      ">
+      <section className="section-gradient">
         <Wrapper>
 
-          <Link href="/dashboard/trending" className="flex items-center gap-1 group w-fit mb-7">
-            <h2 className="section-title mb-0">Trending now</h2>
-            <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+         <Link href="/dashboard/trending" className="flex items-center gap-1 group w-fit mb-4">
+            <h2 className="text-xl font-bold">Trending</h2>
+            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </Link>
 
           <div
@@ -97,9 +96,9 @@ const Page = () => {
       <section className="section-gradient">
         <Wrapper>
 
-          <Link href="/dashboard/new-arrivals" className="flex items-center gap-1 group w-fit mb-7">
-            <h2 className="section-title mb-0">New Arrivals</h2>
-            <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+      <Link href="/dashboard/new-arrivals" className="flex items-center gap-1 group w-fit mb-4">
+            <h2 className="text-xl font-bold">New arrivals</h2>
+            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </Link>
 
           <div
