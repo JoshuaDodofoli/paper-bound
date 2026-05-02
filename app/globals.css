@@ -14,7 +14,7 @@
   --color-stone: var(--grey-2);
   --color-dark-grey: var(--grey-3);
   --color-black: var(--black);
-  --color-white: var(--white);
+  --color-white: var(--white);  
   --color-brand: var(--accent);
 
   --font-sans: var(--font-inter);
@@ -30,6 +30,9 @@
   --text-3xl: 2.438rem; /* 39px */
   --text-4xl: 3.063rem; /* 49px */
   --text-5xl: 3.813rem; /* 61px */
+
+  --shadow-book: 0 10px 20px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  /* --shadow-book-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.07); */
 }
 
 body {
@@ -37,20 +40,19 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif);
-  font-color: var(--color-dark-grey);
+ @apply font-serif text-dark-grey/95
 }
 
 p {
-  font-family: var(--font-sans);
+  @apply font-sans
 }
 
 .section-gradient {
-  @apply bg-linear-to-b from-white to-paper/70 mt-12 pt-8
+  @apply bg-linear-to-b from-white to-paper/70 mt-12 pt-8 duration-300 transition-all 
 }
 
 .section-title {
-  @apply text-xl font-semibold mb-7 font-medium
+  @apply text-xl  mb-7 font-medium
 }
 /* 
 .carousel-fade {

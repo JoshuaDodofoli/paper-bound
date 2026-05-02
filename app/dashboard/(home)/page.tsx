@@ -4,6 +4,7 @@ import { useDraggableScroll } from "@/app/hooks/useDraggableScroll";
 import Header from "../(components)/header/Header";
 import Wrapper from "@/app/components/Wrapper";
 import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 
 const Page = () => {
@@ -19,16 +20,16 @@ const Page = () => {
       <section>
         <Wrapper>
 
-          <span className="flex w-full items-center mb-4">
-            <h2 className="text-xl font-bold ">Reading</h2>
-             <ChevronRight />
-          </span>
+          <Link href="/dashboard/reading" className="flex items-center gap-1 group w-fit mb-4">
+            <h2 className="text-xl font-bold">Reading</h2>
+            <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+          </Link>
 
           <div
             ref={readingScroll.ref}
             {...readingScroll.props}
             className={`
-            flex gap-4 overflow-x-auto flex-nowrap no-scrollbar carousel-fade
+            flex gap-4 overflow-x-auto pt-2 pb-6 px-4 -mt-2 -mb-6 -mx-4 flex-nowrap no-scrollbar carousel-fade
             ${readingScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
@@ -36,7 +37,7 @@ const Page = () => {
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className="min-w-68 min-h-24 bg-red-200 rounded-lg shrink-0 shadow-md"
+                className="min-w-68 min-h-24 bg-red-200 rounded-lg shrink-0 shadow-book transition-shadow hover:shadow-book-hover"
               >
                 {/* Book Content */}
               </div>
@@ -49,13 +50,16 @@ const Page = () => {
       ">
         <Wrapper>
 
-          <h2 className="section-title">Trending now</h2>
+          <Link href="/dashboard/trending" className="flex items-center gap-1 group w-fit mb-7">
+            <h2 className="section-title mb-0">Trending now</h2>
+            <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+          </Link>
 
           <div
             ref={trendingScroll.ref}
             {...trendingScroll.props}
             className={`
-            flex gap-4 overflow-x-auto pb-4 flex-nowrap no-scrollbar carousel-fade
+            flex gap-4 overflow-x-auto pt-2 pb-6 px-4 -mt-2 -mb-6 -mx-4 flex-nowrap no-scrollbar carousel-fade
             ${trendingScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
@@ -63,7 +67,7 @@ const Page = () => {
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className="min-w-40 min-h-52 bg-red-200 shrink-0 shadow-lg"
+                className="min-w-40 min-h-52 bg-red-200 shrink-0 shadow-book transition-shadow hover:shadow-book-hover"
               >
                 {/* Book Content */}
               </div>
@@ -93,13 +97,16 @@ const Page = () => {
       <section className="section-gradient">
         <Wrapper>
 
-          <h2 className="section-title">New Arrivals</h2>
+          <Link href="/dashboard/new-arrivals" className="flex items-center gap-1 group w-fit mb-7">
+            <h2 className="section-title mb-0">New Arrivals</h2>
+            <ChevronRight className="group-hover:translate-x-1 transition-transform" />
+          </Link>
 
           <div
             ref={arrivalsScroll.ref}
             {...arrivalsScroll.props}
             className={`
-            flex gap-4 overflow-x-auto pb-4 flex-nowrap no-scrollbar carousel-fade
+            flex gap-4 overflow-x-auto pt-2 pb-6 px-4 -mt-2 -mb-6 -mx-4 flex-nowrap no-scrollbar carousel-fade
             ${arrivalsScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
@@ -107,7 +114,7 @@ const Page = () => {
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className="min-w-40 min-h-52 bg-red-200 shrink-0 shadow-md"
+                className="min-w-40 min-h-52 bg-red-200 shrink-0 shadow-book transition-shadow hover:shadow-book-hover"
               >
                 {/* Book Content */}
               </div>
