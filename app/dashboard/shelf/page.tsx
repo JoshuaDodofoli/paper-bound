@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Wrapper from '../../components/Wrapper'
 import { PlusCircle } from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react';
 
 interface collectionProps {
   id: number;
@@ -24,35 +25,45 @@ const page = () => {
     <div className='mt-12'>
       <Wrapper>
         <section>
-          <div onClick={toggleModal} className="flex items-center justify-start gap-2 bg-stone w-fit p-2 rounded-lg my-4">
+          <div onClick={toggleModal} className="flex items-center justify-start gap-2 bg-stone w-fit py-2 px-3 rounded-full my-4">
             <p>Add</p>
             <PlusCircle />
           </div>
 
-          {showModal && (
 
-            <>
-              <div className="fixed inset-0 z-30 bg-black/20 backdrop-blur-xs" />
+          <AnimatePresence>
+            {showModal && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-30 bg-black/20 backdrop-blur-xs" />
 
-              <div className="absolute z-30 p-4 top-1/2 left-1/2 bg-paper rounded-2xl -translate-x-1/2 -translate-y-1/2 aspect-video w-[380px] shadow-book">
+                <motion.div
+                  initial={{ y: 20, opacity: 0, scale: 0.8 }}
+                  animate={{ y: 0, opacity: 1, scale: 1 }}
+                  exit={{ y: 10, opacity: 0, scale: 0.9 }}
+                  className="absolute z-30 p-4 top-1/2 left-1/2 bg-paper rounded-2xl -translate-x-1/2 -translate-y-1/2 aspect-video w-[380px] shadow-book">
 
-                <div className=" h-full mb-4">
-                  <div className="flex items-center justify-between w-full">
-                    <h3 className='text-xl text-dark-grey font-medium'>New Collection</h3>
-                    <button className="" onClick={toggleModal}>Close</button>
+                  <div className=" h-full mb-4">
+                    <div className="flex items-center justify-between w-full">
+                      <h3 className='text-xl text-dark-grey font-medium'>New Collection</h3>
+                      <button className="" onClick={toggleModal}>Close</button>
+                    </div>
+
+                    <div className="flex w-full h-full flex-col items-center justify-center pb-2">
+                      <form className="flex flex-col w-full space-y-3">
+                        <label className='text-sm text-dark-grey/90 font-medium'>Collection Name</label>
+                        <input type="text" placeholder='e.g. Want to read' className='bg-dark-grey/5 border-stone/70 border rounded-2xl p-3 ' />
+                        <button className='bg-stone p-3 rounded-2xl'>Add Collection</button>
+                      </form>
+                    </div>
                   </div>
-
-                  <div className="flex w-full h-full flex-col items-center justify-center pb-2">
-                    <form className="flex flex-col w-full space-y-3">
-                      <label className='text-sm text-dark-grey/90 font-medium'>Collection Name</label>
-                      <input type="text" placeholder='e.g. Want to read' className='bg-dark-grey/5 border-stone/70 border rounded-2xl p-3 ' />
-                      <button className='bg-stone p-3 rounded-2xl'>Add Collection</button>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
 
 
           <div className='grid place-items-center grid-cols-1 md:grid-cols-2 gap-6'>
