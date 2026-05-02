@@ -27,7 +27,7 @@ const page = () => {
         <section>
           <div onClick={toggleModal} className="flex items-center justify-start gap-2 bg-stone w-fit py-2 px-3 rounded-full my-4">
             <p>Add</p>
-            <PlusCircle />
+            <PlusCircle size={20} className='text-dark-grey/95' />
           </div>
 
 
@@ -48,8 +48,8 @@ const page = () => {
 
                   <div className=" h-full mb-4">
                     <div className="flex items-center justify-between w-full">
-                      <h3 className='text-xl text-dark-grey font-medium'>New Collection</h3>
-                      <button className="" onClick={toggleModal}>Close</button>
+                      <h3 className='text-xl'>New Collection</h3>
+                      <button className="bg-stone px-3 py-1 text-sm rounded-full text-dark-grey/95 cursor-pointer" onClick={toggleModal}>Close</button>
                     </div>
 
                     <div className="flex w-full h-full flex-col items-center justify-center pb-2">

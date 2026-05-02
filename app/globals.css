@@ -40,7 +40,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
- @apply font-serif text-dark-grey/95 tracking-tight
+ @apply font-serif text-dark-grey/95 tracking-tight font-medium
 }
 
 p, label, input, button, span {

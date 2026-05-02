@@ -21,8 +21,8 @@ const Page = () => {
         <Wrapper>
 
           <Link href="/dashboard/reading" className="flex items-center gap-1 group w-fit mb-4">
-            <h2 className="text-xl font-bold">Reading</h2>
-            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            <h2 className="text-xl">Reading</h2>
+            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform text-dark-grey/90" />
           </Link>
 
           <div
@@ -50,8 +50,8 @@ const Page = () => {
         <Wrapper>
 
          <Link href="/dashboard/trending" className="flex items-center gap-1 group w-fit mb-4">
-            <h2 className="text-xl font-bold">Trending</h2>
-            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            <h2 className="text-xl">Trending</h2>
+            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform text-dark-grey/90" />
           </Link>
 
           <div
@@ -78,7 +78,7 @@ const Page = () => {
       <section className="section-gradient">
         <Wrapper>
 
-          <h2 className="section-title">Genre Spotlights</h2>
+          <h2 className="text-xl">Genre Spotlights</h2>
 
           <div className="flex flex-col lg:flex-row gap-10">
             <div className="flex w-full shadow-lg items-center justify-between bg-red-200 p-4">
@@ -97,8 +97,8 @@ const Page = () => {
         <Wrapper>
 
       <Link href="/dashboard/new-arrivals" className="flex items-center gap-1 group w-fit mb-4">
-            <h2 className="text-xl font-bold">New arrivals</h2>
-            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            <h2 className="text-xl">New arrivals</h2>
+            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform text-dark-grey/90" />
           </Link>
 
           <div
