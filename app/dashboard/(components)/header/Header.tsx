@@ -49,11 +49,11 @@ const Header = () => {
         <AnimatePresence mode='wait'>
           <motion.h1
             key={pathName}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 7 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.3 }}
-            className='text-3xl font-medium'>
+            exit={{ opacity: 0, y: 7 }}
+            transition={{ duration: 0.2 }}
+            className='text-3xl font-medium'> 
             {getPageTitle()}
           </motion.h1>
         </AnimatePresence>
@@ -62,7 +62,7 @@ const Header = () => {
           <span className='size-10 rounded-full bg-green-200' />
         </div>
 
-        {pathName !== '/dashboard' && (
+        {pathName !== '/dashboard' && pathName !== '/dashboard/shelf' && (
 
           <motion.div
             style={{ opacity }}
