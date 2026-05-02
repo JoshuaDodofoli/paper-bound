@@ -66,7 +66,7 @@ const Page = () => {
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className="min-w-40 min-h-52 bg-red-200 shrink-0 shadow-book transition-shadow hover:shadow-book-hover"
+                className="aspect-3/4 w-40 bg-red-200 shrink-0 shadow-book transition-shadow hover:shadow-book-hover"
               >
                 {/* Book Content */}
               </div>
@@ -113,7 +113,7 @@ const Page = () => {
             {[...Array(5)].map((_, i) => (
               <div
                 key={i}
-                className="min-w-40 min-h-52 bg-red-200 shrink-0 shadow-book transition-shadow hover:shadow-book-hover"
+                className="aspect-3/4 w-40 bg-red-200 shrink-0 shadow-book transition-shadow hover:shadow-book-hover"
               >
                 {/* Book Content */}
               </div>

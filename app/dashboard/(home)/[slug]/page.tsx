@@ -7,10 +7,5 @@ export default async function CategoryPage({
 }) {
   const { slug } = await params;
 
-  const title = slug
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-
-  return <CategoryClient title={title} />;
+  return <CategoryClient slug={slug} />;
 }

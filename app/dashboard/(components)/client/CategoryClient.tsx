@@ -5,10 +5,11 @@ import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 
 interface CategoryClientProps {
-    title: string;
+  slug: string;
 }
 
-const CategoryClient = ({ title }: CategoryClientProps) => {
+const CategoryClient = ({ slug }: CategoryClientProps) => {
+
   return (
     <div className="mt-20">
       <Wrapper>
@@ -19,7 +20,6 @@ const CategoryClient = ({ title }: CategoryClientProps) => {
           <span>Back</span>
         </Link>
 
-        <h1 className="text-3xl font-bold mb-8">{title}</h1>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[...Array(12)].map((_, i) => (
