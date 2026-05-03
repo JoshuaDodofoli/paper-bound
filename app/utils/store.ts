@@ -38,16 +38,16 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     deleteCollection: (id) =>
         set((state) => ({
             collections: state.collections.filter((collection) => collection.id !== id),
-            deletingCollectionId: null, // Reset after deletion
-            showEdit: false, // Close edit mode after deletion
+            deletingCollectionId: null,
+            showEdit: false,
         })),
     renameCollection: (id, name) =>
         set((state) => ({
             collections: state.collections.map((collection) =>
                 collection.id === id ? { ...collection, name: name.trim() } : collection
             ),
-            editingCollectionId: null, // Reset after rename
-            showEdit: false, // Close edit mode after rename
+            editingCollectionId: null,
+            showEdit: false,
         })),
     setShowEdit: (show) => set({ showEdit: show }),
     setEditingCollectionId: (id) => set({ editingCollectionId: id }),
