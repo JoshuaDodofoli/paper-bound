@@ -7,6 +7,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import EditOptions from '../(components)/shelf/EditOptions';
 import CreateCollectionModal from '../(components)/shelf/CreateCollectionModal';
+import EditModal from '../(components)/shelf/EditModal';
+import DeleteModal from '../(components)/shelf/DeleteModal';
 import { useCollectionStore } from '@/app/utils/store';
 
 const page = () => {
@@ -15,6 +17,8 @@ const page = () => {
   const addCollection = useCollectionStore((state) => state.addCollection);
   const showEdit = useCollectionStore((state) => state.showEdit);
   const setShowEdit = useCollectionStore((state) => state.setShowEdit);
+  const editingCollectionId = useCollectionStore((state) => state.editingCollectionId);
+  const deletingCollectionId = useCollectionStore((state) => state.deletingCollectionId);
 
   const [collectionName, setCollectionName] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -90,6 +94,18 @@ const page = () => {
             ))}
           </div>
 
+          {/* Global Modals */}
+          <AnimatePresence>
+            {editingCollectionId !== null && (
+              <EditModal collectionId={editingCollectionId} />
+            )}
+          </AnimatePresence>
+
+          <AnimatePresence>
+            {deletingCollectionId !== null && (
+              <DeleteModal collectionId={deletingCollectionId} />
+            )}
+          </AnimatePresence>
 
         </section>
       </Wrapper>

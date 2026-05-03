@@ -4,19 +4,19 @@ import { motion } from 'motion/react'
 import { useCollectionStore } from '@/app/utils/store'
 
 interface ModalProps {
-    toggleDeleteModal: () => void;
     collectionId: number;
 }
 
-const DeleteModal = ({ toggleDeleteModal, collectionId }: ModalProps) => {
+const DeleteModal = ({ collectionId }: ModalProps) => {
 
     const deleteCollection = useCollectionStore((state) => state.deleteCollection);
-    const setShowEdit = useCollectionStore((state) => state.setShowEdit);
+    const setDeletingCollectionId = useCollectionStore((state) => state.setDeletingCollectionId);
+
+    const toggleDeleteModal = () => setDeletingCollectionId(null);
 
     const handleDelete = () => {
         deleteCollection(collectionId);
-        toggleDeleteModal();
-        setShowEdit(false);
+        // Store action also handles closing the modal and edit mode
     }
 
     return (

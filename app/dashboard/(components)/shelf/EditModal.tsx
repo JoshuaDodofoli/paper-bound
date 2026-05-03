@@ -4,15 +4,16 @@ import { motion } from 'motion/react';
 import { useState } from 'react';
 
 interface ModalProps {
-    toggleEditModal: () => void;
     collectionId: number;
 }
 
-const EditModal = ({ toggleEditModal, collectionId }: ModalProps) => {
+const EditModal = ({ collectionId }: ModalProps) => {
 
     const collections = useCollectionStore((state) => state.collections);
     const renameCollection = useCollectionStore((state) => state.renameCollection);
-    const setShowEdit = useCollectionStore((state) => state.setShowEdit);
+    const setEditingCollectionId = useCollectionStore((state) => state.setEditingCollectionId);
+
+    const toggleEditModal = () => setEditingCollectionId(null);
 
     const currentCollection = collections.find(c => c.id === collectionId);
     const [name, setName] = useState(currentCollection?.name || '');
@@ -21,8 +22,6 @@ const EditModal = ({ toggleEditModal, collectionId }: ModalProps) => {
         e.preventDefault();
         if (!name.trim()) return;
         renameCollection(collectionId, name);
-        toggleEditModal();
-        setShowEdit(false);
     }
 
     return (

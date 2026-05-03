@@ -1,10 +1,8 @@
 'use client'
 
 import { FolderPen, Trash2 } from 'lucide-react'
-import { AnimatePresence, motion } from 'motion/react'
-import { useState } from 'react'
-import DeleteModal from './DeleteModal'
-import EditModal from './EditModal'
+import { motion } from 'motion/react'
+import { useCollectionStore } from '@/app/utils/store'
 
 interface editOptionsProps {
     collectionId: number;
@@ -12,16 +10,8 @@ interface editOptionsProps {
 
 const EditOptions = ({ collectionId }: editOptionsProps) => {
 
-    const [editModal, setEditModal] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
-
-    const toggleEditModal = () => {
-        setEditModal(prev => !prev);
-    }
-
-    const toggleDeleteModal = () => {
-        setDeleteModal(prev => !prev);
-    }
+    const setEditingCollectionId = useCollectionStore((state) => state.setEditingCollectionId);
+    const setDeletingCollectionId = useCollectionStore((state) => state.setDeletingCollectionId);
 
     const editOptionsContainer = {
         initial: { opacity: 0 },
@@ -85,7 +75,7 @@ const EditOptions = ({ collectionId }: editOptionsProps) => {
                         whileTap={{ scale: 0.95 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            toggleEditModal();
+                            setEditingCollectionId(collectionId);
                         }}
                         className='size-15 rounded-full p-2 shadow-sm cursor-pointer bg-stone flex items-center justify-center'>
                         <FolderPen size={20} className='text-dark-grey/90' />
@@ -96,25 +86,13 @@ const EditOptions = ({ collectionId }: editOptionsProps) => {
                         whileTap={{ scale: 0.95 }}
                         onClick={(e) => {
                             e.stopPropagation();
-                            toggleDeleteModal();
+                            setDeletingCollectionId(collectionId);
                         }}
                         className='size-15 rounded-full p-2 shadow-sm cursor-pointer flex items-center justify-center bg-rose-200 text-white'>
                         <Trash2 size={20} className='text-rose-400' />
                     </motion.button>
                 </div>
             </div>
-
-            <AnimatePresence>
-                {editModal && (
-                    <EditModal toggleEditModal={toggleEditModal} collectionId={collectionId} />
-                )}
-            </AnimatePresence>
-
-            <AnimatePresence>
-                {deleteModal && (
-                    <DeleteModal toggleDeleteModal={toggleDeleteModal} collectionId={collectionId} />
-                )}
-            </AnimatePresence>
         </motion.div>
     )
 }
