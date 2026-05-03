@@ -38,7 +38,7 @@ const CreateCollectionModal = ({ toggleModal, collectionName, setCollectionName,
                                     value={collectionName}
                                     onChange={(e) => setCollectionName(e.target.value)}
                                     type="text" placeholder='e.g. Want to read' className='bg-dark-grey/5 border-stone/70 border rounded-2xl p-3 ' />
-                                <motion.button whileTap={{ scale: 0.95 }} className='bg-stone p-3 rounded-2xl cursor-pointer'>Add Collection</motion.button>
+                                <motion.button whileTap={{ scale: 0.95 }} className='bg-stone text-dark-grey/90 p-3 rounded-2xl cursor-pointer text-sm'>Add Collection</motion.button>
                             </form>
                         </div>
                     </div>

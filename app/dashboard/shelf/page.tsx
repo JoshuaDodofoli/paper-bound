@@ -2,50 +2,42 @@
 
 import React, { useState } from 'react'
 import Wrapper from '../../components/Wrapper'
-import { FolderPen, Pencil, PlusCircle, Trash2 } from 'lucide-react'
+import { Pencil, PlusCircle } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import EditOptions from '../(components)/shelf/EditOptions';
 import CreateCollectionModal from '../(components)/shelf/CreateCollectionModal';
-
-interface collectionProps {
-  id: number;
-  name: string;
-  books?: number;
-}
+import { useCollectionStore } from '@/app/utils/store';
 
 const page = () => {
 
-  const [collections, setCollections] = useState<collectionProps[]>([]);
+  const collections = useCollectionStore((state) => state.collections);
+  const addCollection = useCollectionStore((state) => state.addCollection);
+  const showEdit = useCollectionStore((state) => state.showEdit);
+  const setShowEdit = useCollectionStore((state) => state.setShowEdit);
+
   const [collectionName, setCollectionName] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [showEdit, setShowEdit] = useState(false);
 
   const toggleModal = () => {
     setShowModal(prev => !prev);
   }
 
   const toggleEdit = () => {
-    setShowEdit(prev => !prev);
+    if (collections.length === 0) return;
+    setShowEdit(!showEdit);
   }
 
   const handleSaveCollection = (e: any) => {
     e.preventDefault();
     if (!collectionName.trim()) return;
 
-    setCollections([
-      ...collections, {
-        id: Date.now(),
-        name: collectionName.trim(),
-        books: 0
-      }
-    ])
+    addCollection(collectionName);
 
     setCollectionName('');
     setShowModal(false);
+    setShowEdit(false);
   }
-
-
 
   return (
     <div className='mt-12'>
@@ -56,10 +48,12 @@ const page = () => {
               <p>Add</p>
               <PlusCircle size={20} className='text-dark-grey/95' />
             </motion.div>
-            <motion.div onClick={toggleEdit} whileTap={{ scale: 0.95 }} className="flex items-center cursor-pointer justify-start gap-2 bg-stone w-fit py-2 px-3 rounded-full my-4 text-dark-grey/95">
-              <p>Edit</p>
-              <Pencil size={20} className='text-dark-grey/95' />
-            </motion.div>
+            {collections.length > 0 && (
+              <motion.div onClick={toggleEdit} whileTap={{ scale: 0.95 }} className="flex items-center cursor-pointer justify-start gap-2 bg-stone w-fit py-2 px-3 rounded-full my-4 text-dark-grey/95">
+                <p>Edit</p>
+                <Pencil size={20} className='text-dark-grey/95' />
+              </motion.div>
+            )}
           </div>
 
 
@@ -89,7 +83,7 @@ const page = () => {
 
                 <AnimatePresence>
                   {showEdit && (
-                    <EditOptions />
+                    <EditOptions collectionId={collection.id} />
                   )}
                 </AnimatePresence>
               </div>
