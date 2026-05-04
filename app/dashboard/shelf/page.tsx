@@ -23,7 +23,7 @@ const page = () => {
 
   const [collectionName, setCollectionName] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [viewMode, setViewMode] = useState('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const toggleModal = () => {
     setShowModal(prev => !prev);
@@ -166,7 +166,6 @@ const page = () => {
             </motion.div>
           </AnimatePresence>
 
-          {/* Global Modals */}
           <AnimatePresence>
             {editingCollectionId !== null && (
               <EditModal collectionId={editingCollectionId} />
