@@ -14,91 +14,54 @@ const EditOptions = ({ collectionId }: editOptionsProps) => {
     const setDeletingCollectionId = useCollectionStore((state) => state.setDeletingCollectionId);
     const setActiveEditId = useCollectionStore((state) => state.setActiveEditId);
 
-    const editOptionsContainer = {
-        initial: { opacity: 0 },
-        animate: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.05,
-                delayChildren: 0.1
-            }
-        },
-        exit: {
-            opacity: 0,
-            transition: {
-                staggerChildren: 0.05,
-                staggerDirection: -1
-            }
-        }
-    }
-
-    const editOptionsItem = {
-        initial: {
-            opacity: 0,
-            scale: 0.6
-        },
-        animate: {
-            opacity: 1,
-            scale: 1,
-            transition: {
-                duration: 0.4,
-                type: "spring" as const,
-                bounce: 0.3,
-            }
-        },
-        exit: {
-            opacity: 0,
-            scale: 0.6,
-            transition: { duration: 0.2 }
-        }
-    }
-
     return (
-        <motion.div
-            variants={editOptionsContainer}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            className="absolute inset-0 z-10 w-full h-full"
-        >
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+        <>
+            {/* Transparent backdrop to catch clicks outside the dropdown */}
+            <div
+                className="fixed inset-0 z-40"
                 onClick={(e) => {
                     e.stopPropagation();
+                    e.preventDefault();
                     setActiveEditId(null);
                 }}
-                className='bg-stone/20 backdrop-blur-sm absolute inset-0 w-full h-full rounded-lg cursor-pointer' 
             />
 
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-10">
-                <div className="flex items-center justify-center gap-4 p-4">
-
-                    <motion.button
-                        variants={editOptionsItem}
-                        whileTap={{ scale: 0.95 }}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: -10, transformOrigin: 'top right' }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+                className="absolute top-12 right-3 z-50 w-44 overflow-hidden rounded-2xl border border-stone/60 bg-stone/95 backdrop-blur-md shadow-xl"
+            >
+                <div className="flex flex-col p-1.5">
+                    <button
                         onClick={(e) => {
                             e.stopPropagation();
                             setEditingCollectionId(collectionId);
+                            setActiveEditId(null);
                         }}
-                        className='size-15 rounded-full p-2 shadow-sm cursor-pointer bg-stone flex items-center justify-center'>
-                        <FolderPen size={20} className='text-dark-grey/90' />
-                    </motion.button>
+                        className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-dark-grey/90 transition-all hover:bg-dark-grey/5 active:scale-95 cursor-pointer"
+                    >
+                        <FolderPen size={18} className="text-dark-grey/70" />
+                        <span>Edit name</span>
+                    </button>
 
-                    <motion.button
-                        variants={editOptionsItem}
-                        whileTap={{ scale: 0.95 }}
+                    <div className="h-px w-full bg-dark-grey/5 my-1" />
+
+                    <button
                         onClick={(e) => {
                             e.stopPropagation();
                             setDeletingCollectionId(collectionId);
+                            setActiveEditId(null);
                         }}
-                        className='size-15 rounded-full p-2 shadow-sm cursor-pointer flex items-center justify-center bg-rose-200 text-white'>
-                        <Trash2 size={20} className='text-rose-400' />
-                    </motion.button>
+                        className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-rose-500 transition-all hover:bg-rose-500/10 active:scale-95 cursor-pointer"
+                    >
+                        <Trash2 size={18} className="text-rose-400" />
+                        <span>Delete shelf</span>
+                    </button>
                 </div>
-            </div>
-        </motion.div>
+            </motion.div>
+        </>
     )
 }
 
