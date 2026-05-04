@@ -8,20 +8,20 @@ export interface Collection {
 
 interface CollectionStore {
     collections: Collection[];
-    showEdit: boolean;
+    activeEditId: number | null;
     editingCollectionId: number | null;
     deletingCollectionId: number | null;
     addCollection: (name: string) => void;
     deleteCollection: (id: number) => void;
     renameCollection: (id: number, name: string) => void;
-    setShowEdit: (show: boolean) => void;
+    setActiveEditId: (id: number | null) => void;
     setEditingCollectionId: (id: number | null) => void;
     setDeletingCollectionId: (id: number | null) => void;
 }
 
 export const useCollectionStore = create<CollectionStore>((set) => ({
     collections: [],
-    showEdit: false,
+    activeEditId: null,
     editingCollectionId: null,
     deletingCollectionId: null,
     addCollection: (name) =>
@@ -39,7 +39,7 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
         set((state) => ({
             collections: state.collections.filter((collection) => collection.id !== id),
             deletingCollectionId: null,
-            showEdit: false,
+            activeEditId: null,
         })),
     renameCollection: (id, name) =>
         set((state) => ({
@@ -47,9 +47,9 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
                 collection.id === id ? { ...collection, name: name.trim() } : collection
             ),
             editingCollectionId: null,
-            showEdit: false,
+            activeEditId: null,
         })),
-    setShowEdit: (show) => set({ showEdit: show }),
+    setActiveEditId: (id) => set({ activeEditId: id }),
     setEditingCollectionId: (id) => set({ editingCollectionId: id }),
     setDeletingCollectionId: (id) => set({ deletingCollectionId: id }),
 }));

@@ -12,6 +12,7 @@ const EditOptions = ({ collectionId }: editOptionsProps) => {
 
     const setEditingCollectionId = useCollectionStore((state) => state.setEditingCollectionId);
     const setDeletingCollectionId = useCollectionStore((state) => state.setDeletingCollectionId);
+    const setActiveEditId = useCollectionStore((state) => state.setActiveEditId);
 
     const editOptionsContainer = {
         initial: { opacity: 0 },
@@ -64,7 +65,11 @@ const EditOptions = ({ collectionId }: editOptionsProps) => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className='bg-stone/20 backdrop-blur-sm absolute inset-0 w-full h-full rounded-lg' 
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveEditId(null);
+                }}
+                className='bg-stone/20 backdrop-blur-sm absolute inset-0 w-full h-full rounded-lg cursor-pointer' 
             />
 
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full z-10">
