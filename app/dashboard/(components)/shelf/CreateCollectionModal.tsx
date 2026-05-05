@@ -22,7 +22,7 @@ const CreateCollectionModal = ({ toggleModal, collectionName, setCollectionName,
                     initial={{ y: 20, opacity: 0, scale: 0.8 }}
                     animate={{ y: 0, opacity: 1, scale: 1 }}
                     exit={{ y: 10, opacity: 0, scale: 0.9 }}
-                    className="absolute z-30 p-4 top-1/2 left-1/2 bg-paper rounded-2xl -translate-x-1/2 -translate-y-1/2 aspect-video w-[370px] shadow-book">
+                    className="absolute z-30 p-4 top-1/2 left-1/2 bg-paper rounded-4xl -translate-x-1/2 -translate-y-1/2 aspect-video w-[370px] shadow-book">
 
                     <div className=" h-full mb-4">
                         <div className="flex items-center justify-between w-full">

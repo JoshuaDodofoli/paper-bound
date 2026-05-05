@@ -3,8 +3,12 @@ import { Home, Library, Search } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import SearchModal from './SearchModal'
 
 const Navbar = () => {
+
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const links = [
     {
@@ -22,6 +26,7 @@ const Navbar = () => {
   const pathName = usePathname();
 
   return (
+    <>
     <nav
       className='fixed bottom-8 z-20 left-1/2 -translate-x-1/2 flex items-center justify-center'
     >
@@ -72,13 +77,21 @@ const Navbar = () => {
         <motion.button 
           whileTap={{ scale: 0.9 }} 
           whileHover={{ scale: 1.05 }} 
+          onClick={() => setIsSearchOpen(!isSearchOpen)}
           className="flex cursor-pointer items-center justify-center rounded-full bg-amber-400 text-black shadow-lg size-12 hover:bg-amber-300 transition-colors"
         >
           <Search className='size-4.5 text-dark-grey/90' />
         </motion.button>
       </div>
 
-    </nav>
+      </nav>
+
+      <AnimatePresence>
+        {isSearchOpen && (
+          <SearchModal isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
+        )}
+      </AnimatePresence>
+    </>
   )
 }
 

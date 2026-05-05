@@ -1,6 +1,6 @@
 'use client'
 
-import { FolderPen, Trash2 } from 'lucide-react'
+import { FolderPen, Share, Trash2 } from 'lucide-react'
 import { motion } from 'motion/react'
 import { useCollectionStore } from '@/app/utils/store'
 
@@ -45,8 +45,19 @@ const EditOptions = ({ collectionId }: editOptionsProps) => {
                         <FolderPen size={18} className="text-dark-grey/70" />
                         <span>Edit name</span>
                     </button>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
 
-                    <div className="h-px w-full bg-dark-grey/5 my-1" />
+                            setActiveEditId(null);
+                        }}
+                        className="flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-dark-grey/90 transition-all hover:bg-dark-grey/5 active:scale-95 cursor-pointer"
+                    >
+                        <Share size={18} className="text-dark-grey/70" />
+                        <span>Share collection</span>
+                    </button>
+
+                    <div className="h-px w-full bg-dark-grey/7 my-1" />
 
                     <button
                         onClick={(e) => {
@@ -59,6 +70,7 @@ const EditOptions = ({ collectionId }: editOptionsProps) => {
                         <Trash2 size={18} className="text-rose-400" />
                         <span>Delete shelf</span>
                     </button>
+                  
                 </div>
             </motion.div>
         </>
