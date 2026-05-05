@@ -11,8 +11,8 @@ export default function DashboardLayout({ children }: childrenProps) {
   return (
 
     <div className="">
+      <Header />
       <Transition>
-        <Header />
         {children}
       </Transition>
       <Navbar />
