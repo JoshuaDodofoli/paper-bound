@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import React, { useState } from 'react'
 import { Search, Book, User, ArrowUpRight } from 'lucide-react';
 import Modal from '../Modal';
+import Link from 'next/link';
 
 interface SearchModalProps {
     isSearchOpen: boolean;
@@ -10,14 +11,14 @@ interface SearchModalProps {
 }
 
 const MOCK_DATA = [
-    { id: 1, title: "The Hobbit", subtitle: "J.R.R. Tolkien", type: "book" },
-    { id: 2, title: "Hard-Boiled Wonderland", subtitle: "Haruki Murakami", type: "book" },
-    { id: 3, title: "Norwegian Wood", subtitle: "Haruki Murakami", type: "book" },
-    { id: 4, title: "Foundation", subtitle: "Isaac Asimov", type: "book" },
-    { id: 5, title: "Haruki Murakami", subtitle: "Author • 14 Books", type: "author" },
-    { id: 6, title: "Stephen King", subtitle: "Author • 64 Books", type: "author" },
-    { id: 7, title: "The Shining", subtitle: "Stephen King", type: "book" },
-    { id: 8, title: "1Q84", subtitle: "Haruki Murakami", type: "book" },
+    { id: 1, slug: "the-hobbit", title: "The Hobbit", subtitle: "J.R.R. Tolkien", type: "book" },
+    { id: 2, slug: "hard-boiled-wonderland", title: "Hard-Boiled Wonderland", subtitle: "Haruki Murakami", type: "book" },
+    { id: 3, slug: "norwegian-wood", title: "Norwegian Wood", subtitle: "Haruki Murakami", type: "book" },
+    { id: 4, slug: "foundation", title: "Foundation", subtitle: "Isaac Asimov", type: "book" },
+    { id: 5, slug: "haruki-murakami", title: "Haruki Murakami", subtitle: "Author • 14 Books", type: "author" },
+    { id: 6, slug: "stephen-king", title: "Stephen King", subtitle: "Author • 64 Books", type: "author" },
+    { id: 7, slug: "the-shining", title: "The Shining", subtitle: "Stephen King", type: "book" },
+    { id: 8, slug: "1q84", title: "1Q84", subtitle: "Haruki Murakami", type: "book" },
 ];
 
 const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
@@ -105,20 +106,27 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
 
                                 {filteredResults.length > 0 ? (
                                     filteredResults.map((item) => (
-                                        <motion.div
-                                            key={item.id}
-                                            whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
-                                            className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
-                                        >
-                                            <div className="w-10 h-10 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 group-hover:bg-amber-400/20 group-hover:text-amber-300 transition-colors">
-                                                {item.type === 'book' ? <Book size={18} /> : <User size={18} />}
-                                            </div>
-                                            <div className="flex-1">
-                                                <p className="font-semibold text-dark-grey/90">{item.title}</p>
-                                                <p className="text-xs text-dark-grey/50">{item.subtitle}</p>
-                                            </div>
-                                            <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
-                                        </motion.div>
+                                        <div key={item.id}>
+                                            <Link
+                                                href={item.type === "book" ? `/dashboard/book/${item.slug}` : `/dashboard/authors/${item.slug}`}
+                                                onClick={() => setIsSearchOpen(false)}
+                                                className='relative'
+                                            >
+                                            <motion.div
+                                                whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
+                                                className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
+                                            >
+                                                <div className="w-10 h-10 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 group-hover:bg-amber-400/20 group-hover:text-amber-300 transition-colors">
+                                                    {item.type === 'book' ? <Book size={18} /> : <User size={18} />}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <p className="font-semibold text-dark-grey/90">{item.title}</p>
+                                                    <p className="text-xs text-dark-grey/50">{item.subtitle}</p>
+                                                </div>
+                                                <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
+                                            </motion.div>
+                                            </Link>
+                                        </div>
                                     ))
                                 ) : (
                                     <div className="py-10 text-center">

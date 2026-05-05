@@ -1,11 +1,18 @@
 'use client'
 
 import { useDraggableScroll } from "@/app/hooks/useDraggableScroll";
-import Header from "../(components)/header/Header";
+import BookCard from "../(components)/book/BookCard";
 import Wrapper from "@/app/components/Wrapper";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 
+export const MOCK_BOOKS = [
+  { id: "1", slug: "the-hobbit", title: "The Hobbit", author: "J.R.R. Tolkien", color: "bg-amber-200" },
+  { id: "2", slug: "1984", title: "1984", author: "George Orwell", color: "bg-blue-200" },
+  { id: "3", slug: "brave-new-world", title: "Brave New World", author: "Aldous Huxley", color: "bg-green-200" },
+  { id: "4", slug: "the-great-gatsby", title: "The Great Gatsby", author: "F. Scott Fitzgerald", color: "bg-rose-200" },
+  { id: "5", slug: "dune", title: "Dune", author: "Frank Herbert", color: "bg-orange-200" },
+];
 
 const Page = () => {
 
@@ -19,7 +26,6 @@ const Page = () => {
 
       <section>
         <Wrapper>
-
           <Link href="/dashboard/reading" className="flex items-center gap-1 group w-fit mb-4">
             <h2 className="text-xl">Reading</h2>
             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform text-dark-grey/90" />
@@ -29,18 +35,22 @@ const Page = () => {
             ref={readingScroll.ref}
             {...readingScroll.props}
             className={`
-            flex gap-4 overflow-x-auto pt-2 pb-6 px-4 -mt-2 -mb-6 -mx-4 flex-nowrap no-scrollbar carousel-fade
+            flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
             ${readingScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
           >
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="min-w-68 min-h-24 bg-red-200 rounded-lg shrink-0 shadow-book transition-shadow hover:shadow-book-hover"
-              >
-                {/* Book Content */}
-              </div>
+            {MOCK_BOOKS.map((book) => (
+              <BookCard 
+                key={book.id}
+                id={book.id}
+                slug={book.slug}
+                title={book.title}
+                author={book.author}
+                coverColor={book.color}
+                aspectRatio="aspect-video"
+                width="w-72"
+              />
             ))}
           </div>
         </Wrapper>
@@ -58,18 +68,20 @@ const Page = () => {
             ref={trendingScroll.ref}
             {...trendingScroll.props}
             className={`
-            flex gap-4 overflow-x-auto pt-2 pb-6 px-4 -mt-2 -mb-6 -mx-4 flex-nowrap no-scrollbar carousel-fade
+            flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
             ${trendingScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
           >
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="aspect-3/4 w-40 bg-red-200 shrink-0 shadow-book transition-shadow hover:shadow-book-hover"
-              >
-                {/* Book Content */}
-              </div>
+            {MOCK_BOOKS.map((book) => (
+              <BookCard 
+                key={book.id}
+                id={book.id}
+                slug={book.slug}
+                title={book.title}
+                author={book.author}
+                coverColor={book.color}
+              />
             ))}
           </div>
         </Wrapper>
@@ -81,13 +93,19 @@ const Page = () => {
           <h2 className="text-xl">Genre Spotlights</h2>
 
           <div className="flex flex-col lg:flex-row gap-10">
-            <div className="flex w-full shadow-lg items-center justify-between bg-red-200 p-4">
-              <h3>Fiction</h3>
-              <div className="bg-blue-300 min-w-30 min-h-40"></div>
+            <div className="flex w-full shadow-lg items-center justify-between bg-stone/40 p-6 rounded-2xl border border-stone">
+              <div className="space-y-1">
+                <h3 className="text-2xl">Fiction</h3>
+                <p className="text-sm text-dark-grey/60 font-medium">1,240 books</p>
+              </div>
+              <div className="bg-amber-100 w-24 h-32 rounded-sm shadow-book -rotate-6" />
             </div>
-            <div className="flex w-full shadow-lg items-center justify-between bg-red-200 p-4">
-              <h3>Non-Fiction</h3>
-              <div className="bg-blue-300 min-w-30 min-h-40"></div>
+            <div className="flex w-full shadow-lg items-center justify-between bg-stone/40 p-6 rounded-2xl border border-stone">
+              <div className="space-y-1">
+                <h3 className="text-2xl">Non-Fiction</h3>
+                <p className="text-sm text-dark-grey/60 font-medium">850 books</p>
+              </div>
+              <div className="bg-blue-100 w-24 h-32 rounded-sm shadow-book rotate-6" />
             </div>
           </div>
         </Wrapper>
@@ -105,18 +123,20 @@ const Page = () => {
             ref={arrivalsScroll.ref}
             {...arrivalsScroll.props}
             className={`
-            flex gap-4 overflow-x-auto pt-2 pb-6 px-4 -mt-2 -mb-6 -mx-4 flex-nowrap no-scrollbar carousel-fade
+            flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
             ${arrivalsScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
           >
-            {[...Array(5)].map((_, i) => (
-              <div
-                key={i}
-                className="aspect-3/4 w-40 bg-red-200 shrink-0 shadow-book transition-shadow hover:shadow-book-hover"
-              >
-                {/* Book Content */}
-              </div>
+            {MOCK_BOOKS.map((book) => (
+              <BookCard 
+                key={book.id}
+                id={book.id}
+                slug={book.slug}
+                title={book.title}
+                author={book.author}
+                coverColor={book.color}
+              />
             ))}
           </div>
         </Wrapper>

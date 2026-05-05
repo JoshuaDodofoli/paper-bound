@@ -3,6 +3,8 @@
 import Wrapper from "@/app/components/Wrapper";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { MOCK_BOOKS } from "../../(home)/page";
+import BookCard from "../book/BookCard";
 
 interface CategoryClientProps {
   slug: string;
@@ -22,14 +24,17 @@ const CategoryClient = ({ slug }: CategoryClientProps) => {
 
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {[...Array(12)].map((_, i) => (
-            <div
-              key={i}
-              className="aspect-3/4 bg-red-200 rounded-lg shadow-book flex items-center justify-center p-4 text-center text-dark-grey/40"
-            >
-              Book Placeholder {i + 1}
-            </div>
-          ))}
+        {MOCK_BOOKS.map((book) => (
+          <BookCard 
+            key={book.id}
+            id={book.id}
+            slug={book.slug}
+            title={book.title}
+            author={book.author}
+            coverColor={book.color}
+            aspectRatio="aspect-3/4"
+          />
+        ))}
         </div>
       </Wrapper>
     </div>
