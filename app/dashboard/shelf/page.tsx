@@ -151,7 +151,7 @@ const page = () => {
                       e.stopPropagation();
                       setActiveEditId(activeEditId === collection.id ? null : collection.id);
                     }}
-                    className="absolute top-3 right-3 z-50 p-2 rounded-full bg-stone/20 hover:bg-stone/40 transition-colors cursor-pointer text-dark-grey"
+                    className="absolute top-3 right-3 z-10 p-2 rounded-full bg-stone/20 hover:bg-stone/40 transition-colors cursor-pointer text-dark-grey"
                   >
                     <Ellipsis size={20} className='text-dark-grey/95' />
                   </button>
