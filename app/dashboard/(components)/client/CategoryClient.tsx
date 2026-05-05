@@ -24,17 +24,17 @@ const CategoryClient = ({ slug }: CategoryClientProps) => {
 
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {MOCK_BOOKS.map((book) => (
-          <BookCard 
-            key={book.id}
-            id={book.id}
-            slug={book.slug}
-            title={book.title}
-            author={book.author}
-            coverColor={book.color}
-            aspectRatio="aspect-3/4"
-          />
-        ))}
+          {MOCK_BOOKS.map((book) => (
+            <BookCard
+              key={book.id}
+              id={book.id}
+              slug={book.slug}
+              title={book.title}
+              author={book.author}
+              coverColor={book.color}
+              aspectRatio="aspect-3/4"
+            />
+          ))}
         </div>
       </Wrapper>
     </div>
