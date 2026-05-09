@@ -1,5 +1,5 @@
 import { motion } from 'motion/react'
-import Modal from '../Modal';
+import Modal from '../../(components)/ui/Modal';
 
 interface ModalProps {
     collectionName: string;
@@ -10,8 +10,8 @@ interface ModalProps {
 
 const CreateCollectionModal = ({ toggleModal, collectionName, setCollectionName, handleSaveCollection }: ModalProps) => {
     return (
-        <Modal 
-            title="New Collection" 
+        <Modal
+            title="New Collection"
             onClose={toggleModal}
             className="aspect-video"
         >
@@ -22,9 +22,9 @@ const CreateCollectionModal = ({ toggleModal, collectionName, setCollectionName,
                         autoFocus
                         value={collectionName}
                         onChange={(e) => setCollectionName(e.target.value)}
-                        type="text" 
-                        placeholder='e.g. Want to read' 
-                        className='bg-dark-grey/5 border-stone/70 border rounded-2xl p-3 focus:border-dark-grey/30 focus:outline-none' 
+                        type="text"
+                        placeholder='e.g. Want to read'
+                        className='bg-dark-grey/5 border-stone/70 border rounded-2xl p-3 focus:border-dark-grey/30 focus:outline-none'
                     />
                     <motion.button whileTap={{ scale: 0.95 }} className='bg-stone text-dark-grey/90 p-3 rounded-2xl cursor-pointer text-sm font-medium'>Add Collection</motion.button>
                 </form>

@@ -3,8 +3,8 @@
 import Wrapper from "@/app/components/Wrapper";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
-import { MOCK_BOOKS } from "../../(home)/page";
-import BookCard from "../book/BookCard";
+import BookCard from "../../(components)/book/BookCard";
+import { MOCK_BOOKS } from "../../../lib/books";
 
 interface CategoryClientProps {
   slug: string;

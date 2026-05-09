@@ -2,7 +2,7 @@
 
 import { FolderPen, Share, Trash2 } from 'lucide-react'
 import { motion } from 'motion/react'
-import { useCollectionStore } from '@/app/utils/store'
+import { useCollectionStore } from '@/app/lib/store'
 
 interface editOptionsProps {
     collectionId: number;
@@ -70,7 +70,7 @@ const EditOptions = ({ collectionId }: editOptionsProps) => {
                         <Trash2 size={18} className="text-rose-400" />
                         <span>Delete shelf</span>
                     </button>
-                  
+
                 </div>
             </motion.div>
         </>

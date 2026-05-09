@@ -2,7 +2,7 @@
 import { motion, AnimatePresence } from 'motion/react';
 import React, { useState } from 'react'
 import { Search, Book, User, ArrowUpRight } from 'lucide-react';
-import Modal from '../Modal';
+import Modal from '../ui/Modal';
 import Link from 'next/link';
 
 interface SearchModalProps {
@@ -112,19 +112,19 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                                 onClick={() => setIsSearchOpen(false)}
                                                 className='relative'
                                             >
-                                            <motion.div
-                                                whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
-                                                className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
-                                            >
-                                                <div className="w-10 h-10 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 group-hover:bg-amber-400/20 group-hover:text-amber-300 transition-colors">
-                                                    {item.type === 'book' ? <Book size={18} /> : <User size={18} />}
-                                                </div>
-                                                <div className="flex-1">
-                                                    <p className="font-semibold text-dark-grey/90">{item.title}</p>
-                                                    <p className="text-xs text-dark-grey/50">{item.subtitle}</p>
-                                                </div>
-                                                <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
-                                            </motion.div>
+                                                <motion.div
+                                                    whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
+                                                    className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
+                                                >
+                                                    <div className="w-10 h-10 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 group-hover:bg-amber-400/20 group-hover:text-amber-300 transition-colors">
+                                                        {item.type === 'book' ? <Book size={18} /> : <User size={18} />}
+                                                    </div>
+                                                    <div className="flex-1">
+                                                        <p className="font-semibold text-dark-grey/90">{item.title}</p>
+                                                        <p className="text-xs text-dark-grey/50">{item.subtitle}</p>
+                                                    </div>
+                                                    <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
+                                                </motion.div>
                                             </Link>
                                         </div>
                                     ))

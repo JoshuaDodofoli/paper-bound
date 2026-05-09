@@ -1,9 +1,9 @@
 'use client'
 
 import { motion } from 'motion/react'
-import { useCollectionStore } from '@/app/utils/store'
+import { useCollectionStore } from '@/app/lib/store'
 
-import Modal from '../Modal';
+import Modal from '../../(components)/ui/Modal';
 
 interface ModalProps {
     collectionId: number;
@@ -22,16 +22,16 @@ const DeleteModal = ({ collectionId }: ModalProps) => {
     }
 
     return (
-        <Modal 
-            title="Delete Collection" 
+        <Modal
+            title="Delete Collection"
             onClose={toggleDeleteModal}
             className="aspect-video"
         >
             <div className="flex w-full h-full flex-col items-center justify-center pb-2 gap-4">
                 <p className='text-center text-dark-grey/80 text-sm'>Are you sure you want to delete this collection? This action cannot be undone.</p>
-                <motion.button 
+                <motion.button
                     onClick={handleDelete}
-                    whileTap={{ scale: 0.95 }} 
+                    whileTap={{ scale: 0.95 }}
                     className='bg-rose-500 hover:bg-rose-600 transition-colors text-white w-full p-3 rounded-2xl cursor-pointer text-sm font-medium'>
                     Delete Permanently
                 </motion.button>
