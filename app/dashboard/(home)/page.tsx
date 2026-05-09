@@ -5,21 +5,13 @@ import BookCard from "../(components)/book/BookCard";
 import Wrapper from "@/app/components/Wrapper";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-
-export const MOCK_BOOKS = [
-  { id: "1", slug: "the-hobbit", title: "The Hobbit", author: "J.R.R. Tolkien", color: "bg-amber-200" },
-  { id: "2", slug: "1984", title: "1984", author: "George Orwell", color: "bg-blue-200" },
-  { id: "3", slug: "brave-new-world", title: "Brave New World", author: "Aldous Huxley", color: "bg-green-200" },
-  { id: "4", slug: "the-great-gatsby", title: "The Great Gatsby", author: "F. Scott Fitzgerald", color: "bg-rose-200" },
-  { id: "5", slug: "dune", title: "Dune", author: "Frank Herbert", color: "bg-orange-200" },
-];
+import { MOCK_BOOKS } from "../../lib/books";
 
 const Page = () => {
 
   const readingScroll = useDraggableScroll();
   const trendingScroll = useDraggableScroll();
   const arrivalsScroll = useDraggableScroll();
-
 
   return (
     <div className="mt-14">
@@ -41,7 +33,7 @@ const Page = () => {
           `}
           >
             {MOCK_BOOKS.map((book) => (
-              <BookCard 
+              <BookCard
                 key={book.id}
                 id={book.id}
                 slug={book.slug}
@@ -59,7 +51,7 @@ const Page = () => {
       <section className="section-gradient">
         <Wrapper>
 
-         <Link href="/dashboard/trending" className="flex items-center gap-1 group w-fit mb-4">
+          <Link href="/dashboard/trending" className="flex items-center gap-1 group w-fit mb-4">
             <h2 className="text-xl">Trending</h2>
             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform text-dark-grey/90" />
           </Link>
@@ -74,7 +66,7 @@ const Page = () => {
           `}
           >
             {MOCK_BOOKS.map((book) => (
-              <BookCard 
+              <BookCard
                 key={book.id}
                 id={book.id}
                 slug={book.slug}
@@ -114,7 +106,7 @@ const Page = () => {
       <section className="section-gradient">
         <Wrapper>
 
-      <Link href="/dashboard/new-arrivals" className="flex items-center gap-1 group w-fit mb-4">
+          <Link href="/dashboard/new-arrivals" className="flex items-center gap-1 group w-fit mb-4">
             <h2 className="text-xl">New arrivals</h2>
             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform text-dark-grey/90" />
           </Link>
@@ -129,7 +121,7 @@ const Page = () => {
           `}
           >
             {MOCK_BOOKS.map((book) => (
-              <BookCard 
+              <BookCard
                 key={book.id}
                 id={book.id}
                 slug={book.slug}

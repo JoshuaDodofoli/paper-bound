@@ -5,12 +5,12 @@ import Wrapper from '../../components/Wrapper'
 import { Ellipsis, LayoutGrid, List, Pencil, PlusCircle } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
-import EditOptions from '../(components)/shelf/EditOptions';
-import CreateCollectionModal from '../(components)/shelf/CreateCollectionModal';
-import EditModal from '../(components)/shelf/EditModal';
-import DeleteModal from '../(components)/shelf/DeleteModal';
-import { useCollectionStore } from '@/app/utils/store';
-import CollectionCard from '../(components)/shelf/CollectionCard';
+import EditOptions from './(components)/EditOptions';
+import CreateCollectionModal from './(components)/CreateCollectionModal';
+import EditModal from './(components)/EditModal';
+import DeleteModal from './(components)/DeleteModal';
+import { useCollectionStore } from '@/app/lib/store';
+import CollectionCard from './(components)/CollectionCard';
 
 const page = () => {
 

@@ -1,7 +1,7 @@
 # Paper Bound
 
 **Paper Bound**
- I'll update this later.
+I'll update this later.
 
 Lol.
 
