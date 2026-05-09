@@ -61,7 +61,7 @@ const BookClient = ({ book }: { book: Book }) => {
                             </div>
 
                             <h1 className="text-5xl font-serif font-bold text-dark-grey mb-2">{book.title}</h1>
-                            <Link href={`/dashboard/author/${book.author}`}>
+                            <Link href={`/dashboard/authors/${book.authorSlug}`}>
                                 <p className="text-xl text-dark-grey/60 font-medium">by <span className="text-dark-grey/90 underline decoration-stone-400 underline-offset-4">{book.author}</span></p>
                             </Link>
                         </motion.div>
