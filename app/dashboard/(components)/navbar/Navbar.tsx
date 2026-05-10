@@ -28,7 +28,7 @@ const Navbar = () => {
   return (
     <>
     <nav
-      className='fixed bottom-8 z-20 left-1/2 -translate-x-1/2 flex items-center justify-center'
+      className='fixed bottom-5 z-20 left-1/2 -translate-x-1/2 flex items-center justify-center'
     >
       <div className="flex items-center gap-2">
         <ul className='flex gap-1 p-1.5 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl'>

@@ -3,7 +3,8 @@
 :root {
   --grey-1: #f6f4f1;
   --grey-2: #e4ded2;
-  --grey-3: #454545;
+  --grey-3: #f4f2ef;
+  --grey-4: #454545;
   --black: #000000;
   --white: #ffffff;
   --accent: #fffb00;
@@ -12,7 +13,8 @@
 @theme inline {
   --color-paper: var(--grey-1);
   --color-stone: var(--grey-2);
-  --color-dark-grey: var(--grey-3);
+  --color-ash: var(--grey-3);
+  --color-dark-grey: var(--grey-4);
   --color-black: var(--black);
   --color-white: var(--white);  
   --color-brand: var(--accent);

@@ -11,12 +11,14 @@ interface CollectionStore {
     activeEditId: number | null;
     editingCollectionId: number | null;
     deletingCollectionId: number | null;
+    viewMode: 'grid' | 'list';
     addCollection: (name: string) => void;
     deleteCollection: (id: number) => void;
     renameCollection: (id: number, name: string) => void;
     setActiveEditId: (id: number | null) => void;
     setEditingCollectionId: (id: number | null) => void;
     setDeletingCollectionId: (id: number | null) => void;
+    setViewMode: (mode: 'grid' | 'list') => void;
 }
 
 export const useCollectionStore = create<CollectionStore>((set) => ({
@@ -24,6 +26,7 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     activeEditId: null,
     editingCollectionId: null,
     deletingCollectionId: null,
+    viewMode: 'grid',
     addCollection: (name) =>
         set((state) => ({
             collections: [
@@ -52,4 +55,5 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     setActiveEditId: (id) => set({ activeEditId: id }),
     setEditingCollectionId: (id) => set({ editingCollectionId: id }),
     setDeletingCollectionId: (id) => set({ deletingCollectionId: id }),
+    setViewMode: (mode) => set({ viewMode: mode }),
 }));
