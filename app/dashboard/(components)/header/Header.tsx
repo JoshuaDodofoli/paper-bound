@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
+import UserMenu from './UserMenu'
 
 const Header = () => {
 
@@ -58,9 +59,8 @@ const Header = () => {
           </motion.h1>
         </AnimatePresence>
 
-        <div className=" flex">
-          <span className='size-10 rounded-full bg-green-200' />
-        </div>
+    {/* user profile */}
+        <UserMenu />
 
         {pathName !== '/dashboard' && pathName !== '/dashboard/shelf' && (
 

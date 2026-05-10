@@ -1,5 +1,11 @@
 import { create } from "zustand";
 
+export interface User {
+    name: string;
+    joinedDate: string;
+    theme: 'paper' | 'midnight' | 'modern';
+}
+
 export interface Collection {
     id: number;
     name: string;
@@ -12,6 +18,7 @@ interface CollectionStore {
     editingCollectionId: number | null;
     deletingCollectionId: number | null;
     viewMode: 'grid' | 'list';
+    user: User;
     addCollection: (name: string) => void;
     deleteCollection: (id: number) => void;
     renameCollection: (id: number, name: string) => void;
@@ -19,6 +26,9 @@ interface CollectionStore {
     setEditingCollectionId: (id: number | null) => void;
     setDeletingCollectionId: (id: number | null) => void;
     setViewMode: (mode: 'grid' | 'list') => void;
+    setTheme: (theme: User['theme']) => void;
+    logout: () => void;
+    deleteAccount: () => void;
 }
 
 export const useCollectionStore = create<CollectionStore>((set) => ({
@@ -27,6 +37,11 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     editingCollectionId: null,
     deletingCollectionId: null,
     viewMode: 'grid',
+    user: {
+        name: "Joshua Dodofoli",
+        joinedDate: "May 2024",
+        theme: 'paper'
+    },
     addCollection: (name) =>
         set((state) => ({
             collections: [
@@ -56,4 +71,7 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     setEditingCollectionId: (id) => set({ editingCollectionId: id }),
     setDeletingCollectionId: (id) => set({ deletingCollectionId: id }),
     setViewMode: (mode) => set({ viewMode: mode }),
+    setTheme: (theme) => set((state) => ({ user: { ...state.user, theme } })),
+    logout: () => console.log("Logout triggered"),
+    deleteAccount: () => console.log("Delete account triggered"),
 }));
