@@ -32,7 +32,7 @@ const CollectionCard = ({ collectionName, viewMode = 'grid' }: CollectionCardPro
                         </div>
 
                         <div className="flex flex-col items-center justify-center text-center">
-                            <h3 className="text-dark-grey font-sans font-bold text-xl md:text-2xl tracking-tight leading-tight line-clamp-1">{collectionName}</h3>
+                            <h3 className="text-dark-grey  font-bold text-3xl md:text-2xl tracking-tight leading-tight line-clamp-1">{collectionName}</h3>
                             {/* <span className="text-[12px] font-sans opacity-50 mt-1 font-medium">Ready for new reading sessions!</span> */}
                         </div>
                     </div>
@@ -89,8 +89,8 @@ const BookItem = ({ color, rotation, x, zIndex, size, isList }: { color: string,
 )
 
 const CollectionCardCover = ({ isList }: { isList: boolean }) => {
-    const baseSize = isList ? "w-8" : "w-16 md:w-20";
-    const centerSize = isList ? "w-10" : "w-20 md:w-24";
+    const baseSize = isList ? "w-8" : "w-21";
+    const centerSize = isList ? "w-10" : "w-25";
     const offset = isList ? 10 : 35;
 
     return (
