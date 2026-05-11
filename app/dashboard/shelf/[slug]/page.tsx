@@ -1,6 +1,5 @@
 import Wrapper from '@/app/components/Wrapper';
-import Link from 'next/link';
-import { ChevronLeft } from 'lucide-react';
+import BackButton from '../../(components)/ui/BackButton';
 import BookCard from '../../(components)/book/BookCard';
 
 const MOCK_BOOKS = [
@@ -91,17 +90,14 @@ const page = async ({ params }: slugProps) => {
     return (
         <div className='mt-12'>
             <Wrapper>
-                <Link href={"/dashboard/shelf"}
-                    className="flex items-center gap-2 text-dark-grey/60 hover:text-dark-grey transition-colors mb-6 group cursor-pointer"
-                >
-                    <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                    <span>Back</span>
-                </Link>
-                <div className='flex flex-col gap-8'>
+                <BackButton label="Back to Library" className="mb-8" />
+                <div className="flex items-center justify-between mb-6">
                     <div className='flex items-center justify-between'>
-                        <h2 className='text-2xl font-bold'>{slug}</h2>
                         <p className='text-sm text-dark-grey/60'>{1000} books</p>
                     </div>
+                </div>
+                <div className='flex flex-col gap-8'>
+
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {MOCK_BOOKS.map((book) => (
                             <BookCard

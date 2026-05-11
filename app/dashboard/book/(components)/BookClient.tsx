@@ -1,18 +1,16 @@
 'use client'
 import Wrapper from '@/app/components/Wrapper';
-import { ChevronLeft, BookOpen, Bookmark, Star, Clock, Plus, Share2 } from 'lucide-react';
+import { BookOpen, Bookmark, Star, Clock, Plus, Share2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { Book } from '../../../lib/interface';
+import BackButton from '../../(components)/ui/BackButton';
 
 const BookClient = ({ book }: { book: Book }) => {
     return (
         <div className="min-h-screen pt-20 pb-20">
             <Wrapper>
-                <Link href="/dashboard" className="flex items-center gap-2 text-dark-grey/50 hover:text-dark-grey transition-colors mb-8 group w-fit">
-                    <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="font-medium">Back to Library</span>
-                </Link>
+                <BackButton label="Back to Library" className="mb-8" />
 
                 <div className="flex flex-col md:flex-row gap-12 lg:gap-20">
                     <div className="w-full md:w-1/3 flex flex-col gap-8">

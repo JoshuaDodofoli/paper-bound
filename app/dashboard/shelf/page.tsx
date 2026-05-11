@@ -20,10 +20,11 @@ const page = () => {
   const setActiveEditId = useCollectionStore((state) => state.setActiveEditId);
   const editingCollectionId = useCollectionStore((state) => state.editingCollectionId);
   const deletingCollectionId = useCollectionStore((state) => state.deletingCollectionId);
+  const viewMode = useCollectionStore((state) => state.viewMode);
+  const setViewMode = useCollectionStore((state) => state.setViewMode);
 
   const [collectionName, setCollectionName] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const toggleModal = () => {
     setShowModal(prev => !prev);
@@ -76,7 +77,7 @@ const page = () => {
             <motion.div
               onClick={toggleModal}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center cursor-pointer justify-start gap-2 bg-stone h-9 px-3 rounded-full my-4 text-dark-grey/95"
+              className="flex items-center cursor-pointer justify-start gap-2 bg-stone/60 h-9 px-3 rounded-full my-4 text-dark-grey/95"
             >
               <p className='text-sm font-medium'>Add</p>
               <PlusCircle size={18} className='text-dark-grey/95' />
@@ -87,7 +88,7 @@ const page = () => {
                 <motion.div
                   onClick={toggleViewMode}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center cursor-pointer justify-center bg-stone size-9 rounded-full my-4 text-dark-grey/80"
+                  className="flex items-center cursor-pointer justify-center bg-stone/60 size-9 rounded-full my-4 text-dark-grey/80"
                 >
                   <AnimatePresence mode="wait">
                     <motion.div

@@ -1,10 +1,11 @@
 'use client'
 import Wrapper from '@/app/components/Wrapper';
-import { ChevronLeft } from 'lucide-react';
+import BackButton from '../ui/BackButton';
 import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
+import UserMenu from './UserMenu'
 
 const Header = () => {
 
@@ -58,9 +59,8 @@ const Header = () => {
           </motion.h1>
         </AnimatePresence>
 
-        <div className=" flex">
-          <span className='size-10 rounded-full bg-green-200' />
-        </div>
+    {/* user profile */}
+        <UserMenu />
 
         {pathName !== '/dashboard' && pathName !== '/dashboard/shelf' && (
 
@@ -70,9 +70,7 @@ const Header = () => {
           >
             <Wrapper className="flex items-center justify-between relative p-1">
 
-              <Link scroll={false} href="/dashboard" className="flex items-center gap-1 cursor-pointer z-10">
-                <ChevronLeft size={24} className='text-dark-grey/70' />
-              </Link>
+              <BackButton label="" />
               <h3 className="absolute left-1/2 -translate-x-1/2 text-lg font-medium">
                 {getPageTitle()}
               </h3>
