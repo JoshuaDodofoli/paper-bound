@@ -3,6 +3,7 @@ import { create } from "zustand";
 export interface User {
     name: string;
     joinedDate: string;
+    location: string;
     theme: 'paper' | 'midnight' | 'modern';
 }
 
@@ -40,6 +41,7 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     user: {
         name: "Joshua Dodofoli",
         joinedDate: "May 2024",
+        location: "Ghana",
         theme: 'paper'
     },
     addCollection: (name) =>

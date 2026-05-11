@@ -4,7 +4,8 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { User, Palette, LogOut } from 'lucide-react'
 import { useCollectionStore } from '@/app/lib/store'
-import Dropdown, { DropdownItem } from '@/app/dashboard/(components)/ui/Dropdown'
+import { DropdownItem } from '@/app/lib/interface'
+import Dropdown from '../ui/Dropdown'
 
 const UserMenu = () => {
   const [isOpen, setIsOpen] = useState(false);

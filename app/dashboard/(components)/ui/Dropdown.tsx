@@ -2,14 +2,7 @@
 
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-export interface DropdownItem {
-  label: string;
-  icon: React.ReactNode;
-  onClick: () => void;
-  variant?: 'default' | 'danger';
-  divider?: boolean;
-}
+import type { DropdownItem } from '@/app/lib/interface'
 
 interface DropdownProps {
   isOpen: boolean;

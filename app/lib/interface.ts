@@ -6,3 +6,19 @@ export interface Book {
   authorSlug: string;
   color: string;
 }
+
+
+export interface DropdownItem {
+  label: string;
+  icon: React.ReactNode;
+  onClick: () => void;
+  variant?: 'default' | 'danger';
+  divider?: boolean;
+}
+
+interface DropdownProps {
+  isOpen: boolean;
+  onClose: () => void;
+  items: DropdownItem[];
+  className?: string;
+}

@@ -1,6 +1,5 @@
 import Wrapper from '@/app/components/Wrapper';
-import Link from 'next/link';
-import { ChevronLeft } from 'lucide-react';
+import BackButton from '../../(components)/ui/BackButton';
 import BookCard from '../../(components)/book/BookCard';
 
 const MOCK_BOOKS = [
@@ -91,13 +90,8 @@ const page = async ({ params }: slugProps) => {
     return (
         <div className='mt-12'>
             <Wrapper>
+                <BackButton label="Back to Library" className="mb-8" />
                 <div className="flex items-center justify-between mb-6">
-                    <Link href={"/dashboard/shelf"}
-                        className="flex items-center gap-2 text-dark-grey/60 hover:text-dark-grey transition-colors group cursor-pointer"
-                    >
-                        <ChevronLeft size={20} className="group-hover:-translate-x-1 transition-transform" />
-                        <span>Back</span>
-                    </Link>
                     <div className='flex items-center justify-between'>
                         <p className='text-sm text-dark-grey/60'>{1000} books</p>
                     </div>
