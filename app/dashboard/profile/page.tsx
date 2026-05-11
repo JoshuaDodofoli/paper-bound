@@ -1,54 +1,50 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import Wrapper from '../../components/Wrapper'
 import { useCollectionStore } from '@/app/lib/store'
 import { motion } from 'framer-motion'
-import { LogOut, Trash2, Palette, ShieldAlert, MapPin, Calendar, Clock, BookOpen, Library, Edit3, ChevronRight, ChevronLeft } from 'lucide-react'
+import { LogOut, Trash2, Palette, ShieldAlert, MapPin, Calendar, Clock, BookOpen, Library, Edit3, ChevronRight, ChevronLeft, Share } from 'lucide-react'
 import Image from 'next/image'
 import BackButton from '../(components)/ui/BackButton'
+import { useToast } from '@/app/lib/hooks/useToast'
+import Toast from '../(components)/ui/Toast'
+import EditProfileModal from '../(components)/ui/EditProfileModal'
 
 const ProfilePage = () => {
   const user = useCollectionStore((state) => state.user);
-
   const collections = useCollectionStore((state) => state.collections);
   const setTheme = useCollectionStore((state) => state.setTheme);
   const logout = useCollectionStore((state) => state.logout);
   const deleteAccount = useCollectionStore((state) => state.deleteAccount);
 
-  const themes = [
-    { id: 'paper', name: 'Paper', color: 'bg-paper', border: 'border-stone/40' },
-    { id: 'midnight', name: 'Midnight', color: 'bg-[#1a1a1a]', border: 'border-white/10' },
-    { id: 'modern', name: 'Modern', color: 'bg-white', border: 'border-black/5' },
-  ] as const;
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const { toast, showToast, hideToast } = useToast();
 
-  const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.6,
-        staggerChildren: 0.1
-      }
+  const handleShareProfile = async () => {
+    const shareUrl = `${window.location.origin}/profile/${user.username}`;
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      showToast('Profile link copied to clipboard!');
+    } catch (err) {
+      showToast('Failed to copy link', 'error');
     }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 10 },
-    visible: { opacity: 1, y: 0 }
   };
 
   return (
     <div className='mt-20 min-h-screen pb-20'>
       <Wrapper>
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className='flex flex-col gap-12 max-w-3xl mx-auto'
-        >
-          <BackButton />
+        <div className='flex flex-col gap-12 max-w-3xl mx-auto'>
+          <div className='flex items-center justify-between'>
+            <BackButton />
+            <button 
+              onClick={handleShareProfile}
+              className='flex items-center gap-2 bg-ash/50 border border-stone/10 px-4 py-2 rounded-full text-xs font-sans font-bold text-dark-grey/60 hover:text-dark-grey hover:border-stone/40 transition-all cursor-pointer'
+            >
+              <Share size={14} />
+              Share Profile
+            </button>
+          </div>
 
           <section className='flex flex-col md:flex-row items-center md:items-start gap-8 md:gap-10'>
             <div className='relative group'>
@@ -72,7 +68,10 @@ const ProfilePage = () => {
             <div className='flex flex-col flex-1 text-center md:text-left pt-2'>
               <div className='flex items-center justify-center md:justify-start gap-3 mb-4'>
                 <h2 className='text-4xl font-serif text-dark-grey leading-none'>{user.name.split(' ')[0]}</h2>
-                <button className='text-xs font-sans text-stone-500 hover:text-dark-grey flex items-center gap-1 transition-colors cursor-pointer'>
+                <button 
+                  onClick={() => setIsEditModalOpen(true)}
+                  className='text-xs font-sans text-stone-500 hover:text-dark-grey flex items-center gap-1 transition-colors cursor-pointer'
+                >
                   <Edit3 size={12} />
                   (edit profile)
                 </button>
@@ -80,13 +79,6 @@ const ProfilePage = () => {
 
               <div className='grid grid-cols-1 gap-3 border-t border-stone/10 pt-4'>
                 <div className='flex items-center justify-center md:justify-start gap-6'>
-                  {/* <div className='flex flex-col'>
-                    <span className='text-[10px] uppercase tracking-widest font-bold text-dark-grey/40 mb-1'>Details</span>
-                    <div className='flex items-center gap-2 text-sm text-dark-grey/80'>
-                      <MapPin size={14} className='text-dark-grey/40' />
-                      <span>{user.location}</span>
-                    </div>
-                  </div> */}
                   <div className='flex flex-col'>
                     <span className='text-[10px] uppercase tracking-widest font-bold text-dark-grey/40 mb-1'>Activity</span>
                     <div className='flex items-center gap-2 text-sm text-dark-grey/80'>
@@ -115,7 +107,7 @@ const ProfilePage = () => {
             </div>
 
             <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
-              {collections.map((shelf) => (
+              {collections.slice(0, 4).map((shelf) => (
                 <motion.div
                   key={shelf.id}
                   whileHover={{ y: -2 }}
@@ -125,6 +117,7 @@ const ProfilePage = () => {
                   <span className='text-xs font-sans text-dark-grey/40'>({shelf.books || 0} books)</span>
                 </motion.div>
               ))}
+
               {collections.length === 0 && (
                 <div className='col-span-full p-8 text-center border-2 border-dashed border-stone/10 rounded-3xl text-dark-grey/40 italic text-sm'>
                   No shelves yet. Start by creating a collection!
@@ -219,9 +212,20 @@ const ProfilePage = () => {
               </button>
             </div>
           </section>
-
-        </motion.div>
+        </div>
       </Wrapper>
+
+      <EditProfileModal 
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+      />
+
+      <Toast 
+        isVisible={toast.isVisible}
+        message={toast.message}
+        type={toast.type}
+        onClose={hideToast}
+      />
     </div>
   )
 }

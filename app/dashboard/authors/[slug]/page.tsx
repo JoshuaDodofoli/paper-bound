@@ -1,6 +1,7 @@
 import { MOCK_BOOKS } from '@/app/lib/books';
 import AuthorClient from '../(components)/AuthorClient'
 import Link from 'next/link';
+import BackButton from '../../(components)/ui/BackButton';
 
 interface AuthorPageProps {
   params: Promise<{ slug: string }>
@@ -18,9 +19,7 @@ const page = async ({ params }: AuthorPageProps) => {
         <p className="text-dark-grey/70">
           We couldn't find an author with the slug "{slug}".
         </p>
-        <Link href="/dashboard" className="text-brand-green hover:underline font-medium">
-          Return to Dashboard
-        </Link>
+       <BackButton label='Go back' />
       </div>
     );
   }

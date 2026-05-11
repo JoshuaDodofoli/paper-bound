@@ -2,6 +2,7 @@ import { create } from "zustand";
 
 export interface User {
     name: string;
+    username: string;
     joinedDate: string;
     location: string;
     theme: 'paper' | 'midnight' | 'modern';
@@ -11,6 +12,7 @@ export interface Collection {
     id: number;
     name: string;
     books?: number;
+    slug?: string;
 }
 
 interface CollectionStore {
@@ -28,6 +30,7 @@ interface CollectionStore {
     setDeletingCollectionId: (id: number | null) => void;
     setViewMode: (mode: 'grid' | 'list') => void;
     setTheme: (theme: User['theme']) => void;
+    updateUser: (data: Partial<User>) => void;
     logout: () => void;
     deleteAccount: () => void;
 }
@@ -40,10 +43,13 @@ export const useCollectionStore = create<CollectionStore>((set) => ({
     viewMode: 'grid',
     user: {
         name: "Joshua Dodofoli",
+        username: "joshua",
         joinedDate: "May 2024",
         location: "Ghana",
         theme: 'paper'
     },
+    updateUser: (data) => set((state) => ({ user: { ...state.user, ...data } })),
+
     addCollection: (name) =>
         set((state) => ({
             collections: [

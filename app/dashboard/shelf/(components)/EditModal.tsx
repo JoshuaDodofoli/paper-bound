@@ -28,6 +28,7 @@ const EditModal = ({ collectionId }: ModalProps) => {
 
     return (
         <Modal
+            isOpen={true}
             title="Edit Collection"
             onClose={toggleEditModal}
             className="aspect-video"

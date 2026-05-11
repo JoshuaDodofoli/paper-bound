@@ -17,12 +17,12 @@ const UserMenu = () => {
     {
       label: 'Profile',
       icon: <User size={18} />,
-      onClick: () => router.push('/dashboard/profile'),
+      path: '/dashboard/profile',
     },
     {
       label: 'Theme',
       icon: <Palette size={18} />,
-      onClick: () => router.push('/dashboard/profile'),
+      path: '/dashboard/profile',
     },
     {
       label: 'Sign out',
