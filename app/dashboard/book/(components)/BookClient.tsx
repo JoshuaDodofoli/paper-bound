@@ -19,7 +19,7 @@ const BookClient = ({ book }: { book: Book }) => {
                 <BackButton label="Back to Library" className="mb-8" />
 
                 <div className="flex flex-col md:flex-row gap-12 lg:gap-20">
-                    <div className="w-full md:w-1/3 flex flex-col gap-8">
+                    <div className="w-full items-center md:w-1/3 flex flex-col gap-8">
                         <motion.div
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
@@ -32,7 +32,7 @@ const BookClient = ({ book }: { book: Book }) => {
                             </div>
                         </motion.div>
 
-                        <div className="flex gap-4">
+                        <div className="flex w-full gap-4">
                             <motion.button
                                 whileTap={{ scale: 0.95 }}
                                 className="flex-1 bg-dark-grey text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:bg-dark-grey/90 transition-colors"
@@ -64,9 +64,9 @@ const BookClient = ({ book }: { book: Book }) => {
                                 <div className="text-dark-grey/50 text-sm font-medium">1,200 Reviews</div>
                             </div>
 
-                            <h1 className="text-5xl font-serif font-bold text-dark-grey mb-2">{book.title}</h1>
+                            <h1 className="text-3xl font-serif font-bold text-dark-grey mb-2">{book.title}</h1>
                             <Link href={`/dashboard/authors/${book.authorSlug}`}>
-                                <p className="text-xl text-dark-grey/60 font-medium">by <span className="text-dark-grey/90 underline decoration-stone-400 underline-offset-4">{book.author}</span></p>
+                                <p className="text-lg text-dark-grey/60 font-medium">by <span className="text-dark-grey/90 underline decoration-stone-400 underline-offset-4">{book.author}</span></p>
                             </Link>
                         </motion.div>
 
