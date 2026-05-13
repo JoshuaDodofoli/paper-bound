@@ -1,3 +1,15 @@
+export interface Author {
+  id: string;
+  name: string;
+  slug: string;
+  bio: string;
+  image: string;
+  born: string;
+  website: string;
+  genres: string[];
+  works: Book[];
+}
+
 export interface Book {
   id: string;
   slug: string;
