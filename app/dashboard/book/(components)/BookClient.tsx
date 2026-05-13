@@ -4,9 +4,15 @@ import { BookOpen, Bookmark, Star, Clock, Plus, Share2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { Book } from '../../../lib/interface';
+import { MOCK_BOOKS } from '../../../lib/books';
 import BackButton from '../../(components)/ui/BackButton';
+import BookCard from '../../(components)/book/BookCard';
+import Recommendations from './Recommendations';
 
 const BookClient = ({ book }: { book: Book }) => {
+    const otherBooks = MOCK_BOOKS.filter(b => b.authorSlug === book.authorSlug && b.id !== book.id);
+
+
     return (
         <div className="min-h-screen pt-20 pb-20">
             <Wrapper>
@@ -84,41 +90,18 @@ const BookClient = ({ book }: { book: Book }) => {
 
                         <div className="space-y-4">
                             <h3 className="text-xl font-bold text-dark-grey">Synopsis</h3>
-                            <p className="text-dark-grey/70 leading-relaxed text-lg">
+                            <p className="text-dark-grey/70 text-lg">
                                 This is a captivating masterpiece by {book.author}. The story takes us through a world of mystery, adventure, and profound discoveries. A must-read for anyone looking to expand their horizons and experience a truly unique narrative journey.
                             </p>
                         </div>
 
-                        <div className="pt-4 flex items-center gap-6">
-                            <div className="flex -space-x-3">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className={`w-10 h-10 rounded-full border-2 border-paper bg-stone shadow-sm`} />
-                                ))}
-                            </div>
-                            <p className="text-sm text-dark-grey/50 font-medium">
-                                <span className="text-dark-grey font-bold">James</span> and <span className="text-dark-grey font-bold">42 others</span> recently read this.
-                            </p>
-                        </div>
-
-                        <div className="flex gap-4 pt-4">
-                            <motion.button
-                                whileTap={{ scale: 0.95 }}
-                                className="px-6 py-3 border-2 border-stone text-dark-grey/80 rounded-2xl font-bold flex items-center gap-2 cursor-pointer hover:bg-stone/20 transition-colors"
-                            >
-                                <Plus size={18} />
-                                Add to Collection
-                            </motion.button>
-                            <motion.button
-                                whileTap={{ scale: 0.95 }}
-                                className="px-6 py-3 border-2 border-stone text-dark-grey/80 rounded-2xl font-bold flex items-center gap-2 cursor-pointer hover:bg-stone/20 transition-colors"
-                            >
-                                <Share2 size={18} />
-                                Share
-                            </motion.button>
-                        </div>
                     </div>
                 </div>
             </Wrapper>
+
+            {otherBooks.length > 0 && (
+              <Recommendations book={book} otherBooks={otherBooks} />
+            )}
         </div>
     )
 }
