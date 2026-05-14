@@ -71,7 +71,7 @@ const Header = () => {
             <Wrapper className="flex items-center justify-between relative p-1">
 
               <BackButton label="" />
-              <h3 className="absolute left-1/2 -translate-x-1/2 text-lg font-medium">
+              <h3 className="absolute left-1/2 -translate-x-1/2 font-medium">
                 {getPageTitle()}
               </h3>
 

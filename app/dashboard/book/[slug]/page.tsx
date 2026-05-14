@@ -25,6 +25,7 @@ const BookDetailsPage = async ({ params }: bookPageProps) => {
 
         if (searchData) {
             book = {
+                key: searchData.key,
                 id: searchData.key.replace('/works/', ''),
                 slug: slug,
                 title: searchData.title,

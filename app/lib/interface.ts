@@ -9,14 +9,20 @@ export interface Author {
   genres: string[];
   works: Book[];
 }
-
 export interface Book {
-  id: string;
+  key: string;
+  id?: string;
   slug: string;
-  title: string;
-  author: string;
-  authorSlug: string;
-  coverId: string;
+
+  title: string;         
+  author: string;        
+  authorSlug: string;    
+  
+  coverId: string;       
+  publishYear?: number;  
+  pages?: number;        
+
+  sourceShelfId?: string; 
 }
 
 
