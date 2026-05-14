@@ -16,7 +16,7 @@ export interface Book {
   title: string;
   author: string;
   authorSlug: string;
-  color: string;
+  coverId: string;
 }
 
 

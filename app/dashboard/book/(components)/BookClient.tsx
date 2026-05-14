@@ -3,14 +3,14 @@ import Wrapper from '@/app/components/Wrapper';
 import { BookOpen, Bookmark, Star, Clock, Plus, Share2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { Book } from '../../../lib/interface';
 import { MOCK_BOOKS } from '../../../lib/books';
 import BackButton from '../../(components)/ui/BackButton';
 import BookCard from '../../(components)/book/BookCard';
 import Recommendations from './Recommendations';
+import Image from 'next/image';
+import { Book } from '@/app/lib/interface';
 
 const BookClient = ({ book }: { book: Book }) => {
-    const otherBooks = MOCK_BOOKS.filter(b => b.authorSlug === book.authorSlug && b.id !== book.id);
 
 
     return (
@@ -23,13 +23,17 @@ const BookClient = ({ book }: { book: Book }) => {
                         <motion.div
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            className={`aspect-3/4 w-64 md:w-full ${book.color} rounded-sm shadow-book-hover relative overflow-hidden`}
+                            className="aspect-3/4 w-64 md:w-full rounded-sm shadow-book-hover relative overflow-hidden flex items-center justify-center"
                         >
-                            <div className="absolute left-0 top-0 bottom-0 w-2 bg-black/10" />
-                            <div className="p-8 h-full flex flex-col justify-end">
-                                <p className="text-sm font-bold text-black/30 uppercase mb-2">{book.author}</p>
-                                <h1 className="text-xl font-serif font-bold text-black/80 leading-[1.1]">{book.title}</h1>
-                            </div>
+                            {book.coverId && (
+                                <Image
+                                    src={`https://covers.openlibrary.org/b/id/${book.coverId}-L.jpg`}
+                                    alt={book.title}
+                                    fill
+                                    className="object-contain"
+                                    priority
+                                />
+                            )}
                         </motion.div>
 
                         <div className="flex gap-4 w-64 md:w-full">
@@ -99,9 +103,9 @@ const BookClient = ({ book }: { book: Book }) => {
                 </div>
             </Wrapper>
 
-            {otherBooks.length > 0 && (
+            {/* {otherBooks.length > 0 && (
                 <Recommendations book={book} otherBooks={otherBooks} />
-            )}
+            )} */}
         </div>
     )
 }

@@ -2,10 +2,9 @@
 import { motion, AnimatePresence } from 'motion/react';
 import { useEffect, useState } from 'react'
 import Image from 'next/image';
-import { Search, Book, User, ArrowUpRight, Loader2 } from 'lucide-react';
+import { Search, ArrowUpRight, Loader2 } from 'lucide-react';
 import Modal from '../ui/Modal';
 import Link from 'next/link';
-import { MOCK_BOOKS, MOCK_AUTHORS } from '@/app/lib/books';
 import { SearchResults } from '@/app/lib/interface';
 import { searchBooks } from '@/app/lib/utils/BookSearch';
 
@@ -145,7 +144,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                                         alt={item.title}
                                                         fill
                                                         sizes="56px"
-                                                        className='object-cover object-center'
+                                                        className='object-center object-contain'
                                                         />
                                                    ) }
                                                     </div>
