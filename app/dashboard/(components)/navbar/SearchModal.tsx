@@ -1,12 +1,13 @@
 'use client'
 import { motion, AnimatePresence } from 'motion/react';
-import { useEffect, useState } from 'react'
+import { KeyboardEvent, useEffect, useState } from 'react'
 import Image from 'next/image';
 import { Search, ArrowUpRight, Loader2 } from 'lucide-react';
 import Modal from '../ui/Modal';
 import Link from 'next/link';
 import { SearchResults } from '@/app/lib/interface';
 import { searchBooks } from '@/app/lib/utils/BookSearch';
+import { useRouter } from 'next/navigation';
 
 interface SearchModalProps {
     isSearchOpen: boolean;
@@ -14,9 +15,17 @@ interface SearchModalProps {
 }
 
 const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
+    const router = useRouter();
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<SearchResults[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Enter' && query.length > 0) {
+            router.push(`/dashboard/search?q=${encodeURIComponent(query)}`)
+            setIsSearchOpen(false);
+        }
+    }
 
     useEffect(() => {
         if (query.length === 0) {
@@ -72,6 +81,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                         type="text"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
+                        onKeyDown={handleKeyDown}
                         placeholder='Search books, authors, genres...'
                         className='w-full bg-dark-grey/5 border-stone/50 border-2 text-dark-grey placeholder:text-base rounded-3xl py-3 pl-12 pr-4 outline-none focus:border-stone transition-all text-lg font-medium'
                     />
