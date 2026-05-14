@@ -1,6 +1,6 @@
 import BookClient from '../(components)/BookClient'
 import BackButton from '../../(components)/ui/BackButton'
-import { searchBooks } from '@/app/lib/utils/BookSearch'
+import { getBookDescription, searchBooks } from '@/app/lib/utils/BookSearch'
 import { Book } from '@/app/lib/interface'
 
 interface bookPageProps {
@@ -10,13 +10,13 @@ interface bookPageProps {
 const BookDetailsPage = async ({ params }: bookPageProps) => {
 
     const { slug } = await params;
-    
+
     let book: Book | undefined = undefined;
 
     try {
         const query = slug.replace(/-/g, ' ');
         const data = await searchBooks(query);
-        
+
         const searchData = data.docs.find((b: Book) => {
             const bSlug = b.title ? b.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : '';
             const bKey = b.id ? b.id.replace('/works/', '') : '';
@@ -24,6 +24,9 @@ const BookDetailsPage = async ({ params }: bookPageProps) => {
         });
 
         if (searchData) {
+
+            const description = await getBookDescription(searchData.key);
+
             book = {
                 key: searchData.key,
                 id: searchData.key.replace('/works/', ''),
@@ -31,8 +34,8 @@ const BookDetailsPage = async ({ params }: bookPageProps) => {
                 title: searchData.title,
                 author: searchData.author_name ? searchData.author_name[0] : 'Unknown Author',
                 authorSlug: searchData.author_name ? searchData.author_name[0].toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : 'unknown',
-                coverId: searchData.cover_i
-                    
+                coverId: searchData.cover_i,
+                description: description
             };
         }
     } catch (error) {

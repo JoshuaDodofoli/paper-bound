@@ -12,6 +12,8 @@ import { Book } from '@/app/lib/interface';
 
 const BookClient = ({ book }: { book: Book }) => {
 
+    const LIMIT = 270;
+    const isLong = (book.description?.length ?? 0) > LIMIT;
 
     return (
         <div className="min-h-screen pt-20 pb-20">
@@ -94,8 +96,14 @@ const BookClient = ({ book }: { book: Book }) => {
 
                         <div className="space-y-4">
                             <h3 className="text-xl font-bold text-dark-grey">Synopsis</h3>
-                            <p className="text-dark-grey/70 text-lg">
-                                This is a captivating masterpiece by {book.author}. The story takes us through a world of mystery, adventure, and profound discoveries. A must-read for anyone looking to expand their horizons and experience a truly unique narrative journey.
+                            <p className="text-dark-grey/70 text-base">
+                                {
+                                    isLong ? (
+                                       book.description?.slice(0, LIMIT) + "..."
+                                    ) : (
+                                        book.description
+                                    )
+                                }
                             </p>
                         </div>
 
