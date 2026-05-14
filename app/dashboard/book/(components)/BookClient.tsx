@@ -100,7 +100,7 @@ const BookClient = ({ book }: { book: Book }) => {
             </Wrapper>
 
             {otherBooks.length > 0 && (
-              <Recommendations book={book} otherBooks={otherBooks} />
+                <Recommendations book={book} otherBooks={otherBooks} />
             )}
         </div>
     )
