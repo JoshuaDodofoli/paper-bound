@@ -16,23 +16,23 @@ const BookClient = ({ book }: { book: Book }) => {
     return (
         <div className="min-h-screen pt-20 pb-20">
             <Wrapper>
-                <BackButton label="Back to Library" className="mb-8" />
+                <BackButton label="Back" className="mb-8" />
 
                 <div className="flex flex-col md:flex-row gap-12 lg:gap-20">
-                    <div className="w-full items-center md:w-1/3 flex flex-col gap-8">
+                    <div className="w-full md:w-1/3 flex flex-col gap-8 items-center md:items-start">
                         <motion.div
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            className={`aspect-3/4 w-full ${book.color} rounded-sm shadow-book-hover relative overflow-hidden`}
+                            className={`aspect-3/4 w-64 md:w-full ${book.color} rounded-sm shadow-book-hover relative overflow-hidden`}
                         >
                             <div className="absolute left-0 top-0 bottom-0 w-2 bg-black/10" />
                             <div className="p-8 h-full flex flex-col justify-end">
                                 <p className="text-sm font-bold text-black/30 uppercase mb-2">{book.author}</p>
-                                <h1 className="text-4xl font-serif font-bold text-black/80 leading-[1.1]">{book.title}</h1>
+                                <h1 className="text-xl font-serif font-bold text-black/80 leading-[1.1]">{book.title}</h1>
                             </div>
                         </motion.div>
 
-                        <div className="flex w-full gap-4">
+                        <div className="flex gap-4 w-64 md:w-full">
                             <motion.button
                                 whileTap={{ scale: 0.95 }}
                                 className="flex-1 bg-dark-grey text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:bg-dark-grey/90 transition-colors"
@@ -100,7 +100,7 @@ const BookClient = ({ book }: { book: Book }) => {
             </Wrapper>
 
             {otherBooks.length > 0 && (
-              <Recommendations book={book} otherBooks={otherBooks} />
+                <Recommendations book={book} otherBooks={otherBooks} />
             )}
         </div>
     )

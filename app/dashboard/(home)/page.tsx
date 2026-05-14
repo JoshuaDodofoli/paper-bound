@@ -28,7 +28,7 @@ const Page = () => {
             {...readingScroll.props}
             className={`
             flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
-            ${readingScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
+            ${readingScroll.isDragging ? 'cursor-grabbing `**:pointer-events-none' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
           >
@@ -61,7 +61,7 @@ const Page = () => {
             {...trendingScroll.props}
             className={`
             flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
-            ${trendingScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
+            ${trendingScroll.isDragging ? 'cursor-grabbing `**:pointer-events-none' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
           >
@@ -116,7 +116,7 @@ const Page = () => {
             {...arrivalsScroll.props}
             className={`
             flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
-            ${arrivalsScroll.isDragging ? 'cursor-grabbing' : 'cursor-grab'}
+            ${arrivalsScroll.isDragging ? 'cursor-grabbing `**:pointer-events-none' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
           >
