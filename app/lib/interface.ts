@@ -9,19 +9,36 @@ export interface Author {
   genres: string[];
   works: Book[];
 }
+
 export interface Book {
   key: string;
   id?: string;
   slug: string;
 
-  title: string;         
+  title: string;    
+  description?: string;     
   author: string;        
   authorSlug: string;    
   
-  coverId: string;       
-  publishYear?: number;  
-  pages?: number;        
+  coverId: string;  
 
+  //ebook access 
+  ebookAccess?: boolean;   
+  
+  // publication info
+  firstPublishYear?: number;  
+  numberOfPages?: number;
+  firstSentence?: string[];
+  publisher?: string[];
+  
+  // series info
+  seriesKey?: string;
+  seriesName?: string;
+  seriesPosition?: number;
+  subjects?: string[];
+  places?: string[];
+  ratingsAverage?: number;
+  ratingsCount?: number;
   sourceShelfId?: string; 
 }
 

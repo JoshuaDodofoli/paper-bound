@@ -23,7 +23,7 @@ const BookCard = ({
     author, 
     coverId,
     coverColor = "bg-red-200", 
-    aspectRatio = "aspect-3/4",
+    aspectRatio = "aspect-[3/4]",
     width = "w-40"
 }: BookCardProps) => {
     return (
