@@ -11,6 +11,7 @@ interface ModalProps {
 const CreateCollectionModal = ({ toggleModal, collectionName, setCollectionName, handleSaveCollection }: ModalProps) => {
     return (
         <Modal
+            isOpen={true}
             title="New Collection"
             onClose={toggleModal}
             className="aspect-video"

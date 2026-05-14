@@ -4,22 +4,30 @@ import React, { useState } from 'react'
 import { Search, Book, User, ArrowUpRight } from 'lucide-react';
 import Modal from '../ui/Modal';
 import Link from 'next/link';
+import { MOCK_BOOKS, MOCK_AUTHORS } from '@/app/lib/books';
 
 interface SearchModalProps {
     isSearchOpen: boolean;
     setIsSearchOpen: (value: boolean) => void;
 }
 
-const MOCK_DATA = [
-    { id: 1, slug: "the-hobbit", title: "The Hobbit", subtitle: "J.R.R. Tolkien", type: "book" },
-    { id: 2, slug: "hard-boiled-wonderland", title: "Hard-Boiled Wonderland", subtitle: "Haruki Murakami", type: "book" },
-    { id: 3, slug: "norwegian-wood", title: "Norwegian Wood", subtitle: "Haruki Murakami", type: "book" },
-    { id: 4, slug: "foundation", title: "Foundation", subtitle: "Isaac Asimov", type: "book" },
-    { id: 5, slug: "haruki-murakami", title: "Haruki Murakami", subtitle: "Author • 14 Books", type: "author" },
-    { id: 6, slug: "stephen-king", title: "Stephen King", subtitle: "Author • 64 Books", type: "author" },
-    { id: 7, slug: "the-shining", title: "The Shining", subtitle: "Stephen King", type: "book" },
-    { id: 8, slug: "1q84", title: "1Q84", subtitle: "Haruki Murakami", type: "book" },
-];
+const booksForSearch = MOCK_BOOKS.map(book => ({
+    id: book.id,
+    slug: book.slug,
+    title: book.title,
+    subtitle: book.author,
+    type: "book" as const
+}));
+
+const authorsForSearch = MOCK_AUTHORS.map(author => ({
+    id: author.id,
+    slug: author.slug,
+    title: author.name,
+    subtitle: `Author • ${author.works?.length || 0} Books`,
+    type: "author" as const
+}));
+
+const SEARCHABLE_DATA = [...booksForSearch, ...authorsForSearch];
 
 const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
     const [query, setQuery] = useState("");
@@ -29,7 +37,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
     }
 
     const filteredResults = query.length > 0
-        ? MOCK_DATA.filter(item =>
+        ? SEARCHABLE_DATA.filter(item =>
             item.title.toLowerCase().includes(query.toLowerCase()) ||
             item.subtitle.toLowerCase().includes(query.toLowerCase())
         )
@@ -37,6 +45,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
 
     return (
         <Modal
+            isOpen={isSearchOpen}
             title="Search"
             onClose={handleCloseSearch}
             center={false}

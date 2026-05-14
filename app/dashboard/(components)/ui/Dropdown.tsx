@@ -3,6 +3,7 @@
 import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { DropdownItem } from '@/app/lib/interface'
+import Link from 'next/link';
 
 interface DropdownProps {
   isOpen: boolean;
@@ -25,28 +26,51 @@ const Dropdown = ({ isOpen, onClose, items, className }: DropdownProps) => {
             className={`absolute top-12 right-0 z-50 w-48 overflow-hidden rounded-2xl border border-stone/60 bg-stone/95 backdrop-blur-md shadow-xl ${className}`}
           >
             <div className="flex flex-col p-1.5">
-              {items.map((item, idx) => (
-                <React.Fragment key={idx}>
-                  {item.divider && <div className="h-px w-full bg-dark-grey/10 my-1" />}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      item.onClick();
-                      onClose();
-                    }}
-                    className={`flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all active:scale-95 cursor-pointer ${
-                      item.variant === 'danger' 
-                        ? 'text-rose-500 hover:bg-rose-500/10' 
-                        : 'text-dark-grey/90 hover:bg-dark-grey/5'
-                    }`}
-                  >
+              {items.map((item, idx) => {
+                const commonClassName = `flex w-full items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium transition-all active:scale-95 cursor-pointer text-left ${
+                  item.variant === 'danger' 
+                    ? 'text-rose-500 hover:bg-rose-500/10' 
+                    : 'text-dark-grey/90 hover:bg-dark-grey/5'
+                }`;
+
+                const handleClick = (e: React.MouseEvent) => {
+                  e.stopPropagation();
+                  item.onClick?.();
+                  onClose();
+                };
+
+                const content = (
+                  <>
                     <span className={item.variant === 'danger' ? 'text-rose-400' : 'text-dark-grey/70'}>
                       {item.icon}
                     </span>
                     <span>{item.label}</span>
-                  </button>
-                </React.Fragment>
-              ))}
+                  </>
+                );
+
+                return (
+                  <React.Fragment key={idx}>
+                    {item.divider && <div className="h-px w-full bg-dark-grey/10 my-1" />}
+                    {item.path ? (
+                      <Link 
+                        href={item.path} 
+                        onClick={handleClick}
+                        className={commonClassName}
+                      >
+                        {content}
+                      </Link>
+                    ) : (
+                      <button 
+                        type="button" 
+                        onClick={handleClick}
+                        className={commonClassName}
+                      >
+                        {content}
+                      </button>
+                    )}
+                  </React.Fragment>
+                );
+              })}
             </div>
           </motion.div>
         </>

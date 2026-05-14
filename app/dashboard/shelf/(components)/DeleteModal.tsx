@@ -23,6 +23,7 @@ const DeleteModal = ({ collectionId }: ModalProps) => {
 
     return (
         <Modal
+            isOpen={true}
             title="Delete Collection"
             onClose={toggleDeleteModal}
             className="aspect-video"
