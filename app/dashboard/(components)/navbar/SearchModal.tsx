@@ -1,47 +1,58 @@
 'use client'
 import { motion, AnimatePresence } from 'motion/react';
-import React, { useState } from 'react'
-import { Search, Book, User, ArrowUpRight } from 'lucide-react';
+import { useEffect, useState } from 'react'
+import Image from 'next/image';
+import { Search, Book, User, ArrowUpRight, Loader2 } from 'lucide-react';
 import Modal from '../ui/Modal';
 import Link from 'next/link';
 import { MOCK_BOOKS, MOCK_AUTHORS } from '@/app/lib/books';
+import { SearchResults } from '@/app/lib/interface';
+import { searchBooks } from '@/app/lib/utils/BookSearch';
 
 interface SearchModalProps {
     isSearchOpen: boolean;
     setIsSearchOpen: (value: boolean) => void;
 }
 
-const booksForSearch = MOCK_BOOKS.map(book => ({
-    id: book.id,
-    slug: book.slug,
-    title: book.title,
-    subtitle: book.author,
-    type: "book" as const
-}));
-
-const authorsForSearch = MOCK_AUTHORS.map(author => ({
-    id: author.id,
-    slug: author.slug,
-    title: author.name,
-    subtitle: `Author • ${author.works?.length || 0} Books`,
-    type: "author" as const
-}));
-
-const SEARCHABLE_DATA = [...booksForSearch, ...authorsForSearch];
-
 const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
     const [query, setQuery] = useState("");
+    const [results, setResults] = useState<SearchResults[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    useEffect(() => {
+        if (query.length === 0) {
+            setResults([]);
+            return;
+        }
+
+        const timeout = setTimeout(async () => {
+            setIsLoading(true);
+
+            try {
+                const data = await searchBooks(query);
+                console.log(data.docs)
+                setResults(data.docs.slice(0, 10).map((searchData: any) => ({
+                    key: searchData.key ? searchData.key.replace('/works/', '') : '',
+                    slug: searchData.title ? searchData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : '',
+                    title: searchData.title,
+                    author: searchData.author_name ? searchData.author_name[0] : 'Unknown Author',
+                    coverId: searchData.cover_i,
+                }))
+                )
+
+            } catch (error) {
+                console.log(error);
+            } finally {
+                setIsLoading(false);
+            }
+        }, 500)
+
+        return () => clearTimeout(timeout)
+    }, [query])
 
     const handleCloseSearch = () => {
         setIsSearchOpen(false);
     }
-
-    const filteredResults = query.length > 0
-        ? SEARCHABLE_DATA.filter(item =>
-            item.title.toLowerCase().includes(query.toLowerCase()) ||
-            item.subtitle.toLowerCase().includes(query.toLowerCase())
-        )
-        : [];
 
     return (
         <Modal
@@ -65,7 +76,9 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                         placeholder='Search books, authors, genres...'
                         className='w-full bg-dark-grey/5 border-stone/50 border-2 text-dark-grey placeholder:text-base rounded-3xl py-3 pl-12 pr-4 outline-none focus:border-stone transition-all text-lg font-medium'
                     />
-                    {query && (
+                    {isLoading ? (
+                        <Loader2 className="absolute right-4 text-dark-grey/30 animate-spin" size={16} />
+                    ) : query && (
                         <button
                             onClick={() => setQuery("")}
                             className="absolute right-4 text-xs font-bold text-dark-grey/40 hover:text-dark-grey/60 cursor-pointer"
@@ -110,27 +123,35 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                             >
                                 <div className="flex items-center justify-between ml-1 mb-2">
                                     <h4 className='text-xs text-dark-grey/40 font-bold uppercase tracking-widest'>Results for "{query}"</h4>
-                                    <span className="text-[10px] bg-stone text-dark-grey/80 px-2 py-0.5 rounded-full font-bold">{filteredResults.length} FOUND</span>
+                                    <span className="text-[10px] bg-stone text-dark-grey/80 px-2 py-0.5 rounded-full font-bold">{results.length} FOUND</span>
                                 </div>
 
-                                {filteredResults.length > 0 ? (
-                                    filteredResults.map((item) => (
-                                        <div key={item.id}>
+                                {results.length > 0 ? (
+                                    results.map((item, i) => (
+                                        <div key={item.key + String(i)}>
                                             <Link
-                                                href={item.type === "book" ? `/dashboard/book/${item.slug}` : `/dashboard/authors/${item.slug}`}
+                                                href={`/dashboard/book/${item.slug || item.key}`}
                                                 onClick={() => setIsSearchOpen(false)}
                                                 className='relative'
                                             >
                                                 <motion.div
                                                     whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
-                                                    className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
+                                                    className="flex items-center gap-4 p-3 rounded-2xl cursor-pointer group transition-all"
                                                 >
-                                                    <div className="w-10 h-10 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 group-hover:bg-amber-400/20 group-hover:text-amber-300 transition-colors">
-                                                        {item.type === 'book' ? <Book size={18} /> : <User size={18} />}
+                                                    <div className="relative aspect-3/4 w-16 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40  transition-colors">
+                                                    {item.coverId && (
+                                                        <Image
+                                                        src={`https://covers.openlibrary.org/b/id/${item.coverId}-M.jpg`}
+                                                        alt={item.title}
+                                                        fill
+                                                        sizes="56px"
+                                                        className='object-cover object-center'
+                                                        />
+                                                   ) }
                                                     </div>
                                                     <div className="flex-1">
                                                         <p className="font-semibold text-dark-grey/90">{item.title}</p>
-                                                        <p className="text-xs text-dark-grey/50">{item.subtitle}</p>
+                                                        <p className="text-sm text-dark-grey/50">by {item.author}</p>
                                                     </div>
                                                     <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
                                                 </motion.div>

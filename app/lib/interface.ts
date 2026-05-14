@@ -35,3 +35,11 @@ interface DropdownProps {
   items: DropdownItem[];
   className?: string;
 }
+
+export interface SearchResults {
+  key: string;
+  slug: string;
+  title: string;
+  author: string;
+  coverId: string;
+}
