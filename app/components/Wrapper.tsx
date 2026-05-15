@@ -1,8 +1,8 @@
 import React from 'react'
 
 interface WrapperProps {
-    children: React.ReactNode
-    className?: string
+  children: React.ReactNode
+  className?: string
 }
 
 const Wrapper = ({ children, className }: WrapperProps) => {

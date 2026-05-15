@@ -1,6 +1,6 @@
 'use client'
 import Wrapper from '@/app/components/Wrapper';
-import { BookOpen, Bookmark, Star, Clock, Plus, Share2 } from 'lucide-react';
+import { BookOpen, Bookmark, Star, Clock, Plus, Share2, Ellipsis } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { MOCK_BOOKS } from '../../../lib/books';
@@ -9,11 +9,20 @@ import BookCard from '../../(components)/book/BookCard';
 import Recommendations from './Recommendations';
 import Image from 'next/image';
 import { Book } from '@/app/lib/interface';
+import { useState } from 'react';
+import Modal from '../../(components)/ui/Modal';
 
 const BookClient = ({ book }: { book: Book }) => {
 
+    const [ isOpen, setIsOpen ] = useState(false);
+
+    const handleMore = () => {
+        setIsOpen(!isOpen);
+    }
+
+    const cleanDescription = book.description?.split(/Also contained in:|----------|\*\*Contains\*\*/i)[0].trim();
     const LIMIT = 270;
-    const isLong = (book.description?.length ?? 0) > LIMIT;
+    const isLong = (cleanDescription?.length ?? 0) > LIMIT;
 
     return (
         <div className="min-h-screen pt-20 pb-20">
@@ -96,16 +105,36 @@ const BookClient = ({ book }: { book: Book }) => {
 
                         <div className="space-y-4">
                             <h3 className="text-xl font-bold text-dark-grey">Synopsis</h3>
-                            <p className="text-dark-grey/70 text-lg">
-                                {
-                                    isLong ? (
-                                       book.description?.slice(0, LIMIT) + "..."
-                                    ) : (
-                                        book.description
-                                    )
-                                }
-                            </p>
+                            <div className="text-wrap">
+                                <span className="text-dark-grey/70 text-base">
+                                    {isLong
+                                        ? cleanDescription?.slice(0, LIMIT) + '...'
+                                        : cleanDescription
+                                    }
+                                </span>
+                                {isLong && (
+                                    <button
+                                        onClick={handleMore}
+                                        className="text-dark-grey font-semibold text-base cursor-pointer"
+                                    >
+                                        Read more
+                                    </button>
+                                )}
+                            </div>
                         </div>
+
+                        <Modal 
+                            isOpen={isOpen} 
+                            onClose={() => setIsOpen(false)} 
+                            title="Synopsis"
+                            width="w-[90%] max-w-[600px]"
+                        >
+                            <div className="max-h-[60vh] overflow-y-auto">
+                                <p className="text-dark-grey/80 text-base leading-relaxed text-wrap font-medium">
+                                    {cleanDescription}
+                                </p>
+                            </div>
+                        </Modal>
 
                     </div>
                 </div>
