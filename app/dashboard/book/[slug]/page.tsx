@@ -1,6 +1,6 @@
 import BookClient from '../(components)/BookClient'
 import BackButton from '../../(components)/ui/BackButton'
-import { getBookDescription, searchBooks } from '@/app/lib/utils/BookSearch'
+import { getBookDetails, searchBooks } from '@/app/lib/utils/BookSearch'
 import { Book } from '@/app/lib/interface'
 
 interface bookPageProps {
@@ -25,7 +25,7 @@ const BookDetailsPage = async ({ params }: bookPageProps) => {
 
         if (searchData) {
 
-            const description = await getBookDescription(searchData.key);
+            const details = await getBookDetails(searchData.key);
 
             book = {
                 key: searchData.key,
@@ -35,9 +35,11 @@ const BookDetailsPage = async ({ params }: bookPageProps) => {
                 author: searchData.author_name ? searchData.author_name[0] : 'Unknown Author',
                 authorSlug: searchData.author_name ? searchData.author_name[0].toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : 'unknown',
                 coverId: searchData.cover_i,
-                description: description
+                description: details.description,
+                subjects: details.subjects,
             };
         }
+
     } catch (error) {
         console.error("Error fetching actual search results:", error);
     }

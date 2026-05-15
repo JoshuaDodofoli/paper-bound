@@ -11,11 +11,13 @@ interface childrenProps {
 export default function DashboardLayout({ children }: childrenProps) {
   return (
 
-    <div className="">
+    <div className="min-h-screen flex flex-col">
       <Header />
-      <Transition>
-        {children}
-      </Transition>
+      <main className="flex-1">
+        <Transition>
+          {children}
+        </Transition>
+      </main>
       <Navbar />
       <Footer />
     </div>
