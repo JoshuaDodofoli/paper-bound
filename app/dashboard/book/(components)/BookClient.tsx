@@ -96,7 +96,7 @@ const BookClient = ({ book }: { book: Book }) => {
 
                         <div className="space-y-4">
                             <h3 className="text-xl font-bold text-dark-grey">Synopsis</h3>
-                            <p className="text-dark-grey/70 text-base">
+                            <p className="text-dark-grey/70 text-lg">
                                 {
                                     isLong ? (
                                        book.description?.slice(0, LIMIT) + "..."

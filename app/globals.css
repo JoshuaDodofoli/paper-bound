@@ -46,7 +46,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 p, label, input, button, span, a, li {
-  @apply font-sans tracking-tighter font-bold
+  @apply font-sans tracking-tighter font-medium
 }
 
 .section-gradient {

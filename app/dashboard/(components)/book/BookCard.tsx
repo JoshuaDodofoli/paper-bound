@@ -44,6 +44,21 @@ const BookCard = ({
                 )}
                 <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-black/10 z-10" />
 
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-xs z-30">
+                    <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            console.log("Quick add book:", id);
+                        }}
+                        className="bg-white/20 hover:bg-white/40 p-2 rounded-full border border-white/40 text-white transition-colors cursor-pointer"
+                    >
+                        <Plus size={20} />
+                    </motion.button>
+                </div>
+
                 <div className="absolute inset-0 p-4 flex flex-col justify-end z-20 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <p className="text-[10px] font-bold text-white uppercase tracking-widest truncate">{author}</p>
                     <p className="text-xs font-serif font-bold text-white/90 leading-tight line-clamp-2">{title}</p>

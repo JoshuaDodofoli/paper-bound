@@ -31,7 +31,7 @@ const Navbar = () => {
         className='fixed bottom-5 z-20 left-1/2 -translate-x-1/2 flex items-center justify-center'
       >
         <div className="flex items-center gap-2">
-          <ul className='flex gap-1 p-1.5 bg-white/40 backdrop-blur-xl border border-stone/30 rounded-full shadow-2xl'>
+          <ul className='flex gap-1 p-1.5 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full shadow-2xl'>
             {links.map((link) => {
               const isActive = link.href === '/dashboard'
                 ? pathName === '/dashboard' || (!pathName.startsWith('/dashboard/shelf') && pathName.startsWith('/dashboard'))
@@ -43,7 +43,7 @@ const Navbar = () => {
                     href={link.href}
                     className={`
                     flex items-center justify-center gap-1 w-20 px-4=6 py-2.5 rounded-full transition-colors duration-300 relative z-10
-                    ${isActive ? 'text-dark-grey' : 'text-dark-grey/50 hover:text-dark-grey/80'}
+                    ${isActive ? 'text-white' : 'text-white/50 hover:text-white/80'}
                   `}
                   >
                     <span className="relative z-10">{link.icon}</span>
@@ -65,7 +65,7 @@ const Navbar = () => {
                   {isActive && (
                     <motion.div
                       layoutId="navbar-active-pill"
-                      className="absolute inset-0 bg-stone/50 rounded-full"
+                      className="absolute inset-0 bg-white/15 rounded-full"
                       transition={{ type: "spring", bounce: 0.15, duration: 0.5 }}
                     />
                   )}
@@ -78,7 +78,7 @@ const Navbar = () => {
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: 1.05 }}
             onClick={() => setIsSearchOpen(!isSearchOpen)}
-            className="flex cursor-pointer items-center justify-center rounded-full bg-amber-400 text-dark-grey shadow-lg size-12 hover:bg-amber-300 transition-colors"
+            className="flex cursor-pointer items-center justify-center rounded-full bg-amber-400 text-black shadow-lg size-12 hover:bg-amber-300 transition-colors"
           >
             <Search className='size-4.5 text-dark-grey/90' />
           </motion.button>

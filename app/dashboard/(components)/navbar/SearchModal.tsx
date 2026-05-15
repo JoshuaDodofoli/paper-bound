@@ -145,7 +145,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                             >
                                                 <motion.div
                                                     whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
-                                                    className="flex items-center gap-4 p-3 rounded-2xl cursor-pointer group transition-all"
+                                                    className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
                                                 >
                                                     <div className="relative aspect-3/4 w-16 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40  transition-colors">
                                                     {item.coverId && (
