@@ -39,11 +39,11 @@
 
 html {
   scrollbar-gutter: stable;
-  @apply bg-paper overflow-x-hidden;
+  @apply bg-paper overflow-x-clip;
 }
 
 body {
-  @apply min-h-screen bg-paper/70 text-dark-grey/90 overflow-x-hidden wrap-break-word;
+  @apply min-h-screen bg-paper/70 text-dark-grey/90 overflow-x-clip wrap-break-word;
 }
 
 h1, h2, h3, h4, h5, h6 {

@@ -1,20 +1,19 @@
 'use client'
 import Wrapper from '@/app/components/Wrapper';
-import { BookOpen, Bookmark, Star, Clock, Plus, Share2, Ellipsis } from 'lucide-react';
+import { Star, Clock } from 'lucide-react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
-import { MOCK_BOOKS } from '../../../lib/books';
 import BackButton from '../../(components)/ui/BackButton';
-import BookCard from '../../(components)/book/BookCard';
-import Recommendations from './Recommendations';
-import Image from 'next/image';
 import { Book } from '@/app/lib/interface';
 import { useState } from 'react';
 import Modal from '../../(components)/ui/Modal';
+import Sidebar from './Sidebar';
+import Recommendations from './Recommendations';
+import Image from 'next/image';
 
 const BookClient = ({ book }: { book: Book }) => {
 
-    const [ isOpen, setIsOpen ] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleMore = () => {
         setIsOpen(!isOpen);
@@ -25,124 +24,129 @@ const BookClient = ({ book }: { book: Book }) => {
     const isLong = (cleanDescription?.length ?? 0) > LIMIT;
 
     return (
-        <div className="min-h-screen pt-20 pb-20">
-            <Wrapper>
-                <BackButton label="Back" className="mb-8" />
+        <div className="w-full min-h-screen bg-[#F5F5F5] pt-12 pb-24">
+            <Wrapper className="">
+                <div className="flex items-center justify-between mb-16 border-b border-black/5 pb-4">
+                    <BackButton />
+                    <span className="text-xs font-medium uppercase tracking-[0.2em] text-dark-grey/60">Book Listing</span>
+                </div>
 
-                <div className="flex flex-col md:flex-row gap-12 lg:gap-20">
-                    <div className="w-full md:w-1/3 flex flex-col gap-8 items-center md:items-start">
+                <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-20 items-start">
+                    {/* Left Section: Cover with circular background */}
+                    <div className="relative flex flex-col items-center">
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-white/40 blur-3xl -z-10" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-dark-grey/5 -z-20" />
+
+                        <Sidebar book={book} />
+
+                        <p className="mt-8 text-[9px] uppercase font-bold tracking-[0.2em] text-dark-grey/40">Click for Preview</p>
+                    </div>
+
+                    {/* Middle Section: Editorial Content */}
+                    <div className="max-w-2xl space-y-16">
                         <motion.div
                             initial={{ y: 20, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
-                            className="aspect-3/4 w-64 md:w-full rounded-sm shadow-book-hover relative overflow-hidden flex items-center justify-center"
+                            className="space-y-4"
                         >
-                            {book.coverId && (
-                                <Image
-                                    src={`https://covers.openlibrary.org/b/id/${book.coverId}-L.jpg`}
-                                    alt={book.title}
-                                    fill
-                                    className="object-contain"
-                                    priority
-                                />
-                            )}
+                            <h1 className="text-3xl md:text-4xl font-serif font-bold text-dark-grey leading-[1.1] tracking-tight">
+                                {book.title}
+                            </h1>
+                            <p className="text-sm text-dark-grey/50">
+                                by <span className="text-dark-grey text-base font-sans ml-1">{book.author}</span>
+                            </p>
                         </motion.div>
 
-                        <div className="flex gap-4 w-64 md:w-full">
-                            <motion.button
-                                whileTap={{ scale: 0.95 }}
-                                className="flex-1 bg-dark-grey text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 cursor-pointer shadow-lg hover:bg-dark-grey/90 transition-colors"
-                            >
-                                <BookOpen size={20} />
-                                Start Reading
-                            </motion.button>
-                            <motion.button
-                                whileTap={{ scale: 0.95 }}
-                                className="p-4 bg-stone rounded-2xl text-dark-grey cursor-pointer hover:bg-stone/80 transition-colors"
-                            >
-                                <Bookmark size={20} />
-                            </motion.button>
-                        </div>
-                    </div>
+                        <div className="space-y-8">
 
-                    <div className="flex-1 space-y-8">
-                        <motion.div
-                            initial={{ x: 20, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            transition={{ delay: 0.1 }}
-                        >
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="flex items-center gap-1 bg-amber-400/10 text-amber-500 px-3 py-1 rounded-full text-sm font-bold">
-                                    <Star size={16} fill="currentColor" />
-                                    4.8
-                                </div>
-                                <span className="text-dark-grey/30">•</span>
-                                <div className="text-dark-grey/50 text-sm font-medium">1,200 Reviews</div>
-                            </div>
-
-                            <h1 className="text-3xl font-serif font-bold text-dark-grey mb-2">{book.title}</h1>
-                            <Link href={`/dashboard/authors/${book.authorSlug}`}>
-                                <p className="text-lg text-dark-grey/60 font-medium">by <span className="text-dark-grey/90 underline decoration-stone-400 underline-offset-4">{book.author}</span></p>
-                            </Link>
-                        </motion.div>
-
-                        <div className="grid grid-cols-3 gap-4 border-y border-stone/50 py-6">
-                            <div className="text-center">
-                                <p className="text-[10px] uppercase font-bold text-dark-grey/40 tracking-widest mb-1">Length</p>
-                                <div className="flex items-center justify-center gap-1 text-dark-grey/80 font-bold">
-                                    <Clock size={16} />
-                                    12h 45m
+                            {/* Main Body */}
+                            <div className="">
+                                <h3 className='mb-2 text-lg'>Synopsis</h3>
+                                <div className="space-y-4">
+                                    {(isLong ? cleanDescription?.slice(0, LIMIT) + '...' : cleanDescription)
+                                        ?.split('\n').filter(p => p.trim() !== '').map((paragraph, index, arr) => (
+                                            <p key={index} className="text-base leading-relaxed text-dark-grey/70 text-wrap font-medium">
+                                                {paragraph}
+                                                {isLong && index === arr.length - 1 && (
+                                                    <button
+                                                        onClick={handleMore}
+                                                        className="ml-2 text-base text-dark-grey font-bold hover:underline cursor-pointer inline-block"
+                                                    >
+                                                        Read more
+                                                    </button>
+                                                )}
+                                            </p>
+                                        ))}
                                 </div>
                             </div>
-                            <div className="text-center border-x border-stone/50">
-                                <p className="text-[10px] uppercase font-bold text-dark-grey/40 tracking-widest mb-1">Language</p>
-                                <p className="text-dark-grey/80 font-bold">English</p>
+                        </div>
+
+                        {/* Metadata Grid */}
+                        <div className="grid grid-cols-2 gap-x-20 gap-y-8 py-10 border-y border-black/5">
+                            <div className="flex flex-col gap-2">
+                                <span className="text-xs uppercase font-bold text-dark-grey/60">Editors</span>
+                                <span className="text-sm font-medium text-dark-grey/80">Gestalten</span>
                             </div>
-                            <div className="text-center">
-                                <p className="text-[10px] uppercase font-bold text-dark-grey/40 tracking-widest mb-1">Format</p>
-                                <p className="text-dark-grey/80 font-bold">Hardcover</p>
+                            <div className="flex flex-col gap-2">
+                                <span className="text-xs uppercase font-bold text-dark-grey/60">Features</span>
+                                <span className="text-sm font-medium text-dark-grey/80">Full color, 256 pages</span>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <span className="text-xs uppercase font-bold text-dark-grey/60">Release Date</span>
+                                <span className="text-sm font-medium text-dark-grey/80">May 2017</span>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <span className="text-xs uppercase font-bold text-dark-grey/60">Language</span>
+                                <span className="text-sm font-medium text-dark-grey/80">English</span>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <span className="text-xs uppercase font-bold text-dark-grey/60">Format</span>
+                                <span className="text-sm font-medium text-dark-grey/80">21 x 26 cm</span>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <span className="text-xs uppercase font-bold text-dark-grey/60">ISBN</span>
+                                <span className="text-sm font-medium text-dark-grey/80">978-3-89955-698-8</span>
                             </div>
                         </div>
 
-                        <div className="space-y-4">
-                            <h3 className="text-xl font-bold text-dark-grey">Synopsis</h3>
-                            <div className="text-wrap">
-                                <span className="text-dark-grey/70 text-base">
-                                    {isLong
-                                        ? cleanDescription?.slice(0, LIMIT) + '...'
-                                        : cleanDescription
-                                    }
-                                </span>
-                                {isLong && (
-                                    <button
-                                        onClick={handleMore}
-                                        className="text-dark-grey font-semibold text-base cursor-pointer"
-                                    >
-                                        Read more
-                                    </button>
-                                )}
+                        {/* Categories/Subjects (from user request) */}
+                        {book.subjects && book.subjects.length > 0 && (
+                            <div className="space-y-4">
+                                <p className="text-[9px] uppercase font-bold text-dark-grey/60 tracking-[0.2em]">Genres</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {book.subjects.slice(0, 8).map((subject, index) => (
+                                        <span key={index} className="text-sm font-medium text-dark-grey/70 hover:text-dark-grey cursor-default transition-colors">
+                                            {subject}{index < 7 && index < book.subjects!.length - 1 ? " • " : ""}
+                                        </span>
+                                    ))}
+                                </div>
                             </div>
-                        </div>
+                        )}
 
-                        <Modal 
-                            isOpen={isOpen} 
-                            onClose={() => setIsOpen(false)} 
-                            title="Synopsis"
-                            width="w-[90%] max-w-[600px]"
-                        >
-                            <div className="max-h-[60vh] overflow-y-auto">
-                                <p className="text-dark-grey/80 text-base leading-relaxed text-wrap font-medium">
-                                    {cleanDescription}
-                                </p>
-                            </div>
-                        </Modal>
+                        {/* Reviewer Section */}
 
                     </div>
+
+                    {/* Right Section: Vertical Shelf Sidebar */}
+
                 </div>
-            </Wrapper>
 
-            {/* {otherBooks.length > 0 && (
-                <Recommendations book={book} otherBooks={otherBooks} />
-            )} */}
+                <Modal
+                    isOpen={isOpen}
+                    onClose={() => setIsOpen(false)}
+                    title="Synopsis"
+                    showDivider
+                    width="w-[90%] max-w-[600px]"
+                >
+                    <div className="max-h-[60vh] overflow-y-auto pr-2 no-scrollbar space-y-4">
+                        {cleanDescription?.split('\n').filter(p => p.trim() !== '').map((paragraph, index) => (
+                            <p key={index} className="text-dark-grey/80 text-base leading-relaxed text-wrap font-medium">
+                                {paragraph}
+                            </p>
+                        ))}
+                    </div>
+                </Modal>
+            </Wrapper>
         </div>
     )
 }

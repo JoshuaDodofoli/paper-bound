@@ -17,28 +17,31 @@ export async function searchBooks(query: string) {
   }
 }
 
-export async function getBookDescription(workKey: string) {
+export async function getBookDetails(workKey: string) {
   try {
-    // workKey is usually "/works/OL12345W"
     const res = await fetch(`https://openlibrary.org${workKey}.json`);
 
     if (!res.ok) {
-      console.error("Description API error:", res.status);
-      return "Description not available.";
+      console.error("Details API error:", res.status);
+      return { description: "Description not available.", subjects: [] };
     }
 
     const data = await res.json();
+    let description = "No description available for this title.";
 
-    // Open Library descriptions can be a string or an object { value: string }
     if (typeof data.description === 'string') {
-      return data.description;
+      description = data.description;
     } else if (data.description?.value) {
-      return data.description.value;
+      description = data.description.value;
     }
 
-    return "No description available for this title.";
+
+    return {
+      description,
+      subjects: data.subjects || [],
+    };
   } catch (error) {
-    console.error("Failed to fetch description:", error);
-    return "Error loading description.";
+    console.error("Failed to fetch details:", error);
+    return { description: "Error loading description.", subjects: [], firstSentence: null };
   }
 }
