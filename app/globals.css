@@ -38,15 +38,15 @@
 }
 
 body {
-  @apply bg-paper/70 ;
+  @apply bg-paper/70 text-dark-grey/90;
 }
 
 h1, h2, h3, h4, h5, h6 {
  @apply font-serif text-dark-grey/95 tracking-tight font-semibold
 }
 
-p, label, input, button, span {
-  @apply font-sans tracking-tighter font-medium
+p, label, input, button, span, a, li {
+  @apply font-sans tracking-tighter font-bold
 }
 
 .section-gradient {
