@@ -39,7 +39,7 @@ const page = async ({ params }: AuthorPageProps) => {
         <p className="text-dark-grey/60 max-w-md">
           We couldn't find an author with the slug "{slug}". They might be hiding in a different library.
         </p>
-        <BackButton label='Go back to Dashboard' />
+        <BackButton label='Go back'/>
       </div>
     );
   }

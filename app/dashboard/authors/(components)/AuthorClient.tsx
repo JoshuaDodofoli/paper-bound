@@ -11,7 +11,7 @@ const AuthorClient = ({ author }: { author: Author }) => {
   return (
     <div className="mt-20 mb-32">
       <Wrapper>
-        <BackButton label="Back to Dashboard" className="mb-12" />
+        <BackButton label="Back" className="mb-12" />
 
         <div className="grid grid-cols-1 lg:grid-cols-[230px_1fr] gap-8 items-start">
           {/* Sidebar - Left Column */}

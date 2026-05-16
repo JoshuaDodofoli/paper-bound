@@ -23,22 +23,22 @@ const BookCard = ({
     author, 
     coverId,
     coverColor = "bg-red-200", 
-    aspectRatio = "aspect-[3/4]",
-    width = "w-40"
+    aspectRatio = "aspect-3/4",
+    width = "w-44"
 }: BookCardProps) => {
     return (
         <Link href={`/dashboard/book/${slug}`} className="shrink-0 block group">
             <motion.div
                 whileHover={{ y: -5 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`relative ${width} ${aspectRatio} ${coverColor} rounded-sm shadow-book transition-shadow hover:shadow-book-hover overflow-hidden`}
+                className={`relative ${width} ${aspectRatio} ${coverColor} shadow-book transition-shadow hover:shadow-book-hover overflow-hidden`}
             >
                 {coverId && (
                     <Image
                         src={`https://covers.openlibrary.org/b/id/${coverId}-L.jpg`}
                         alt={title}
                         fill
-                        className="object-cover object-center"
+                        className="object-fit object-center"
                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
                     />
                 )}

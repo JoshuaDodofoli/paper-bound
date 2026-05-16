@@ -10,10 +10,13 @@ import Modal from '../../(components)/ui/Modal';
 import Sidebar from './Sidebar';
 import Recommendations from './Recommendations';
 import Image from 'next/image';
+import BookCard from '../../(components)/book/BookCard';
+import { useDraggableScroll } from '@/app/hooks/useDraggableScroll';
 
 const BookClient = ({ book }: { book: Book }) => {
 
     const [isOpen, setIsOpen] = useState(false);
+    const recScroll = useDraggableScroll();
 
     const handleMore = () => {
         setIsOpen(!isOpen);
@@ -39,10 +42,9 @@ const BookClient = ({ book }: { book: Book }) => {
 
                         <Sidebar book={book} />
 
-                        <p className="mt-8 text-[9px] uppercase font-bold tracking-[0.2em] text-dark-grey/40">Click for Preview</p>
+                        {/* <p className="mt-8 text-[9px] uppercase font-bold tracking-[0.2em] text-dark-grey/40">Click for Preview</p> */}
                     </div>
 
-                    {/* Middle Section: Editorial Content */}
                     <div className="max-w-2xl space-y-16">
                         <motion.div
                             initial={{ y: 20, opacity: 0 }}
@@ -53,13 +55,14 @@ const BookClient = ({ book }: { book: Book }) => {
                                 {book.title}
                             </h1>
                             <p className="text-sm text-dark-grey/50">
-                                by <span className="text-dark-grey text-base font-sans ml-1">{book.author}</span>
+                                by
+                                <Link href={`/dashboard/authors/${book.authorSlug}`}>
+                                    <span className="text-dark-grey/90 text-base font-sans ml-1 hover:underline underline-offset-2">{book.author}</span>
+                                </Link>
                             </p>
                         </motion.div>
 
                         <div className="space-y-8">
-
-                            {/* Main Body */}
                             <div className="">
                                 <h3 className='mb-2 text-lg'>Synopsis</h3>
                                 <div className="space-y-4">
@@ -109,7 +112,6 @@ const BookClient = ({ book }: { book: Book }) => {
                             </div>
                         </div>
 
-                        {/* Categories/Subjects (from user request) */}
                         {book.subjects && book.subjects.length > 0 && (
                             <div className="space-y-4">
                                 <p className="text-[9px] uppercase font-bold text-dark-grey/60 tracking-[0.2em]">Genres</p>
@@ -123,13 +125,13 @@ const BookClient = ({ book }: { book: Book }) => {
                             </div>
                         )}
 
-                        {/* Reviewer Section */}
-
                     </div>
 
-                    {/* Right Section: Vertical Shelf Sidebar */}
-
                 </div>
+
+              
+
+                <Recommendations book={book} />
 
                 <Modal
                     isOpen={isOpen}

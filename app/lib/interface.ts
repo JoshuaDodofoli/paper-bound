@@ -40,6 +40,8 @@ export interface Book {
   ratingsAverage?: number;
   ratingsCount?: number;
   sourceShelfId?: string; 
+
+  recommendations?: RecommendedBook[];
 }
 
 
@@ -65,4 +67,12 @@ export interface SearchResults {
   title: string;
   author: string;
   coverId: string;
+}
+
+export interface RecommendedBook {
+    key: string;
+    slug: string;
+    title: string;
+    author: string;
+    coverId: number | null;
 }
