@@ -1,20 +1,19 @@
 'use client'
+
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { KeyboardEvent, useEffect, useState } from 'react'
-import Image from 'next/image';
-import { Search, ArrowUpRight, Loader2 } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 import Modal from '../ui/Modal';
-import AuthorSearchAvatar from '../ui/AuthorSearchAvatar';
-import Link from 'next/link';
 import { SearchResults } from '@/app/lib/interface';
-// Hardcover search is now proxied through /api/search (server-side, keeps API key safe)
 import { useRouter } from 'next/navigation';
+import QuickSuggestions from './QuickSuggestions';
+import BookResultItem from './BookResultItem';
+import AuthorResultItem from './AuthorResultItem';
 
 interface SearchModalProps {
     isSearchOpen: boolean;
     setIsSearchOpen: (value: boolean) => void;
 }
-
 
 const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
     const router = useRouter();
@@ -122,28 +121,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                 <p className="text-sm font-medium text-dark-grey/40">Searching library...</p>
                             </motion.div>
                         ) : query.length === 0 ? (
-                            <motion.div
-                                key="suggestions"
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -10 }}
-                                className="space-y-4"
-                            >
-                                <h4 className='text-xs text-dark-grey/40 font-bold uppercase tracking-widest ml-1'>Quick Suggestions</h4>
-                                <div className="flex flex-wrap gap-2">
-                                    {['Fantasy', 'Sci-Fi', 'Mystery', 'Haruki Murakami', 'Classic Fiction', 'The Hobbit'].map((tag) => (
-                                        <motion.button
-                                            key={tag}
-                                            onClick={() => setQuery(tag)}
-                                            whileHover={{ scale: 1.03, backgroundColor: '#fff' }}
-                                            whileTap={{ scale: 0.97 }}
-                                            className="px-4 py-2 bg-dark-grey/5 border border-stone/40 rounded-xl text-sm text-dark-grey/70 cursor-pointer transition-all font-medium"
-                                        >
-                                            {tag}
-                                        </motion.button>
-                                    ))}
-                                </div>
-                            </motion.div>
+                            <QuickSuggestions setQuery={setQuery} />
                         ) : (
                             <motion.div
                                 key="results"
@@ -187,37 +165,14 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                     bookResults.length > 0 ? (
                                         <div className="space-y-2">
                                             {bookResults.map((item, i) => (
-                                                <div key={`book-${item.key}-${i}`}>
-                                                    <Link
-                                                        href={`/dashboard/book/${item.slug || item.key}`}
-                                                        onClick={() => setIsSearchOpen(false)}
-                                                        className='relative'
-                                                    >
-                                                        <motion.div
-                                                            whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
-                                                            className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
-                                                        >
-                                                            <div className="relative aspect-3/4 w-16 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 transition-colors overflow-hidden">
-                                                                {item.coverUrl ? (
-                                                                    <Image
-                                                                        src={item.coverUrl}
-                                                                        alt={item.title}
-                                                                        fill
-                                                                        sizes="56px"
-                                                                        className='object-center object-contain'
-                                                                    />
-                                                                ) : (
-                                                                    <span className="text-[10px] font-serif font-bold text-center px-1 line-clamp-2 leading-none">{item.title}</span>
-                                                                )}
-                                                            </div>
-                                                            <div className="flex-1">
-                                                                <p className="font-semibold text-dark-grey/90">{item.title}</p>
-                                                                <p className="text-sm text-dark-grey/50">by {item.author}</p>
-                                                            </div>
-                                                            <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
-                                                        </motion.div>
-                                                    </Link>
-                                                </div>
+                                                <BookResultItem
+                                                    key={`book-${item.key}-${i}`}
+                                                    slug={item.slug || item.key}
+                                                    title={item.title}
+                                                    author={item.author}
+                                                    coverUrl={item.coverUrl}
+                                                    onClick={() => setIsSearchOpen(false)}
+                                                />
                                             ))}
                                         </div>
                                     ) : (
@@ -229,29 +184,14 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                     authorResults.length > 0 ? (
                                         <div className="space-y-2">
                                             {authorResults.map((item, i) => (
-                                                <div key={`author-${item.slug}-${i}`}>
-                                                    <Link
-                                                        href={`/dashboard/authors/${item.slug}`}
-                                                        onClick={() => setIsSearchOpen(false)}
-                                                        className='relative'
-                                                    >
-                                                        <motion.div
-                                                            whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
-                                                            className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
-                                                        >
-                                                            <AuthorSearchAvatar name={item.name} coverUrl={item.image} />
-                                                            <div className="flex-1">
-                                                                <p className="font-semibold text-dark-grey/90">{item.name}</p>
-                                                                {item.topWork && (
-                                                                    <p className="text-xs text-dark-grey/50 truncate max-w-[320px]">
-                                                                        Top Work: <span className="italic font-medium">{item.topWork}</span>
-                                                                    </p>
-                                                                )}
-                                                            </div>
-                                                            <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
-                                                        </motion.div>
-                                                    </Link>
-                                                </div>
+                                                <AuthorResultItem
+                                                    key={`author-${item.slug}-${i}`}
+                                                    slug={item.slug}
+                                                    name={item.name}
+                                                    image={item.image}
+                                                    topWork={item.topWork}
+                                                    onClick={() => setIsSearchOpen(false)}
+                                                />
                                             ))}
                                         </div>
                                     ) : (
@@ -269,4 +209,4 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
     )
 }
 
-export default SearchModal
+export default SearchModal;
