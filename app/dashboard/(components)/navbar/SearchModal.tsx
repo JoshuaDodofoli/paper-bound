@@ -22,6 +22,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
     const [bookResults, setBookResults] = useState<SearchResults[]>([]);
     const [authorResults, setAuthorResults] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState<'books' | 'authors'>('books');
 
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Enter' && query.length > 0) {
@@ -42,7 +43,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
 
             try {
                 const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-                const { books } = await res.json();
+                const { books, authors } = await res.json();
 
                 setBookResults((books ?? []).map((b: any) => ({
                     key: b.slug,
@@ -52,8 +53,13 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                     coverUrl: b.coverUrl,
                 })));
 
-                // Author search not yet in Hardcover search endpoint — clear for now
-                setAuthorResults([]);
+                setAuthorResults((authors ?? []).map((a: any) => ({
+                    key: a.slug,
+                    slug: a.slug,
+                    name: a.name,
+                    image: a.image,
+                    topWork: a.topWork,
+                })));
 
             } catch (error) {
                 console.error("Search error:", error);
@@ -153,84 +159,106 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                     </span>
                                 </div>
 
-                                {bookResults.length > 0 || authorResults.length > 0 ? (
-                                    <div className="space-y-6">
-                                        {/* Books Sub-section */}
-                                        {bookResults.length > 0 && (
-                                            <div className="space-y-2">
-                                                <span className="text-[10px] text-dark-grey/40 font-bold uppercase tracking-widest mb-1 ml-1 block">Books</span>
-                                                {bookResults.map((item, i) => (
-                                                    <div key={`book-${item.key}-${i}`}>
-                                                        <Link
-                                                            href={`/dashboard/book/${item.slug || item.key}`}
-                                                            onClick={() => setIsSearchOpen(false)}
-                                                            className='relative'
-                                                        >
-                                                            <motion.div
-                                                                whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
-                                                                className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
-                                                            >
-                                                                <div className="relative aspect-3/4 w-16 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 transition-colors">
-                                                                    {(item.coverUrl) && (
-                                                                        <Image
-                                                                            src={item.coverUrl}
-                                                                            alt={item.title}
-                                                                            fill
-                                                                            sizes="56px"
-                                                                            className='object-center object-contain'
-                                                                        />
-                                                                    )}
-                                                                </div>
-                                                                <div className="flex-1">
-                                                                    <p className="font-semibold text-dark-grey/90">{item.title}</p>
-                                                                    <p className="text-sm text-dark-grey/50">by {item.author}</p>
-                                                                </div>
-                                                                <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
-                                                            </motion.div>
-                                                        </Link>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
+                                {/* Tabs Switcher */}
+                                <div className="flex border-b border-dark-grey/5 mb-6 gap-6 px-1">
+                                    <button
+                                        onClick={() => setActiveTab('books')}
+                                        className={`pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer ${
+                                            activeTab === 'books'
+                                                ? 'border-stone text-dark-grey'
+                                                : 'border-transparent text-dark-grey/40 hover:text-dark-grey/60'
+                                        }`}
+                                    >
+                                        Books ({bookResults.length})
+                                    </button>
+                                    <button
+                                        onClick={() => setActiveTab('authors')}
+                                        className={`pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer ${
+                                            activeTab === 'authors'
+                                                ? 'border-stone text-dark-grey'
+                                                : 'border-transparent text-dark-grey/40 hover:text-dark-grey/60'
+                                        }`}
+                                    >
+                                        Authors ({authorResults.length})
+                                    </button>
+                                </div>
 
-                                        {/* Authors Sub-section */}
-                                        {authorResults.length > 0 && (
-                                            <div className="space-y-2">
-                                                <span className="text-[10px] text-dark-grey/40 font-bold uppercase tracking-widest mb-1 ml-1 block">Authors</span>
-                                                {authorResults.map((item, i) => (
-                                                    <div key={`author-${item.key}-${i}`}>
-                                                        <Link
-                                                            href={`/dashboard/authors/${item.slug}`}
-                                                            onClick={() => setIsSearchOpen(false)}
-                                                            className='relative'
+                                {activeTab === 'books' ? (
+                                    bookResults.length > 0 ? (
+                                        <div className="space-y-2">
+                                            {bookResults.map((item, i) => (
+                                                <div key={`book-${item.key}-${i}`}>
+                                                    <Link
+                                                        href={`/dashboard/book/${item.slug || item.key}`}
+                                                        onClick={() => setIsSearchOpen(false)}
+                                                        className='relative'
+                                                    >
+                                                        <motion.div
+                                                            whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
+                                                            className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
                                                         >
-                                                            <motion.div
-                                                                whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
-                                                                className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
-                                                            >
-                                                                <AuthorSearchAvatar name={item.name} olid={item.key} />
-                                                                <div className="flex-1">
-                                                                    <p className="font-semibold text-dark-grey/90">{item.name}</p>
-                                                                    {item.topWork && (
-                                                                        <p className="text-xs text-dark-grey/50 truncate max-w-[320px]">
-                                                                            Top Work: <span className="italic font-medium">{item.topWork}</span>
-                                                                            {item.workCount > 0 && ` • ${item.workCount} Books`}
-                                                                        </p>
-                                                                    )}
-                                                                </div>
-                                                                <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
-                                                            </motion.div>
-                                                        </Link>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
+                                                            <div className="relative aspect-3/4 w-16 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 transition-colors overflow-hidden">
+                                                                {item.coverUrl ? (
+                                                                    <Image
+                                                                        src={item.coverUrl}
+                                                                        alt={item.title}
+                                                                        fill
+                                                                        sizes="56px"
+                                                                        className='object-center object-contain'
+                                                                    />
+                                                                ) : (
+                                                                    <span className="text-[10px] font-serif font-bold text-center px-1 line-clamp-2 leading-none">{item.title}</span>
+                                                                )}
+                                                            </div>
+                                                            <div className="flex-1">
+                                                                <p className="font-semibold text-dark-grey/90">{item.title}</p>
+                                                                <p className="text-sm text-dark-grey/50">by {item.author}</p>
+                                                            </div>
+                                                            <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
+                                                        </motion.div>
+                                                    </Link>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="py-10 text-center">
+                                            <p className="text-dark-grey/40 font-medium">No books found for "{query}"</p>
+                                        </div>
+                                    )
                                 ) : (
-                                    <div className="py-10 text-center">
-                                        <p className="text-dark-grey/40 font-medium">No results found for "{query}"</p>
-                                        <p className="text-xs text-dark-grey/30 mt-1">Try searching for a different book or author</p>
-                                    </div>
+                                    authorResults.length > 0 ? (
+                                        <div className="space-y-2">
+                                            {authorResults.map((item, i) => (
+                                                <div key={`author-${item.slug}-${i}`}>
+                                                    <Link
+                                                        href={`/dashboard/authors/${item.slug}`}
+                                                        onClick={() => setIsSearchOpen(false)}
+                                                        className='relative'
+                                                    >
+                                                        <motion.div
+                                                            whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
+                                                            className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
+                                                        >
+                                                            <AuthorSearchAvatar name={item.name} coverUrl={item.image} />
+                                                            <div className="flex-1">
+                                                                <p className="font-semibold text-dark-grey/90">{item.name}</p>
+                                                                {item.topWork && (
+                                                                    <p className="text-xs text-dark-grey/50 truncate max-w-[320px]">
+                                                                        Top Work: <span className="italic font-medium">{item.topWork}</span>
+                                                                    </p>
+                                                                )}
+                                                            </div>
+                                                            <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
+                                                        </motion.div>
+                                                    </Link>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="py-10 text-center">
+                                            <p className="text-dark-grey/40 font-medium">No authors found for "{query}"</p>
+                                        </div>
+                                    )
                                 )}
                             </motion.div>
                         )}

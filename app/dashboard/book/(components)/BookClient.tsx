@@ -29,6 +29,8 @@ const BookClient = ({ book }: { book: Book }) => {
     return (
         <div className="w-full min-h-screen bg-[#F5F5F5] pt-12 pb-24">
             <Wrapper className="">
+
+                {/* breadcrumb */}
                 <div className="flex items-center justify-between mb-16 border-b border-black/5 pb-4">
                     <BackButton />
                     <span className="text-xs font-medium uppercase tracking-[0.2em] text-dark-grey/60">Book Listing</span>

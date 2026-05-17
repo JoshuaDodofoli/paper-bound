@@ -3,6 +3,7 @@
 import React from 'react'
 import BookCard from '../../(components)/book/BookCard'
 import Wrapper from '@/app/components/Wrapper';
+import BackButton from "../../(components)/ui/BackButton";
 
 interface SearchResult {
     id: string;
@@ -25,14 +26,12 @@ const colors = [
 
 export default function SearchClient({ query, results }: SearchClientProps) {
     return (
-        <div className="w-full  px-6 py-12">
+        <div className="w-full px-6 py-12 bg-[#F5F5F5] min-h-screen">
             <Wrapper>
 
-                <div className="mb-12">
-                    <h1 className="text-4xl font-serif text-[#1e1a15] mb-2">Search Results</h1>
-                    <p className="text-[#1e1a15]/60 text-lg">
-                        Showing results for <span className="font-semibold text-[#1e1a15]">"{query}"</span>
-                    </p>
+                <div className="flex items-center justify-between mb-16 border-b border-black/5 pb-4">
+                    <BackButton />
+                    <span className="text-xs font-medium uppercase tracking-[0.2em] text-dark-grey/60">Search Results</span>
                 </div>
 
                 {results.length > 0 ? (

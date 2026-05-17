@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     const data = await getBooks(SEARCH_QUERY, { query: q });
     const hits: any[] = data?.search?.results?.hits ?? [];
 
-    const books = hits.slice(0, 5).map((hit: any) => {
+    const books = hits.map((hit: any) => {
       const doc = hit.document;
       const primaryAuthor = doc.contributions?.[0]?.author;
       return {
@@ -32,9 +32,27 @@ export async function GET(request: NextRequest) {
       };
     });
 
-    return Response.json({ books });
+    const authorsMap = new Map();
+    hits.forEach((hit: any) => {
+      const doc = hit.document;
+      (doc.contributions ?? []).forEach((c: any) => {
+        if (c.author) {
+          authorsMap.set(c.author.slug, {
+            key: c.author.slug,
+            slug: c.author.slug,
+            name: c.author.name,
+            image: c.author.image?.url ?? null,
+            topWork: doc.title,
+          });
+        }
+      });
+    });
+
+    const authors = Array.from(authorsMap.values());
+
+    return Response.json({ books, authors });
   } catch (err) {
     console.error("Hardcover search error:", err);
-    return Response.json({ books: [] }, { status: 500 });
+    return Response.json({ books: [], authors: [] }, { status: 500 });
   }
 }
