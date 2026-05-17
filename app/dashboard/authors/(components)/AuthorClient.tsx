@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Wrapper from "@/app/components/Wrapper"
 import { Author } from "@/app/lib/interface"
 import BackButton from "../../(components)/ui/BackButton"
@@ -8,9 +9,15 @@ import BookCard from "../../(components)/book/BookCard"
 import { motion } from "motion/react"
 import { useDraggableScroll } from "@/app/hooks/useDraggableScroll"
 import Sidebar from './Sidebar'
+import Modal from "../../(components)/ui/Modal"
 
 const AuthorClient = ({ author }: { author: Author }) => {
+  const [isOpen, setIsOpen] = useState(false)
   const worksScroll = useDraggableScroll()
+
+  const LIMIT = 270
+  const isLong = (author.bio?.length ?? 0) > LIMIT
+  const handleMore = () => setIsOpen(!isOpen)
 
   return (
     <div className="w-full min-h-screen bg-[#F5F5F5] pt-12 pb-24">
@@ -45,9 +52,20 @@ const AuthorClient = ({ author }: { author: Author }) => {
               <div className="">
                 <h3 className="mb-2 text-lg">Biography</h3>
                 <div className="space-y-4">
-                  <p className="text-base leading-relaxed text-dark-grey/70 text-wrap font-medium">
-                    {author.bio}
-                  </p>
+                  {(isLong ? author.bio?.slice(0, LIMIT) + '...' : author.bio)
+                    ?.split('\n').filter(p => p.trim() !== '').map((paragraph, index, arr) => (
+                      <p key={index} className="text-base leading-relaxed text-dark-grey/70 text-wrap font-medium">
+                        {paragraph}
+                        {isLong && index === arr.length - 1 && (
+                          <button
+                            onClick={handleMore}
+                            className="ml-2 text-base text-dark-grey font-bold hover:underline cursor-pointer inline-block"
+                          >
+                            Read more
+                          </button>
+                        )}
+                      </p>
+                    ))}
                 </div>
               </div>
             </div>
@@ -139,6 +157,22 @@ const AuthorClient = ({ author }: { author: Author }) => {
             </div>
           </motion.div>
         )}
+
+        <Modal
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          title="Biography"
+          showDivider
+          width="w-[90%] max-w-[600px]"
+        >
+          <div className="max-h-[60vh] overflow-y-auto pr-2 no-scrollbar space-y-4">
+            {author.bio?.split('\n').filter(p => p.trim() !== '').map((paragraph, index) => (
+              <p key={index} className="text-dark-grey/80 text-base leading-relaxed text-wrap font-medium">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        </Modal>
       </Wrapper>
     </div>
   )
