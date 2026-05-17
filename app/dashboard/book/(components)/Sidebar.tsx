@@ -15,10 +15,10 @@ const Sidebar = ({ book }: { book: Book }) => {
                 {/* Book Spine Shadow */}
                 <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-black/10 z-20 pointer-events-none" />
                 <div className="absolute left-1.5 top-0 bottom-0 w-px bg-white/20 z-20 pointer-events-none" />
-                
-                {book.coverId && (
+
+                {(book.coverUrl) && (
                     <Image
-                        src={`https://covers.openlibrary.org/b/id/${book.coverId}-L.jpg`}
+                        src={book.coverUrl}
                         alt={book.title}
                         fill
                         className="object-fit object-center"

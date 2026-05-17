@@ -1,7 +1,7 @@
-import BookClient from '../(components)/BookClient'
-import BackButton from '../../(components)/ui/BackButton'
-import { getBookDetails, searchBooks, getRecommendations } from '@/app/lib/utils/BookSearch'
-import { Book } from '@/app/lib/interface'
+import { getBooks } from "@/app/lib/utils/HardCoverSearch";
+import { Book } from "@/app/lib/interface";
+import BookClient from "../(components)/BookClient";
+import BackButton from "../../(components)/ui/BackButton";
 
 interface bookPageProps {
     params: Promise<{ slug: string }>
@@ -10,46 +10,68 @@ interface bookPageProps {
 const BookDetailsPage = async ({ params }: bookPageProps) => {
 
     const { slug } = await params;
-
     let book: Book | undefined = undefined;
 
     try {
-        const query = slug.replace(/-/g, ' ');
-        const data = await searchBooks(query);
+        const query = `
+            query GetBookBySlug($slug: String!) {
+                books(where: { slug: { _eq: $slug } }, limit: 1) {
+                    id
+                    title
+                    slug
+                    description
+                    pages
+                    release_year
+                    rating
+                    ratings_count
+                    users_read_count
+                    image { url }        
+                    cached_tags          
+                    contributions {
+                        author {
+                            name
+                            slug
+                        }
+                    }
+                    editions(limit: 1) {
+                        isbn_13
+                        edition_format
+                        publisher { name }
+                        release_date
+                        audio_seconds
+                    }
+                }
+            }
+        `;
 
-        const searchData = data.docs.find((b: any) => {
-            const bSlug = b.title ? b.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : '';
-            const bKey = b.key ? b.key.replace('/works/', '') : '';
-            return bSlug === slug || bKey === slug;
-        });
+        const data = await getBooks(query, { slug });
+        const searchData = data?.books?.[0];
 
         if (searchData) {
-            const details = await getBookDetails(searchData.key);
-            
-            const subjects = (searchData.subject && searchData.subject.length > 0) 
-                ? searchData.subject 
-                : details.subjects;
-
-            const recommendations = await getRecommendations(subjects, searchData.key);
+            const genres: string[] = Array.isArray(searchData.cached_tags?.Genre)
+                ? searchData.cached_tags.Genre.map((g: any) => g.tag ?? g.tagSlug ?? '').filter(Boolean)
+                : [];
 
             book = {
-                key: searchData.key,
-                id: searchData.key.replace('/works/', ''),
-                slug: slug,
+                key: searchData.id.toString(),
+                id: searchData.id.toString(),
+                slug: searchData.slug,
                 title: searchData.title,
-                author: searchData.author_name?.[0] ?? 'Unknown Author',
-                authorSlug: searchData.author_name
-                    ? searchData.author_name[0].toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
-                    : 'unknown',
-                coverId: searchData.cover_i,
-                description: details.description,
-                subjects: details.subjects,
-                recommendations: recommendations,
+                author: searchData.contributions?.[0]?.author?.name ?? 'Unknown Author',
+                authorSlug: searchData.contributions?.[0]?.author?.slug ?? 'unknown',
+                coverUrl: searchData.image?.url ?? null,
+                description: searchData.description || 'No description available.',
+                subjects: genres,
+                rating: searchData.rating,
+                ratingsCount: searchData.ratings_count,
+                firstPublishYear: searchData.release_year,
+                publisher: searchData.editions?.[0]?.publisher?.name ?? null,
+                recommendations: [],
             };
         }
 
     } catch (error) {
-        console.error("Error fetching book:", error);
+        console.error("Error fetching book from Hardcover:", error);
     }
 
     if (!book) {

@@ -9,8 +9,8 @@ interface SearchResult {
     slug: string;
     title: string;
     author: string;
+    coverUrl: string | null;
     authorSlug: string;
-    coverId?: number | string;
 }
 
 interface SearchClientProps {
@@ -46,7 +46,7 @@ export default function SearchClient({ query, results }: SearchClientProps) {
                                     slug={book.slug}
                                     title={book.title}
                                     author={book.author}
-                                    coverId={book.coverId}
+                                    coverUrl={book.coverUrl}
                                     coverColor={coverColor}
                                     width="w-full"
                                 />

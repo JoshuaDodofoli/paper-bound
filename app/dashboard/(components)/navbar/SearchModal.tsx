@@ -7,7 +7,7 @@ import Modal from '../ui/Modal';
 import AuthorSearchAvatar from '../ui/AuthorSearchAvatar';
 import Link from 'next/link';
 import { SearchResults } from '@/app/lib/interface';
-import { searchBooks, searchAuthors } from '@/app/lib/utils/BookSearch';
+// Hardcover search is now proxied through /api/search (server-side, keeps API key safe)
 import { useRouter } from 'next/navigation';
 
 interface SearchModalProps {
@@ -41,30 +41,19 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
             setIsLoading(true);
 
             try {
-                const [bookData, authorData] = await Promise.all([
-                    searchBooks(query),
-                    searchAuthors(query)
-                ]);
+                const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                const { books } = await res.json();
 
-                setBookResults(bookData.docs?.slice(0, 5).map((searchData: any) => ({
-                    key: searchData.key ? searchData.key.replace('/works/', '') : '',
-                    slug: searchData.title ? searchData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : '',
-                    title: searchData.title,
-                    author: searchData.author_name ? searchData.author_name[0] : 'Unknown Author',
-                    coverId: searchData.cover_i,
-                })) || []);
+                setBookResults((books ?? []).map((b: any) => ({
+                    key: b.slug,
+                    slug: b.slug,
+                    title: b.title,
+                    author: b.author,
+                    coverUrl: b.coverUrl,
+                })));
 
-                setAuthorResults(authorData.docs?.slice(0, 5).map((author: any) => {
-                    const authorName = author.name || 'Unknown Author';
-                    const slug = authorName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-                    return {
-                        key: author.key,
-                        slug: slug,
-                        name: authorName,
-                        topWork: author.top_work || '',
-                        workCount: author.work_count || 0,
-                    };
-                }) || []);
+                // Author search not yet in Hardcover search endpoint — clear for now
+                setAuthorResults([]);
 
             } catch (error) {
                 console.error("Search error:", error);
@@ -182,9 +171,9 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                                                 className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
                                                             >
                                                                 <div className="relative aspect-3/4 w-16 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 transition-colors">
-                                                                    {item.coverId && (
+                                                                    {(item.coverUrl) && (
                                                                         <Image
-                                                                            src={`https://covers.openlibrary.org/b/id/${item.coverId}-M.jpg`}
+                                                                            src={item.coverUrl}
                                                                             alt={item.title}
                                                                             fill
                                                                             sizes="56px"

@@ -149,8 +149,7 @@ const AuthorClient = ({ author }: { author: Author }) => {
                   slug={book.slug}
                   title={book.title}
                   author={book.author}
-                  coverId={book.coverId || undefined}
-                  coverColor={book.color}
+                  coverUrl={book.coverUrl ?? undefined}
                   width="w-52"
                 />
               ))}
