@@ -4,9 +4,10 @@ import { KeyboardEvent, useEffect, useState } from 'react'
 import Image from 'next/image';
 import { Search, ArrowUpRight, Loader2 } from 'lucide-react';
 import Modal from '../ui/Modal';
+import AuthorSearchAvatar from '../ui/AuthorSearchAvatar';
 import Link from 'next/link';
 import { SearchResults } from '@/app/lib/interface';
-import { searchBooks } from '@/app/lib/utils/BookSearch';
+import { searchBooks, searchAuthors } from '@/app/lib/utils/BookSearch';
 import { useRouter } from 'next/navigation';
 
 interface SearchModalProps {
@@ -14,10 +15,12 @@ interface SearchModalProps {
     setIsSearchOpen: (value: boolean) => void;
 }
 
+
 const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
     const router = useRouter();
     const [query, setQuery] = useState("");
-    const [results, setResults] = useState<SearchResults[]>([]);
+    const [bookResults, setBookResults] = useState<SearchResults[]>([]);
+    const [authorResults, setAuthorResults] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -29,7 +32,8 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
 
     useEffect(() => {
         if (query.length === 0) {
-            setResults([]);
+            setBookResults([]);
+            setAuthorResults([]);
             return;
         }
 
@@ -37,19 +41,33 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
             setIsLoading(true);
 
             try {
-                const data = await searchBooks(query);
-                console.log(data.docs)
-                setResults(data.docs.slice(0, 10).map((searchData: any) => ({
+                const [bookData, authorData] = await Promise.all([
+                    searchBooks(query),
+                    searchAuthors(query)
+                ]);
+
+                setBookResults(bookData.docs?.slice(0, 5).map((searchData: any) => ({
                     key: searchData.key ? searchData.key.replace('/works/', '') : '',
                     slug: searchData.title ? searchData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') : '',
                     title: searchData.title,
                     author: searchData.author_name ? searchData.author_name[0] : 'Unknown Author',
                     coverId: searchData.cover_i,
-                }))
-                )
+                })) || []);
+
+                setAuthorResults(authorData.docs?.slice(0, 5).map((author: any) => {
+                    const authorName = author.name || 'Unknown Author';
+                    const slug = authorName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                    return {
+                        key: author.key,
+                        slug: slug,
+                        name: authorName,
+                        topWork: author.top_work || '',
+                        workCount: author.work_count || 0,
+                    };
+                }) || []);
 
             } catch (error) {
-                console.log(error);
+                console.error("Search error:", error);
             } finally {
                 setIsLoading(false);
             }
@@ -85,9 +103,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                         placeholder='Search books, authors, genres...'
                         className='w-full bg-dark-grey/5 border-stone/50 border-2 text-dark-grey placeholder:text-base rounded-3xl py-3 pl-12 pr-4 outline-none focus:border-stone transition-all text-lg font-medium'
                     />
-                    {isLoading ? (
-                        <Loader2 className="absolute right-4 text-dark-grey/30 animate-spin" size={16} />
-                    ) : query && (
+                    {query && (
                         <button
                             onClick={() => setQuery("")}
                             className="absolute right-4 text-xs font-bold text-dark-grey/40 hover:text-dark-grey/60 cursor-pointer"
@@ -99,7 +115,18 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
 
                 <div className="max-h-[400px] overflow-y-auto no-scrollbar">
                     <AnimatePresence mode="wait">
-                        {query.length === 0 ? (
+                        {isLoading ? (
+                            <motion.div
+                                key="loading"
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                className="flex flex-col items-center justify-center py-16 space-y-4"
+                            >
+                                <Loader2 className="text-dark-grey/30 animate-spin" size={32} />
+                                <p className="text-sm font-medium text-dark-grey/40">Searching library...</p>
+                            </motion.div>
+                        ) : query.length === 0 ? (
                             <motion.div
                                 key="suggestions"
                                 initial={{ opacity: 0, y: 10 }}
@@ -128,45 +155,88 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
-                                className="space-y-2"
+                                className="space-y-4"
                             >
                                 <div className="flex items-center justify-between ml-1 mb-2">
                                     <h4 className='text-xs text-dark-grey/40 font-bold uppercase tracking-widest'>Results for "{query}"</h4>
-                                    <span className="text-[10px] bg-stone text-dark-grey/80 px-2 py-0.5 rounded-full font-bold">{results.length} FOUND</span>
+                                    <span className="text-[10px] bg-stone text-dark-grey/80 px-2 py-0.5 rounded-full font-bold">
+                                        {bookResults.length + authorResults.length} FOUND
+                                    </span>
                                 </div>
 
-                                {results.length > 0 ? (
-                                    results.map((item, i) => (
-                                        <div key={item.key + String(i)}>
-                                            <Link
-                                                href={`/dashboard/book/${item.slug || item.key}`}
-                                                onClick={() => setIsSearchOpen(false)}
-                                                className='relative'
-                                            >
-                                                <motion.div
-                                                    whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
-                                                    className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
-                                                >
-                                                    <div className="relative aspect-3/4 w-16 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40  transition-colors">
-                                                    {item.coverId && (
-                                                        <Image
-                                                        src={`https://covers.openlibrary.org/b/id/${item.coverId}-M.jpg`}
-                                                        alt={item.title}
-                                                        fill
-                                                        sizes="56px"
-                                                        className='object-center object-contain'
-                                                        />
-                                                   ) }
+                                {bookResults.length > 0 || authorResults.length > 0 ? (
+                                    <div className="space-y-6">
+                                        {/* Books Sub-section */}
+                                        {bookResults.length > 0 && (
+                                            <div className="space-y-2">
+                                                <span className="text-[10px] text-dark-grey/40 font-bold uppercase tracking-widest mb-1 ml-1 block">Books</span>
+                                                {bookResults.map((item, i) => (
+                                                    <div key={`book-${item.key}-${i}`}>
+                                                        <Link
+                                                            href={`/dashboard/book/${item.slug || item.key}`}
+                                                            onClick={() => setIsSearchOpen(false)}
+                                                            className='relative'
+                                                        >
+                                                            <motion.div
+                                                                whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
+                                                                className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
+                                                            >
+                                                                <div className="relative aspect-3/4 w-16 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 transition-colors">
+                                                                    {item.coverId && (
+                                                                        <Image
+                                                                            src={`https://covers.openlibrary.org/b/id/${item.coverId}-M.jpg`}
+                                                                            alt={item.title}
+                                                                            fill
+                                                                            sizes="56px"
+                                                                            className='object-center object-contain'
+                                                                        />
+                                                                    )}
+                                                                </div>
+                                                                <div className="flex-1">
+                                                                    <p className="font-semibold text-dark-grey/90">{item.title}</p>
+                                                                    <p className="text-sm text-dark-grey/50">by {item.author}</p>
+                                                                </div>
+                                                                <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
+                                                            </motion.div>
+                                                        </Link>
                                                     </div>
-                                                    <div className="flex-1">
-                                                        <p className="font-semibold text-dark-grey/90">{item.title}</p>
-                                                        <p className="text-sm text-dark-grey/50">by {item.author}</p>
+                                                ))}
+                                            </div>
+                                        )}
+
+                                        {/* Authors Sub-section */}
+                                        {authorResults.length > 0 && (
+                                            <div className="space-y-2">
+                                                <span className="text-[10px] text-dark-grey/40 font-bold uppercase tracking-widest mb-1 ml-1 block">Authors</span>
+                                                {authorResults.map((item, i) => (
+                                                    <div key={`author-${item.key}-${i}`}>
+                                                        <Link
+                                                            href={`/dashboard/authors/${item.slug}`}
+                                                            onClick={() => setIsSearchOpen(false)}
+                                                            className='relative'
+                                                        >
+                                                            <motion.div
+                                                                whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
+                                                                className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
+                                                            >
+                                                                <AuthorSearchAvatar name={item.name} olid={item.key} />
+                                                                <div className="flex-1">
+                                                                    <p className="font-semibold text-dark-grey/90">{item.name}</p>
+                                                                    {item.topWork && (
+                                                                        <p className="text-xs text-dark-grey/50 truncate max-w-[320px]">
+                                                                            Top Work: <span className="italic font-medium">{item.topWork}</span>
+                                                                            {item.workCount > 0 && ` • ${item.workCount} Books`}
+                                                                        </p>
+                                                                    )}
+                                                                </div>
+                                                                <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
+                                                            </motion.div>
+                                                        </Link>
                                                     </div>
-                                                    <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
-                                                </motion.div>
-                                            </Link>
-                                        </div>
-                                    ))
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 ) : (
                                     <div className="py-10 text-center">
                                         <p className="text-dark-grey/40 font-medium">No results found for "{query}"</p>

@@ -11,10 +11,6 @@ const Sidebar = ({ author }: { author: Author }) => {
                 animate={{ y: 0, opacity: 1 }}
                 className="aspect-2/3 w-full shadow-[20px_20px_60px_-15px_rgba(0,0,0,0.3)] relative overflow-hidden flex items-center justify-center bg-stone/40 border border-stone/50"
             >  
-                {/* Book Spine Shadow (matching Book details style) */}
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-black/10 z-20 pointer-events-none" />
-                <div className="absolute left-1.5 top-0 bottom-0 w-px bg-white/20 z-20 pointer-events-none" />
-                
                 {author.image ? (
                     <Image
                         src={author.image}

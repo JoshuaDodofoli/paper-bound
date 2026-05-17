@@ -17,6 +17,24 @@ export async function searchBooks(query: string) {
   }
 }
 
+export async function searchAuthors(query: string) {
+  try {
+    const encodedQuery = encodeURIComponent(query);
+    const res = await fetch(`https://openlibrary.org/search/authors.json?q=${encodedQuery}`);
+
+    if (!res.ok) {
+      console.error("Author search API error:", res.status);
+      return { docs: [] };
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Author fetch failed:", error);
+    return { docs: [] };
+  }
+}
+
 export async function getBookDetails(workKey: string) {
   try {
     const res = await fetch(`https://openlibrary.org${workKey}.json`);
