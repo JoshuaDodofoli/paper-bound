@@ -8,30 +8,26 @@ export interface Author {
   website: string;
   genres: string[];
   works: Book[];
+  topWork?: string;
+  workCount?: number;
+  ratingsAverage?: number;
+  ratingsCount?: number;
 }
 
 export interface Book {
   key: string;
   id?: string;
   slug: string;
-
   title: string;    
   description?: string;     
   author: string;        
   authorSlug: string;    
-  
   coverId: string;  
-
-  //ebook access 
   ebookAccess?: boolean;   
-  
-  // publication info
   firstPublishYear?: number;  
   numberOfPages?: number;
   firstSentence?: string[];
   publisher?: string[];
-  
-  // series info
   seriesKey?: string;
   seriesName?: string;
   seriesPosition?: number;
@@ -40,6 +36,7 @@ export interface Book {
   ratingsAverage?: number;
   ratingsCount?: number;
   sourceShelfId?: string; 
+  recommendations?: RecommendedBook[];
 }
 
 
@@ -65,4 +62,12 @@ export interface SearchResults {
   title: string;
   author: string;
   coverId: string;
+}
+
+export interface RecommendedBook {
+    key: string;
+    slug: string;
+    title: string;
+    author: string;
+    coverId: number | null;
 }

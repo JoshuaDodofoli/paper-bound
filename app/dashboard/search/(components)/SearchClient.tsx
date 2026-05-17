@@ -40,17 +40,16 @@ export default function SearchClient({ query, results }: SearchClientProps) {
                         {results.map((book, index) => {
                             const coverColor = colors[index % colors.length];
                             return (
-                                <div key={book.id} className="flex justify-center">
-                                    <BookCard
-                                        id={book.id}
-                                        slug={book.slug}
-                                        title={book.title}
-                                        author={book.author}
-                                        coverId={book.coverId}
-                                        coverColor={coverColor}
-                                        width="w-full"
-                                    />
-                                </div>
+                                <BookCard
+                                    key={book.id}
+                                    id={book.id}
+                                    slug={book.slug}
+                                    title={book.title}
+                                    author={book.author}
+                                    coverId={book.coverId}
+                                    coverColor={coverColor}
+                                    width="w-full"
+                                />
                             );
                         })}
                     </div>
