@@ -27,7 +27,7 @@ const BookCard = ({
     width = "w-44"
 }: BookCardProps) => {
     return (
-        <Link href={`/dashboard/book/${slug}`} className="shrink-0 block group">
+        <Link href={`/dashboard/book/${slug}`} className={`shrink-0 block group ${width === 'w-full' ? 'w-full' : ''}`}>
             <motion.div
                 whileHover={{ y: -5 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
