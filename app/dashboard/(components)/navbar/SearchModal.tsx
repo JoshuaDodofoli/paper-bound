@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation';
 import QuickSuggestions from './QuickSuggestions';
 import BookResultItem from './BookResultItem';
 import AuthorResultItem from './AuthorResultItem';
+import GenreResultItem from './GenreResultItem';
 
 interface SearchModalProps {
     isSearchOpen: boolean;
@@ -20,8 +21,9 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
     const [query, setQuery] = useState("");
     const [bookResults, setBookResults] = useState<SearchResults[]>([]);
     const [authorResults, setAuthorResults] = useState<any[]>([]);
+    const [genreResults, setGenreResults] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState<'books' | 'authors'>('books');
+    const [activeTab, setActiveTab] = useState<'books' | 'authors' | 'genres'>('books');
 
     const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Enter' && query.length > 0) {
@@ -34,6 +36,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
         if (query.length === 0) {
             setBookResults([]);
             setAuthorResults([]);
+            setGenreResults([]);
             return;
         }
 
@@ -42,7 +45,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
 
             try {
                 const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
-                const { books, authors } = await res.json();
+                const { books, authors, genres } = await res.json();
 
                 setBookResults((books ?? []).map((b: any) => ({
                     key: b.slug,
@@ -58,6 +61,12 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                     name: a.name,
                     image: a.image,
                     topWork: a.topWork,
+                })));
+
+                setGenreResults((genres ?? []).map((g: any) => ({
+                    key: g.slug,
+                    slug: g.slug,
+                    name: g.name,
                 })));
 
             } catch (error) {
@@ -133,7 +142,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                 <div className="flex items-center justify-between ml-1 mb-2">
                                     <h4 className='text-xs text-dark-grey/40 font-bold uppercase tracking-widest'>Results for "{query}"</h4>
                                     <span className="text-[10px] bg-stone text-dark-grey/80 px-2 py-0.5 rounded-full font-bold">
-                                        {bookResults.length + authorResults.length} FOUND
+                                        {bookResults.length + authorResults.length + genreResults.length} FOUND
                                     </span>
                                 </div>
 
@@ -159,6 +168,16 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                     >
                                         Authors ({authorResults.length})
                                     </button>
+                                    <button
+                                        onClick={() => setActiveTab('genres')}
+                                        className={`pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer ${
+                                            activeTab === 'genres'
+                                                ? 'border-stone text-dark-grey'
+                                                : 'border-transparent text-dark-grey/40 hover:text-dark-grey/60'
+                                        }`}
+                                    >
+                                        Genres ({genreResults.length})
+                                    </button>
                                 </div>
 
                                 {activeTab === 'books' ? (
@@ -180,7 +199,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                             <p className="text-dark-grey/40 font-medium">No books found for "{query}"</p>
                                         </div>
                                     )
-                                ) : (
+                                ) : activeTab === 'authors' ? (
                                     authorResults.length > 0 ? (
                                         <div className="space-y-2">
                                             {authorResults.map((item, i) => (
@@ -197,6 +216,22 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                     ) : (
                                         <div className="py-10 text-center">
                                             <p className="text-dark-grey/40 font-medium">No authors found for "{query}"</p>
+                                        </div>
+                                    )
+                                ) : (
+                                    genreResults.length > 0 ? (
+                                        <div className="space-y-2">
+                                            {genreResults.map((item, i) => (
+                                                <GenreResultItem
+                                                    key={`genre-${item.slug}-${i}`}
+                                                    name={item.name}
+                                                    onClick={() => setIsSearchOpen(false)}
+                                                />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="py-10 text-center">
+                                            <p className="text-dark-grey/40 font-medium">No genres found for "{query}"</p>
                                         </div>
                                     )
                                 )}

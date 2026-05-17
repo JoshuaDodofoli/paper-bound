@@ -50,9 +50,25 @@ export async function GET(request: NextRequest) {
 
     const authors = Array.from(authorsMap.values());
 
-    return Response.json({ books, authors });
+    const genresSet = new Set<string>();
+    hits.forEach((hit: any) => {
+      const doc = hit.document;
+      (doc.genres ?? []).forEach((g: string) => {
+        if (g && g.trim()) {
+          genresSet.add(g.trim());
+        }
+      });
+    });
+
+    const genres = Array.from(genresSet).map(g => ({
+      key: g.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      slug: g.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+      name: g
+    }));
+
+    return Response.json({ books, authors, genres });
   } catch (err) {
     console.error("Hardcover search error:", err);
-    return Response.json({ books: [], authors: [] }, { status: 500 });
+    return Response.json({ books: [], authors: [], genres: [] }, { status: 500 });
   }
 }
