@@ -1,7 +1,6 @@
-import { MOCK_BOOKS, MOCK_AUTHORS } from '@/app/lib/books';
 import AuthorClient from '../(components)/AuthorClient'
 import BackButton from '../../(components)/ui/BackButton';
-import { Author } from '@/app/lib/interface';
+import { getAuthorDetailsBySlug } from '@/app/lib/utils/BookSearch';
 
 interface AuthorPageProps {
   params: Promise<{ slug: string }>
@@ -11,26 +10,8 @@ const page = async ({ params }: AuthorPageProps) => {
 
   const { slug } = await params;
   
-  // Try to find detailed author first
-  let author = MOCK_AUTHORS.find(a => a.slug === slug);
-
-  // If not found, try to find in books and create a minimal author object
-  if (!author) {
-    const bookAuthor = MOCK_BOOKS.find(b => b.authorSlug === slug);
-    if (bookAuthor) {
-      author = {
-        id: `temp-${slug}`,
-        name: bookAuthor.author,
-        slug: bookAuthor.authorSlug,
-        bio: "No biography available for this author yet.",
-        image: "",
-        born: "Unknown",
-        website: "",
-        genres: [],
-        works: MOCK_BOOKS.filter(b => b.authorSlug === slug)
-      };
-    }
-  }
+  // Fetch dynamically from Open Library API (No mock data fallback)
+  const author = await getAuthorDetailsBySlug(slug);
 
   if (!author) {
     return (
