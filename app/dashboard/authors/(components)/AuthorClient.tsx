@@ -145,7 +145,7 @@ const AuthorClient = ({ author }: { author: Author }) => {
               {author.works.map((book) => (
                 <BookCard
                   key={book.id || book.key}
-                  id={book.id || book.key}
+                  id={book.id || book.key || ''}
                   slug={book.slug}
                   title={book.title}
                   author={book.author}

@@ -21,7 +21,7 @@ const CategoryClient = ({ slug }: CategoryClientProps) => {
           {MOCK_BOOKS.map((book) => (
             <BookCard
               key={book.id}
-              id={book.id}
+              id={book.id || ''}
               slug={book.slug}
               title={book.title}
               author={book.author}

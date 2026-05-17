@@ -34,7 +34,7 @@ const Recommendations = ({ book }: { book: Book }) => {
                                     slug={rec.slug}
                                     title={rec.title}
                                     author={rec.author}
-                                    coverId={rec.coverId}
+                                    coverId={rec.coverId || undefined}
                                     width='w-52'
                                 />
                             ))}

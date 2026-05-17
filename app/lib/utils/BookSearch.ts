@@ -1,3 +1,5 @@
+import { Book } from "../interface";
+
 export async function searchBooks(query: string) {
   try {
     const encodedQuery = encodeURIComponent(query);
@@ -159,6 +161,44 @@ export async function getAuthorDetailsBySlug(slug: string) {
   } catch (error) {
     console.error("Error fetching author details:", error);
     return null;
+  }
+}
+
+export async function getBooksBySubject(subject: string, limit: number = 8): Promise<Book[]> {
+  try {
+    const formattedSubject = subject.toLowerCase().replace(/ /g, '_');
+    console.log("Fetching books for subject:", formattedSubject);
+    const res = await fetch(
+      `https://openlibrary.org/subjects/${encodeURIComponent(formattedSubject)}.json?limit=${limit}`
+    );
+    if (!res.ok) {
+      console.error("Subject API error:", res.status);
+      return [];
+    }
+    const data = await res.json();
+    return data.works?.map((work: any) => {
+      const generatedSlug = work.title
+        ? work.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        : 'unknown';
+      const authorName = work.authors?.[0]?.name ?? 'Unknown Author';
+      const authorSlug = work.authors?.[0]?.name
+        ? work.authors[0].name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')
+        : 'unknown';
+
+      return {
+        key: work.key,
+        id: work.key.replace('/works/', ''),
+        slug: generatedSlug,
+        title: work.title,
+        author: authorName,
+        authorSlug: authorSlug,
+        coverId: work.cover_id ? String(work.cover_id) : (work.cover_i ? String(work.cover_i) : ''),
+        color: getRandomColor(),
+      };
+    }) ?? [];
+  } catch (error) {
+    console.error("Error fetching subject books:", error);
+    return [];
   }
 }
 

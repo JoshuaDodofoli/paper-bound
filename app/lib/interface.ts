@@ -15,14 +15,15 @@ export interface Author {
 }
 
 export interface Book {
-  key: string;
+  key?: string;
   id?: string;
   slug: string;
   title: string;    
   description?: string;     
   author: string;        
   authorSlug: string;    
-  coverId: string;  
+  coverId?: string;  
+  color?: string;
   ebookAccess?: boolean;   
   firstPublishYear?: number;  
   numberOfPages?: number;
