@@ -48,7 +48,7 @@ const BookCard = ({
                     <div className="absolute inset-0 p-4 flex flex-col justify-between bg-[#fbfaf8] text-dark-grey border-l-4 border-l-amber-900/20 select-none">
                         <div className="space-y-1">
                             <p className="text-[8px] uppercase tracking-widest font-bold text-dark-grey/40 line-clamp-1">{author}</p>
-                            <div className="h-[1px] bg-dark-grey/10 w-8 my-2" />
+                            <div className="h-1px bg-dark-grey/10 w-8 my-2" />
                         </div>
                         <p className="text-xs font-serif font-bold text-dark-grey/80 leading-snug line-clamp-4">{title}</p>
                         <p className="text-[7px] uppercase tracking-wider font-semibold text-dark-grey/30">LITERARY CLASSIC</p>

@@ -10,7 +10,7 @@ interface BookResultItemProps {
     slug: string;
     title: string;
     author: string;
-    coverUrl: string | null;
+    coverUrl: string | null | undefined;
     onClick: () => void;
 }
 
