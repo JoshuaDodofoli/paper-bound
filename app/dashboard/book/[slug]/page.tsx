@@ -1,4 +1,4 @@
-import { getBooks, getRecommendations } from "@/app/lib/utils/HardCoverSearch";
+import { getBooks, getRecommendations, getSeriesDetails } from "@/app/lib/utils/HardCoverSearch";
 import { Book } from "@/app/lib/interface";
 import BookClient from "../(components)/BookClient";
 import BackButton from "../../(components)/ui/BackButton";
@@ -40,6 +40,19 @@ const BookDetailsPage = async ({ params }: bookPageProps) => {
                         release_date
                         audio_seconds
                     }
+                    book_series {
+                        position
+                        series {
+                            name
+                            slug
+                        }
+                    }
+                    book_characters {
+                        character {
+                            name
+                            slug
+                        }
+                    }
                 }
             }
         `;
@@ -51,6 +64,26 @@ const BookDetailsPage = async ({ params }: bookPageProps) => {
             const genres: string[] = Array.isArray(searchData.cached_tags?.Genre)
                 ? searchData.cached_tags.Genre.map((g: any) => g.tag ?? g.tagSlug ?? '').filter(Boolean)
                 : [];
+
+            const moods: string[] = Array.isArray(searchData.cached_tags?.Mood)
+                ? searchData.cached_tags.Mood.map((m: any) => m.tag ?? m.tagSlug ?? '').filter(Boolean)
+                : [];
+
+            const characters: string[] = Array.isArray(searchData.book_characters)
+                ? searchData.book_characters.map((c: any) => c.character?.name ?? '').filter(Boolean)
+                : [];
+
+            const seriesList = Array.isArray(searchData.book_series)
+                ? searchData.book_series.map((s: any) => ({
+                    name: s.series?.name ?? '',
+                    position: s.position ?? null,
+                    slug: s.series?.slug ?? ''
+                })).filter((s: any) => s.name)
+                : [];
+
+            // Fetch series details and deduplicated books in the same series
+            const seriesSlug = seriesList[0]?.slug;
+            const seriesDetails = seriesSlug ? await getSeriesDetails(seriesSlug) : null;
 
             // Dynamically fetch recommended books from the same genre
             const recommendations = await getRecommendations(genres, searchData.id.toString());
@@ -69,7 +102,13 @@ const BookDetailsPage = async ({ params }: bookPageProps) => {
                 ratingsCount: searchData.ratings_count,
                 firstPublishYear: searchData.release_year,
                 publisher: searchData.editions?.[0]?.publisher?.name ?? null,
+                numberOfPages: searchData.pages,
                 recommendations: recommendations,
+                moods: moods,
+                characters: characters,
+                seriesList: seriesList,
+                seriesBooks: seriesDetails?.books ?? [],
+                seriesDetails: seriesDetails ?? undefined,
             };
         }
 

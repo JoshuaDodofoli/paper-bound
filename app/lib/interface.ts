@@ -39,6 +39,19 @@ export interface Book {
   ratingsCount?: number;
   sourceShelfId?: string;
   recommendations?: RecommendedBook[];
+  moods?: string[];
+  characters?: string[];
+  seriesList?: { name: string; position: number | null; slug: string }[];
+  seriesBooks?: (RecommendedBook & { position: number | null })[];
+  seriesDetails?: SeriesDetails;
+}
+
+export interface SeriesDetails {
+  name: string;
+  description: string | null;
+  booksCount: number | null;
+  primaryBooksCount: number | null;
+  books: (RecommendedBook & { position: number | null })[];
 }
 
 
