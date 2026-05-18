@@ -41,7 +41,7 @@ export interface Book {
   recommendations?: RecommendedBook[];
   moods?: string[];
   characters?: string[];
-  seriesList?: { name: string; position: number | null; slug: string }[];
+  seriesList?: { name: string; position: number | null; slug: string }[] | undefined;
   seriesBooks?: (RecommendedBook & { position: number | null })[];
   seriesDetails?: SeriesDetails;
 }

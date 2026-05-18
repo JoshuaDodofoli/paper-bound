@@ -31,21 +31,18 @@ const BookClient = ({ book }: { book: Book }) => {
         <div className="w-full min-h-screen bg-[#F5F5F5] pt-12 pb-24">
             <Wrapper className="">
 
-                {/* breadcrumb */}
                 <div className="flex items-center justify-between mb-16 border-b border-black/5 pb-4">
                     <BackButton />
                     <span className="text-xs font-medium uppercase tracking-[0.2em] text-dark-grey/60">Book Listing</span>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-20 items-start">
-                    {/* Left Section: Cover with circular background */}
                     <div className="relative flex flex-col items-center">
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-white/40 blur-3xl -z-10" />
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-dark-grey/5 -z-20" />
 
                         <Sidebar book={book} />
 
-                        {/* <p className="mt-8 text-[9px] uppercase font-bold tracking-[0.2em] text-dark-grey/40">Click for Preview</p> */}
                     </div>
 
                     <div className="max-w-2xl space-y-16">
@@ -78,7 +75,9 @@ const BookClient = ({ book }: { book: Book }) => {
                             {book.seriesList && book.seriesList.length > 0 && (
                                 <p className="text-xs font-bold tracking-[0.15em] text-dark-grey/50 uppercase">
                                     {book.seriesList[0].position ? `Book ${book.seriesList[0].position} of ` : ''}
-                                    <span className="text-dark-grey/85 font-extrabold">{book.seriesList[0].name}</span>
+                                    <Link href={`/dashboard/series/${book.seriesList[0].slug}`}>
+                                        <span className="text-dark-grey/85 font-extrabold hover:underline cursor-pointer">{book.seriesList[0].name}</span>
+                                    </Link>
                                 </p>
                             )}
 
@@ -114,7 +113,6 @@ const BookClient = ({ book }: { book: Book }) => {
                             </div>
                         </div>
 
-                        {/* Metadata Grid */}
                         <div className="grid grid-cols-2 gap-x-20 gap-y-8 py-10 border-y border-black/5">
                             <div className="flex flex-col gap-2">
                                 <span className="text-xs uppercase font-bold text-dark-grey/60">Publisher</span>
@@ -204,13 +202,10 @@ const BookClient = ({ book }: { book: Book }) => {
                 {book.seriesDetails && book.seriesBooks && book.seriesBooks.length > 0 && (
                     <div className="mt-14 pt-10 border-t border-black/5">
                         <div className="space-y-6">
-                            {/* Heading */}
                             <div>
                                 <h2 className="text-3xl font-serif font-bold text-dark-grey tracking-tight">
                                     Series
                                 </h2>
-                                
-                                {/* Badges */}
                                 <div className="flex flex-wrap items-center gap-2 mt-3 select-none">
                                     <span className="bg-dark-grey/10 text-dark-grey/80 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider font-sans">
                                         Featured Series
@@ -227,17 +222,17 @@ const BookClient = ({ book }: { book: Book }) => {
                                     )}
                                 </div>
 
-                                {/* Subheading link */}
-                                <h3 className="text-xl md:text-2xl font-serif font-semibold text-dark-grey leading-tight mt-4">
+                                <h3 className="text-lg md:text-xl font-serif font-semibold text-dark-grey leading-tight mt-4">
                                     {book.seriesList?.[0]?.position !== null && book.seriesList?.[0]?.position !== undefined && (
                                         <span>#{book.seriesList[0].position} in </span>
                                     )}
-                                    <span className="underline decoration-dark-grey/20 underline-offset-4 decoration-1 hover:text-dark-grey/80 transition-colors cursor-pointer">
-                                        {book.seriesDetails.name}
-                                    </span>
+                                    <Link href={`/dashboard/series/${book.seriesList[0].slug}`}>
+                                        <span className="underline decoration-dark-grey/20 underline-offset-4 decoration-1 hover:text-dark-grey/80 transition-colors cursor-pointer">
+                                            {book.seriesDetails.name}
+                                        </span>
+                                    </Link>
                                 </h3>
 
-                                {/* Description Paragraph */}
                                 {book.seriesDetails.description && (
                                     <p className="text-base text-dark-grey/70 leading-relaxed font-medium mt-3 max-w-4xl">
                                         {book.seriesDetails.description}
@@ -245,7 +240,6 @@ const BookClient = ({ book }: { book: Book }) => {
                                 )}
                             </div>
 
-                            {/* Carousel */}
                             <div
                                 ref={seriesScroll.ref}
                                 {...seriesScroll.props}
@@ -259,7 +253,6 @@ const BookClient = ({ book }: { book: Book }) => {
                                             title={sb.title}
                                             author={sb.author}
                                             coverUrl={sb.coverUrl}
-                                            width="w-52"
                                         />
                                         {sb.position !== null && (
                                             <div className="absolute bottom-0 right-0 bg-[#F2A900] text-black px-3.5 py-1.5 text-sm font-black tracking-wide rounded-tl-md z-30 shadow-[0_-2px_8px_rgba(0,0,0,0.15)] pointer-events-none select-none">
