@@ -33,7 +33,7 @@ const BookCard = ({
             <motion.div
                 whileHover={{ y: -5 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
-                className={`relative ${width} ${aspectRatio} ${coverColor} shadow-book transition-shadow hover:shadow-book-hover overflow-hidden rounded-md border border-black/5`}
+                className={`relative ${width} ${aspectRatio} ${coverColor} shadow-book transition-shadow hover:shadow-book-hover overflow-hidden border border-black/5`}
             >
                 {coverUrl && !imageError ? (
                     <Image

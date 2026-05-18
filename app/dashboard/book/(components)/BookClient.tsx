@@ -12,12 +12,12 @@ import Recommendations from './Recommendations';
 import Image from 'next/image';
 import BookCard from '../../(components)/book/BookCard';
 import { useDraggableScroll } from '@/app/hooks/useDraggableScroll';
+import BookSeries from './BookSeries';
 
 const BookClient = ({ book }: { book: Book }) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const recScroll = useDraggableScroll();
-    const seriesScroll = useDraggableScroll();
 
     const handleMore = () => {
         setIsOpen(!isOpen);
@@ -72,15 +72,6 @@ const BookClient = ({ book }: { book: Book }) => {
                                 {book.title}
                             </h1>
 
-                            {book.seriesList && book.seriesList.length > 0 && (
-                                <p className="text-xs font-bold tracking-[0.15em] text-dark-grey/50 uppercase">
-                                    {book.seriesList[0].position ? `Book ${book.seriesList[0].position} of ` : ''}
-                                    <Link href={`/dashboard/series/${book.seriesList[0].slug}`}>
-                                        <span className="text-dark-grey/85 font-extrabold hover:underline cursor-pointer">{book.seriesList[0].name}</span>
-                                    </Link>
-                                </p>
-                            )}
-
                             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-dark-grey/50 mt-1">
                                 <p className="text-sm">
                                     by
@@ -89,6 +80,15 @@ const BookClient = ({ book }: { book: Book }) => {
                                     </Link>
                                 </p>
                             </div>
+
+                            {book.seriesList && book.seriesList.length > 0 && (
+                                <p className="text-xs font-bold tracking-[0.15em] text-dark-grey/50 uppercase">
+                                    {book.seriesList[0].position ? `Book ${book.seriesList[0].position} of ` : ''}
+                                    <Link href={`/dashboard/series/${book.seriesList[0].slug}`}>
+                                        <span className="text-dark-grey/85 font-extrabold hover:underline cursor-pointer">{book.seriesList[0].name}</span>
+                                    </Link>
+                                </p>
+                            )}
                         </motion.div>
 
                         <div className="space-y-8">
@@ -117,8 +117,8 @@ const BookClient = ({ book }: { book: Book }) => {
                             <div className="flex flex-col gap-2">
                                 <span className="text-xs uppercase font-bold text-dark-grey/60">Publisher</span>
                                 <span className="text-sm font-medium text-dark-grey/80">
-                                    {Array.isArray(book.publisher) 
-                                        ? book.publisher.join(', ') 
+                                    {Array.isArray(book.publisher)
+                                        ? book.publisher.join(', ')
                                         : (book.publisher || 'Miramax Books')}
                                 </span>
                             </div>
@@ -197,74 +197,9 @@ const BookClient = ({ book }: { book: Book }) => {
 
                 </div>
 
-              
 
-                {book.seriesDetails && book.seriesBooks && book.seriesBooks.length > 0 && (
-                    <div className="mt-14 pt-10 border-t border-black/5">
-                        <div className="space-y-6">
-                            <div>
-                                <h2 className="text-3xl font-serif font-bold text-dark-grey tracking-tight">
-                                    Series
-                                </h2>
-                                <div className="flex flex-wrap items-center gap-2 mt-3 select-none">
-                                    <span className="bg-dark-grey/10 text-dark-grey/80 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider font-sans">
-                                        Featured Series
-                                    </span>
-                                    {book.seriesDetails.primaryBooksCount !== null && (
-                                        <span className="bg-[#F2A900] text-black px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider font-sans">
-                                            {book.seriesDetails.primaryBooksCount} primary books
-                                        </span>
-                                    )}
-                                    {book.seriesDetails.booksCount !== null && (
-                                        <span className="bg-dark-grey/10 text-dark-grey/80 px-3 py-1 rounded-full text-[10px] uppercase font-bold tracking-wider font-sans">
-                                            {book.seriesDetails.booksCount} released books
-                                        </span>
-                                    )}
-                                </div>
+                <BookSeries book={book} />
 
-                                <h3 className="text-lg md:text-xl font-serif font-semibold text-dark-grey leading-tight mt-4">
-                                    {book.seriesList?.[0]?.position !== null && book.seriesList?.[0]?.position !== undefined && (
-                                        <span>#{book.seriesList[0].position} in </span>
-                                    )}
-                                    <Link href={`/dashboard/series/${book.seriesList[0].slug}`}>
-                                        <span className="underline decoration-dark-grey/20 underline-offset-4 decoration-1 hover:text-dark-grey/80 transition-colors cursor-pointer">
-                                            {book.seriesDetails.name}
-                                        </span>
-                                    </Link>
-                                </h3>
-
-                                {book.seriesDetails.description && (
-                                    <p className="text-base text-dark-grey/70 leading-relaxed font-medium mt-3 max-w-4xl">
-                                        {book.seriesDetails.description}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div
-                                ref={seriesScroll.ref}
-                                {...seriesScroll.props}
-                                className="flex gap-6 overflow-x-auto no-scrollbar pb-4 pt-2"
-                            >
-                                {book.seriesBooks.map((sb) => (
-                                    <div key={sb.key} className="relative shrink-0 select-none">
-                                        <BookCard
-                                            id={sb.key}
-                                            slug={sb.slug}
-                                            title={sb.title}
-                                            author={sb.author}
-                                            coverUrl={sb.coverUrl}
-                                        />
-                                        {sb.position !== null && (
-                                            <div className="absolute bottom-0 right-0 bg-[#F2A900] text-black px-3.5 py-1.5 text-sm font-black tracking-wide rounded-tl-md z-30 shadow-[0_-2px_8px_rgba(0,0,0,0.15)] pointer-events-none select-none">
-                                                #{sb.position}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                )}
 
                 <Recommendations book={book} />
 
