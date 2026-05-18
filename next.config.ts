@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "assets.hardcover.app",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };

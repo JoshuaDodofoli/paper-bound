@@ -1,12 +1,19 @@
-import { Book } from "@/app/lib/interface";
-import { searchBooks } from "@/app/lib/utils/BookSearch";
 import SearchClient from "./(components)/SearchClient";
+import { getBooks } from "@/app/lib/utils/HardCoverSearch";
 
 interface SearchPageProps {
     searchParams: Promise<{
         q?: string;
     }>;
 }
+
+const SEARCH_QUERY = `
+    query SearchBooks($query: String!) {
+        search(query: $query) {
+            results
+        }
+    }
+`;
 
 export default async function Page(props: SearchPageProps) {
     const searchParams = await props.searchParams;
@@ -23,25 +30,24 @@ export default async function Page(props: SearchPageProps) {
         );
     }
 
-    const data = await searchBooks(query);
+    const data = await getBooks(SEARCH_QUERY, { query });
+    const hits: any[] = data?.search?.results?.hits ?? [];
 
-    const results = data.docs?.map((book: any) => {
-        const generatedSlug = book.title
-            ?.toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/(^-|-$)/g, '') || 'unknown-title';
-
-        const authorName = book.author_name ? book.author_name[0] : 'Unknown Author';
+    const results = hits.slice(0, 20).map((hit: any) => {
+        const doc = hit.document;
+        const primaryAuthor = doc.contributions?.[0]?.author;
+        const authorName = primaryAuthor?.name ?? 'Unknown Author';
 
         return {
-            key: book.key,
-            id: book.key?.replace('/works/', ''),
-            slug: generatedSlug,
-            title: book.title,
+            key: doc.slug,
+            id: doc.id?.toString(),
+            slug: doc.slug ?? '',
+            title: doc.title ?? 'Unknown Title',
             author: authorName,
-            authorSlug: authorName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-            coverId: book.cover_i?.toString() || '',
+            authorSlug: primaryAuthor?.slug ?? authorName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+            coverUrl: doc.image?.url ?? null,
         };
-    }) || [];
+    });
+
     return <SearchClient query={query} results={results} />;
-}
+}
