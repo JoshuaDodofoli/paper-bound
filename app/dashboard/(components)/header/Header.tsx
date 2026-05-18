@@ -54,7 +54,7 @@ const Header = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 7 }}
             transition={{ duration: 0.2 }}
-            className='text-3xl font-medium'> 
+            className='text-3xl'> 
             {getPageTitle()}
           </motion.h1>
         </AnimatePresence>
@@ -71,7 +71,7 @@ const Header = () => {
             <Wrapper className="flex items-center justify-between relative p-1">
 
               <BackButton label="" />
-              <h3 className="absolute left-1/2 -translate-x-1/2 text-lg font-medium">
+              <h3 className="absolute left-1/2 -translate-x-1/2">
                 {getPageTitle()}
               </h3>
 

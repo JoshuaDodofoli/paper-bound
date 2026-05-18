@@ -1,47 +1,92 @@
 'use client'
+
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import React, { useState } from 'react'
-import { Search, Book, User, ArrowUpRight } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 import Modal from '../ui/Modal';
-import Link from 'next/link';
-import { MOCK_BOOKS, MOCK_AUTHORS } from '@/app/lib/books';
+import { SearchResults } from '@/app/lib/interface';
+import { useRouter } from 'next/navigation';
+import QuickSuggestions from './QuickSuggestions';
+import BookResultItem from './BookResultItem';
+import AuthorResultItem from './AuthorResultItem';
+import GenreResultItem from './GenreResultItem';
 
 interface SearchModalProps {
     isSearchOpen: boolean;
     setIsSearchOpen: (value: boolean) => void;
 }
 
-const booksForSearch = MOCK_BOOKS.map(book => ({
-    id: book.id,
-    slug: book.slug,
-    title: book.title,
-    subtitle: book.author,
-    type: "book" as const
-}));
-
-const authorsForSearch = MOCK_AUTHORS.map(author => ({
-    id: author.id,
-    slug: author.slug,
-    title: author.name,
-    subtitle: `Author • ${author.works?.length || 0} Books`,
-    type: "author" as const
-}));
-
-const SEARCHABLE_DATA = [...booksForSearch, ...authorsForSearch];
-
 const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
+    const router = useRouter();
     const [query, setQuery] = useState("");
+    const [bookResults, setBookResults] = useState<SearchResults[]>([]);
+    const [authorResults, setAuthorResults] = useState<any[]>([]);
+    const [genreResults, setGenreResults] = useState<any[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState<'books' | 'authors' | 'genres'>('books');
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+            handleCloseSearch();
+        } else if (e.key === 'Enter') {
+            if (query.length > 0) {
+                e.preventDefault();
+                router.push(`/dashboard/search?q=${encodeURIComponent(query)}`);
+                handleCloseSearch();
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (query.length === 0) {
+            setBookResults([]);
+            setAuthorResults([]);
+            setGenreResults([]);
+            return;
+        }
+
+        const timeout = setTimeout(async () => {
+            setIsLoading(true);
+
+            try {
+                const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+                const { books, authors, genres } = await res.json();
+
+                setBookResults((books ?? []).map((b: any) => ({
+                    key: b.slug,
+                    slug: b.slug,
+                    title: b.title,
+                    author: b.author,
+                    coverUrl: b.coverUrl,
+                })));
+
+                setAuthorResults((authors ?? []).map((a: any) => ({
+                    key: a.slug,
+                    slug: a.slug,
+                    name: a.name,
+                    image: a.image,
+                    topWork: a.topWork,
+                })));
+
+                setGenreResults((genres ?? []).map((g: any) => ({
+                    key: g.slug,
+                    slug: g.slug,
+                    name: g.name,
+                })));
+
+            } catch (error) {
+                console.error("Search error:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }, 250); // Snappy 250ms debounce
+
+        return () => clearTimeout(timeout);
+    }, [query]);
 
     const handleCloseSearch = () => {
         setIsSearchOpen(false);
-    }
-
-    const filteredResults = query.length > 0
-        ? SEARCHABLE_DATA.filter(item =>
-            item.title.toLowerCase().includes(query.toLowerCase()) ||
-            item.subtitle.toLowerCase().includes(query.toLowerCase())
-        )
-        : [];
+    };
 
     return (
         <Modal
@@ -55,93 +100,160 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
         >
             <div className="-mt-2">
                 <span className='text-xs text-dark-grey/40 font-bold uppercase tracking-widest mb-2 block'>search through our library</span>
-                <div className="relative flex items-center mb-6">
-                    <Search className="absolute left-4 text-dark-grey/40" size={20} />
-                    <input
-                        autoFocus
-                        type="text"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        placeholder='Search books, authors, genres...'
-                        className='w-full bg-dark-grey/5 border-stone/50 border-2 text-dark-grey placeholder:text-base rounded-3xl py-3 pl-12 pr-4 outline-none focus:border-stone transition-all text-lg font-medium'
-                    />
-                    {query && (
-                        <button
-                            onClick={() => setQuery("")}
-                            className="absolute right-4 text-xs font-bold text-dark-grey/40 hover:text-dark-grey/60 cursor-pointer"
-                        >
-                            CLEAR
-                        </button>
-                    )}
+                
+                <div className="relative">
+                    <div className="relative flex items-center mb-6">
+                        <Search className="absolute left-4 text-dark-grey/40" size={20} />
+                        <input
+                            autoFocus
+                            type="text"
+                            value={query}
+                            onChange={(e) => {
+                                setQuery(e.target.value);
+                            }}
+                            onKeyDown={handleKeyDown}
+                            placeholder='Search books, authors, genres...'
+                            className='w-full bg-dark-grey/5 border-stone/50 border-2 text-dark-grey placeholder:text-base rounded-3xl py-3 pl-12 pr-4 outline-none focus:border-stone transition-all text-lg font-medium'
+                        />
+                        {query && (
+                            <button
+                                onClick={() => {
+                                    setQuery("");
+                                }}
+                                className="absolute right-4 text-xs font-bold text-dark-grey/40 hover:text-dark-grey/60 cursor-pointer"
+                            >
+                                CLEAR
+                            </button>
+                        )}
+                    </div>
                 </div>
 
-                <div className="max-h-[400px] overflow-y-auto no-scrollbar">
+                <div className="max-h-[420px] overflow-y-auto no-scrollbar">
                     <AnimatePresence mode="wait">
-                        {query.length === 0 ? (
+                        {isLoading ? (
                             <motion.div
-                                key="suggestions"
+                                key="loading"
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
-                                className="space-y-4"
+                                className="flex flex-col items-center justify-center py-16 space-y-4"
                             >
-                                <h4 className='text-xs text-dark-grey/40 font-bold uppercase tracking-widest ml-1'>Quick Suggestions</h4>
-                                <div className="flex flex-wrap gap-2">
-                                    {['Fantasy', 'Sci-Fi', 'Mystery', 'Haruki Murakami', 'Classic Fiction', 'The Hobbit'].map((tag) => (
-                                        <motion.button
-                                            key={tag}
-                                            onClick={() => setQuery(tag)}
-                                            whileHover={{ scale: 1.03, backgroundColor: '#fff' }}
-                                            whileTap={{ scale: 0.97 }}
-                                            className="px-4 py-2 bg-dark-grey/5 border border-stone/40 rounded-xl text-sm text-dark-grey/70 cursor-pointer transition-all font-medium"
-                                        >
-                                            {tag}
-                                        </motion.button>
-                                    ))}
-                                </div>
+                                <Loader2 className="text-dark-grey/30 animate-spin" size={32} />
+                                <p className="text-sm font-medium text-dark-grey/40">Searching library...</p>
                             </motion.div>
+                        ) : query.length === 0 ? (
+                            <QuickSuggestions setQuery={setQuery} />
                         ) : (
                             <motion.div
                                 key="results"
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
-                                className="space-y-2"
+                                className="space-y-4"
                             >
                                 <div className="flex items-center justify-between ml-1 mb-2">
                                     <h4 className='text-xs text-dark-grey/40 font-bold uppercase tracking-widest'>Results for "{query}"</h4>
-                                    <span className="text-[10px] bg-stone text-dark-grey/80 px-2 py-0.5 rounded-full font-bold">{filteredResults.length} FOUND</span>
+                                    <span className="text-[10px] bg-stone text-dark-grey/80 px-2 py-0.5 rounded-full font-bold">
+                                        {bookResults.length + authorResults.length + genreResults.length} FOUND
+                                    </span>
                                 </div>
 
-                                {filteredResults.length > 0 ? (
-                                    filteredResults.map((item) => (
-                                        <div key={item.id}>
-                                            <Link
-                                                href={item.type === "book" ? `/dashboard/book/${item.slug}` : `/dashboard/authors/${item.slug}`}
-                                                onClick={() => setIsSearchOpen(false)}
-                                                className='relative'
-                                            >
-                                                <motion.div
-                                                    whileHover={{ x: 4, backgroundColor: 'rgba(0,0,0,0.04)' }}
-                                                    className="flex items-center gap-4 p-3 rounded-3xl cursor-pointer group transition-all"
-                                                >
-                                                    <div className="w-10 h-10 rounded-xl bg-dark-grey/5 flex items-center justify-center text-dark-grey/40 group-hover:bg-amber-400/20 group-hover:text-amber-300 transition-colors">
-                                                        {item.type === 'book' ? <Book size={18} /> : <User size={18} />}
-                                                    </div>
-                                                    <div className="flex-1">
-                                                        <p className="font-semibold text-dark-grey/90">{item.title}</p>
-                                                        <p className="text-xs text-dark-grey/50">{item.subtitle}</p>
-                                                    </div>
-                                                    <ArrowUpRight size={16} className="text-dark-grey/20 group-hover:text-dark-grey/50 transition-colors" />
-                                                </motion.div>
-                                            </Link>
+                                {/* Tabs Switcher */}
+                                <div className="flex border-b border-dark-grey/5 mb-6 gap-6 px-1">
+                                    <button
+                                        onClick={() => {
+                                            setActiveTab('books');
+                                        }}
+                                        className={`pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer ${
+                                            activeTab === 'books'
+                                                ? 'border-stone text-dark-grey'
+                                                : 'border-transparent text-dark-grey/40 hover:text-dark-grey/60'
+                                        }`}
+                                    >
+                                        Books ({bookResults.length})
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setActiveTab('authors');
+                                        }}
+                                        className={`pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer ${
+                                            activeTab === 'authors'
+                                                ? 'border-stone text-dark-grey'
+                                                : 'border-transparent text-dark-grey/40 hover:text-dark-grey/60'
+                                        }`}
+                                    >
+                                        Authors ({authorResults.length})
+                                    </button>
+                                    <button
+                                        onClick={() => {
+                                            setActiveTab('genres');
+                                        }}
+                                        className={`pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer ${
+                                            activeTab === 'genres'
+                                                ? 'border-stone text-dark-grey'
+                                                : 'border-transparent text-dark-grey/40 hover:text-dark-grey/60'
+                                        }`}
+                                    >
+                                        Genres ({genreResults.length})
+                                    </button>
+                                </div>
+
+                                {activeTab === 'books' ? (
+                                    bookResults.length > 0 ? (
+                                        <div className="space-y-2">
+                                            {bookResults.map((item, i) => (
+                                                <BookResultItem
+                                                    key={`book-${item.key}-${i}`}
+                                                    slug={item.slug || item.key}
+                                                    title={item.title}
+                                                    author={item.author}
+                                                    coverUrl={item.coverUrl}
+                                                    query={query}
+                                                    onClick={handleCloseSearch}
+                                                />
+                                            ))}
                                         </div>
-                                    ))
+                                    ) : (
+                                        <div className="py-10 text-center">
+                                            <p className="text-dark-grey/40 font-medium">No books found for "{query}"</p>
+                                        </div>
+                                    )
+                                ) : activeTab === 'authors' ? (
+                                    authorResults.length > 0 ? (
+                                        <div className="space-y-2">
+                                            {authorResults.map((item, i) => (
+                                                <AuthorResultItem
+                                                    key={`author-${item.slug}-${i}`}
+                                                    slug={item.slug}
+                                                    name={item.name}
+                                                    image={item.image}
+                                                    topWork={item.topWork}
+                                                    query={query}
+                                                    onClick={handleCloseSearch}
+                                                />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="py-10 text-center">
+                                            <p className="text-dark-grey/40 font-medium">No authors found for "{query}"</p>
+                                        </div>
+                                    )
                                 ) : (
-                                    <div className="py-10 text-center">
-                                        <p className="text-dark-grey/40 font-medium">No results found for "{query}"</p>
-                                        <p className="text-xs text-dark-grey/30 mt-1">Try searching for a different book or author</p>
-                                    </div>
+                                    genreResults.length > 0 ? (
+                                        <div className="space-y-2">
+                                            {genreResults.map((item, i) => (
+                                                <GenreResultItem
+                                                    key={`genre-${item.slug}-${i}`}
+                                                    name={item.name}
+                                                    onClick={handleCloseSearch}
+                                                />
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="py-10 text-center">
+                                            <p className="text-dark-grey/40 font-medium">No genres found for "{query}"</p>
+                                        </div>
+                                    )
                                 )}
                             </motion.div>
                         )}
@@ -149,7 +261,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                 </div>
             </div>
         </Modal>
-    )
-}
+    );
+};
 
-export default SearchModal
+export default SearchModal;

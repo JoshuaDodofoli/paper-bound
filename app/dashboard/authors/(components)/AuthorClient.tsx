@@ -1,118 +1,177 @@
 'use client'
 
+import { useState } from 'react'
 import Wrapper from "@/app/components/Wrapper"
 import { Author } from "@/app/lib/interface"
 import BackButton from "../../(components)/ui/BackButton"
-import { Globe, Calendar, BookOpen, Star } from "lucide-react"
+import { Star } from "lucide-react"
 import BookCard from "../../(components)/book/BookCard"
 import { motion } from "motion/react"
+import { useDraggableScroll } from "@/app/hooks/useDraggableScroll"
+import Sidebar from './Sidebar'
+import Modal from "../../(components)/ui/Modal"
 
 const AuthorClient = ({ author }: { author: Author }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const worksScroll = useDraggableScroll()
+
+  const LIMIT = 270
+  const isLong = (author.bio?.length ?? 0) > LIMIT
+  const handleMore = () => setIsOpen(!isOpen)
+
   return (
-    <div className="mt-20 mb-32">
+    <div className="w-full min-h-screen bg-[#F5F5F5] pt-12 pb-24">
       <Wrapper>
-        <BackButton label="Back to Dashboard" className="mb-12" />
+        <div className="flex items-center justify-between mb-16 border-b border-black/5 pb-4">
+          <BackButton label="Back" />
+          <span className="text-xs font-medium uppercase tracking-[0.2em] text-dark-grey/60">Author Profile</span>
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-[230px_1fr] gap-8 items-start">
-          {/* Sidebar - Left Column */}
-          <aside className="flex flex-row lg:flex-col gap-8 lg:gap-10 items-start">
-            {/* The "Box" instead of an image */}
-            <div className="relative group shrink-0">
-              <div className="absolute -inset-1 bg-stone/20 rounded-sm blur-sm group-hover:blur-md transition-all duration-500" />
-              <div className="relative w-36 sm:w-48 aspect-3/4 bg-stone/40 border border-stone/50 rounded-sm overflow-hidden flex items-center justify-center shadow-book">
-                <div className="absolute inset-0 opacity-10 pointer-events-none " />
-                <div className="text-center p-4 sm:p-8 space-y-4">
-                  <div className="size-12 sm:size-16 mx-auto rounded-full bg-paper/50 flex items-center justify-center border border-dark-grey/10">
-                    <span className="text-xl sm:text-2xl font-serif text-dark-grey/40">{author.name.charAt(0)}</span>
-                  </div>
-                  <div className="space-y-1">
-                    <p className="text-[8px] sm:text-[10px] uppercase tracking-[0.2em] text-dark-grey/40 font-bold">Author Portrait</p>
-                    <p className="text-xs sm:text-sm font-serif italic text-dark-grey/60 line-clamp-1">{author.name}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-20 items-start">
+          {/* Left Column: Author Portrait & Info */}
+          <div className="relative flex flex-col items-center">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-white/40 blur-3xl -z-10" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-dark-grey/5 -z-20" />
 
-            <div className="flex-1 space-y-6 sm:space-y-8 px-2">
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4">
-                <div className="flex items-center gap-1 bg-amber-400/10 text-amber-500 px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
-                  <Star size={14} fill="currentColor" />
-                  4.8
-                </div>
-                <span className="hidden sm:block text-dark-grey/30">•</span>
-                <div className="text-dark-grey/50 text-xs sm:text-sm font-medium whitespace-nowrap">1,200 Reviews</div>
-              </div>
+            <Sidebar author={author} />
+          </div>
 
-              <div className="flex items-center gap-4 group">
-                <div>
-                  <p className="text-[10px] uppercase tracking-wider text-dark-grey/40 font-bold">Born</p>
-                  <p className="text-sm text-dark-grey/80">{author.born}</p>
-                </div>
-              </div>
-
-              {author.genres.length > 0 && (
-                <div className="space-y-3">
-                  <p className="text-[10px] uppercase tracking-wider text-dark-grey/40 font-bold flex items-center gap-2 px-1">
-                    <BookOpen size={12} />
-                    Genres
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {author.genres.map(genre => (
-                      <span key={genre} className="px-3 py-1 bg-stone/30 border border-stone/50 rounded-full text-[10px] sm:text-xs text-dark-grey/70">
-                        {genre}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </aside>
-
-          <main className="space-y-16">
-            <header className="space-y-6">
-              <h1 className="text-3xl font-serif font-bold text-dark-grey leading-tight tracking-tighter">
+          {/* Right Column: Biography & Metadata */}
+          <div className="max-w-2xl space-y-16">
+            <motion.div
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="space-y-4"
+            >
+              <h1 className="text-3xl md:text-4xl font-serif font-bold text-dark-grey leading-[1.1] tracking-tight">
                 {author.name}
               </h1>
-              <div className="w-24 h-1 bg-brand/40 rounded-full" />
-            </header>
+            </motion.div>
 
-            <section className="space-y-6">
-              <h2 className="text-xs uppercase tracking-[0.3em] text-dark-grey/40 font-bold">Biography</h2>
-              <div className="max-w-2xl">
-                <p className="text-base font-serif leading-relaxed text-dark-grey/80 whitespace-pre-wrap first-letter:text-2xl first-letter:font-bold first-letter:mr-1 first-letter:float-left">
-                  {author.bio}
-                </p>
+            <div className="space-y-8">
+              <div className="">
+                <h3 className="mb-2 text-lg">Biography</h3>
+                <div className="space-y-4">
+                  {(isLong ? author.bio?.slice(0, LIMIT) + '...' : author.bio)
+                    ?.split('\n').filter(p => p.trim() !== '').map((paragraph, index, arr) => (
+                      <p key={index} className="text-base leading-relaxed text-dark-grey/70 text-wrap font-medium">
+                        {paragraph}
+                        {isLong && index === arr.length - 1 && (
+                          <button
+                            onClick={handleMore}
+                            className="ml-2 text-base text-dark-grey font-bold hover:underline cursor-pointer inline-block"
+                          >
+                            Read more
+                          </button>
+                        )}
+                      </p>
+                    ))}
+                </div>
               </div>
-            </section>
+            </div>
 
-            <section className="space-y-8 border-t border-stone pt-16">
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-serif font-bold text-dark-grey">{author.name}'s books</h2>
-                <span className="text-sm text-dark-grey/40">{author.works.length} titles</span>
+            {/* Metadata Grid */}
+            <div className="grid grid-cols-2 gap-x-20 gap-y-8 py-10 border-y border-black/5">
+              <div className="flex flex-col gap-2">
+                <span className="text-xs uppercase font-bold text-dark-grey/60">Born</span>
+                <span className="text-sm font-medium text-dark-grey/80">{author.born}</span>
               </div>
-
-              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
-                {author.works.map((book, index) => (
-                  <motion.div
-                    key={book.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.05 }}
+              {author.website && (
+                <div className="flex flex-col gap-2">
+                  <span className="text-xs uppercase font-bold text-dark-grey/60">Website</span>
+                  <a
+                    href={author.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-dark-grey/80 hover:underline truncate max-w-[200px]"
                   >
-                    <BookCard
-                      id={book.id}
-                      slug={book.slug}
-                      title={book.title}
-                      author={book.author}
-                      coverColor={book.color}
-                      width="w-full"
-                    />
-                  </motion.div>
-                ))}
+                    {author.website.replace('https://', '').replace('www.', '')}
+                  </a>
+                </div>
+              )}
+              {author.topWork && (
+                <div className="flex flex-col gap-2">
+                  <span className="text-xs uppercase font-bold text-dark-grey/60">Top Work</span>
+                  <span className="text-sm font-medium text-dark-grey/80 italic truncate max-w-[200px]">{author.topWork}</span>
+                </div>
+              )}
+              {author.workCount !== undefined && author.workCount > 0 && (
+                <div className="flex flex-col gap-2">
+                  <span className="text-xs uppercase font-bold text-dark-grey/60">Total Works</span>
+                  <span className="text-sm font-medium text-dark-grey/80">{author.workCount.toLocaleString()} Books</span>
+                </div>
+              )}
+              <div className="flex flex-col gap-2 col-span-2">
+                <span className="text-xs uppercase font-bold text-dark-grey/60">Rating</span>
+                <div className="flex items-center gap-1 text-sm font-medium text-dark-grey/80">
+                  <Star size={14} className="text-amber-500" fill="currentColor" />
+                  {author.ratingsAverage ?? "4.8"} <span className="text-dark-grey/40">({(author.ratingsCount ?? 1200).toLocaleString()} Reviews)</span>
+                </div>
               </div>
-            </section>
-          </main>
+            </div>
+
+            {/* Genres */}
+            {author.genres && author.genres.length > 0 && (
+              <div className="space-y-4">
+                <p className="text-[9px] uppercase font-bold text-dark-grey/60 tracking-[0.2em]">Genres</p>
+                <div className="flex flex-wrap gap-2">
+                  {author.genres.slice(0, 8).map((genre, index) => (
+                    <span key={index} className="text-sm font-medium text-dark-grey/70 hover:text-dark-grey cursor-default transition-colors">
+                      {genre}{index < 7 && index < author.genres.length - 1 ? " • " : ""}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
+
+        {/* Author Works Carousel */}
+        {author.works && author.works.length > 0 && (
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-24 space-y-6"
+          >
+            <p className="text-[10px] uppercase font-bold text-dark-grey/40 tracking-[0.2em]">
+              Author Works
+            </p>
+            <div
+              ref={worksScroll.ref}
+              {...worksScroll.props}
+              className="flex gap-6 overflow-x-auto no-scrollbar pb-4"
+            >
+              {author.works.map((book) => (
+                <BookCard
+                  key={book.id || book.key}
+                  id={book.id || book.key}
+                  slug={book.slug}
+                  title={book.title}
+                  author={book.author}
+                  coverUrl={book.coverUrl ?? undefined}
+                  width="w-52"
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+
+        <Modal
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          title="Biography"
+          showDivider
+          width="w-[90%] max-w-[600px]"
+        >
+          <div className="max-h-[60vh] overflow-y-auto pr-2 no-scrollbar space-y-4">
+            {author.bio?.split('\n').filter(p => p.trim() !== '').map((paragraph, index) => (
+              <p key={index} className="text-dark-grey/80 text-base leading-relaxed text-wrap font-medium">
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        </Modal>
       </Wrapper>
     </div>
   )

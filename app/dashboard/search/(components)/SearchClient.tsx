@@ -1,0 +1,66 @@
+'use client'
+
+import React from 'react'
+import BookCard from '../../(components)/book/BookCard'
+import Wrapper from '@/app/components/Wrapper';
+import BackButton from "../../(components)/ui/BackButton";
+
+interface SearchResult {
+    id: string;
+    slug: string;
+    title: string;
+    author: string;
+    coverUrl: string | null;
+    authorSlug: string;
+}
+
+interface SearchClientProps {
+    query: string;
+    results: SearchResult[];
+}
+
+const colors = [
+    'bg-red-200', 'bg-blue-200', 'bg-green-200', 'bg-yellow-200',
+    'bg-purple-200', 'bg-orange-200', 'bg-pink-200', 'bg-teal-200'
+];
+
+export default function SearchClient({ query, results }: SearchClientProps) {
+    return (
+        <div className="w-full px-6 py-12 bg-[#F5F5F5] min-h-screen">
+            <Wrapper>
+
+                <div className="flex items-center justify-between mb-16 border-b border-black/5 pb-4">
+                    <BackButton />
+                    <span className="text-xs font-medium uppercase tracking-[0.2em] text-dark-grey/60">Search Results</span>
+                </div>
+
+                {results.length > 0 ? (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-10">
+                        {results.map((book, index) => {
+                            const coverColor = colors[index % colors.length];
+                            return (
+                                <BookCard
+                                    key={book.id}
+                                    id={book.id}
+                                    slug={book.slug}
+                                    title={book.title}
+                                    author={book.author}
+                                    coverUrl={book.coverUrl}
+                                    coverColor={coverColor}
+                                    width="w-full"
+                                />
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div className="text-center py-24 bg-[#FAF9F7]/60 rounded-xl border border-[#EAE6DF] shadow-sm backdrop-blur-sm">
+                        <h3 className="text-2xl font-serif text-[#1e1a15] mb-2">No results found</h3>
+                        <p className="text-[#1e1a15]/60">
+                            We couldn't find any books matching "{query}". Try adjusting your search term.
+                        </p>
+                    </div>
+                )}
+            </Wrapper>
+        </div>
+    )
+}
