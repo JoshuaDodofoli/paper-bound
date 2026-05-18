@@ -1,4 +1,4 @@
-import { getBooks } from "@/app/lib/utils/HardCoverSearch";
+import { getBooks, getRecommendations } from "@/app/lib/utils/HardCoverSearch";
 import { Book } from "@/app/lib/interface";
 import BookClient from "../(components)/BookClient";
 import BackButton from "../../(components)/ui/BackButton";
@@ -52,6 +52,9 @@ const BookDetailsPage = async ({ params }: bookPageProps) => {
                 ? searchData.cached_tags.Genre.map((g: any) => g.tag ?? g.tagSlug ?? '').filter(Boolean)
                 : [];
 
+            // Dynamically fetch recommended books from the same genre
+            const recommendations = await getRecommendations(genres, searchData.id.toString());
+
             book = {
                 key: searchData.id.toString(),
                 id: searchData.id.toString(),
@@ -66,7 +69,7 @@ const BookDetailsPage = async ({ params }: bookPageProps) => {
                 ratingsCount: searchData.ratings_count,
                 firstPublishYear: searchData.release_year,
                 publisher: searchData.editions?.[0]?.publisher?.name ?? null,
-                recommendations: [],
+                recommendations: recommendations,
             };
         }
 

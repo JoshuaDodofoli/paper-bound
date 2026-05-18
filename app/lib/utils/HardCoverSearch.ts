@@ -68,3 +68,41 @@ export async function getAuthor(slug: string) {
         books: data?.books ?? []
     };
 }
+
+export async function getRecommendations(subjects: string[], currentKey: string) {
+    if (!subjects || subjects.length === 0) return [];
+
+    const subject = subjects[0];
+    console.log("Fetching Hardcover recommendations for subject:", subject);
+
+    try {
+        const SEARCH_QUERY = `
+            query SearchBooks($query: String!) {
+                search(query: $query) {
+                    results
+                }
+            }
+        `;
+
+        const data = await getBooks(SEARCH_QUERY, { query: subject });
+        const hits: any[] = data?.search?.results?.hits ?? [];
+
+        return hits
+            .map((hit: any) => {
+                const doc = hit.document;
+                const primaryAuthor = doc.contributions?.[0]?.author;
+                return {
+                    key: doc.id?.toString() ?? doc.slug ?? "",
+                    slug: doc.slug ?? "",
+                    title: doc.title ?? "Unknown Title",
+                    author: primaryAuthor?.name ?? "Unknown Author",
+                    coverUrl: doc.image?.url ?? null,
+                };
+            })
+            .filter((work) => work.slug !== currentKey && work.title !== "Unknown Title")
+            .slice(0, 8);
+    } catch (error) {
+        console.error("Failed to fetch hardcover recommendations:", error);
+        return [];
+    }
+}
