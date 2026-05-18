@@ -26,11 +26,16 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
     const [activeTab, setActiveTab] = useState<'books' | 'authors' | 'genres'>('books');
 
     const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Enter' && query.length > 0) {
-            router.push(`/dashboard/search?q=${encodeURIComponent(query)}`)
-            setIsSearchOpen(false);
+        if (e.key === 'Escape') {
+            handleCloseSearch();
+        } else if (e.key === 'Enter') {
+            if (query.length > 0) {
+                e.preventDefault();
+                router.push(`/dashboard/search?q=${encodeURIComponent(query)}`);
+                handleCloseSearch();
+            }
         }
-    }
+    };
 
     useEffect(() => {
         if (query.length === 0) {
@@ -74,14 +79,14 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
             } finally {
                 setIsLoading(false);
             }
-        }, 500)
+        }, 250); // Snappy 250ms debounce
 
-        return () => clearTimeout(timeout)
-    }, [query])
+        return () => clearTimeout(timeout);
+    }, [query]);
 
     const handleCloseSearch = () => {
         setIsSearchOpen(false);
-    }
+    };
 
     return (
         <Modal
@@ -95,28 +100,35 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
         >
             <div className="-mt-2">
                 <span className='text-xs text-dark-grey/40 font-bold uppercase tracking-widest mb-2 block'>search through our library</span>
-                <div className="relative flex items-center mb-6">
-                    <Search className="absolute left-4 text-dark-grey/40" size={20} />
-                    <input
-                        autoFocus
-                        type="text"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        onKeyDown={handleKeyDown}
-                        placeholder='Search books, authors, genres...'
-                        className='w-full bg-dark-grey/5 border-stone/50 border-2 text-dark-grey placeholder:text-base rounded-3xl py-3 pl-12 pr-4 outline-none focus:border-stone transition-all text-lg font-medium'
-                    />
-                    {query && (
-                        <button
-                            onClick={() => setQuery("")}
-                            className="absolute right-4 text-xs font-bold text-dark-grey/40 hover:text-dark-grey/60 cursor-pointer"
-                        >
-                            CLEAR
-                        </button>
-                    )}
+                
+                <div className="relative">
+                    <div className="relative flex items-center mb-6">
+                        <Search className="absolute left-4 text-dark-grey/40" size={20} />
+                        <input
+                            autoFocus
+                            type="text"
+                            value={query}
+                            onChange={(e) => {
+                                setQuery(e.target.value);
+                            }}
+                            onKeyDown={handleKeyDown}
+                            placeholder='Search books, authors, genres...'
+                            className='w-full bg-dark-grey/5 border-stone/50 border-2 text-dark-grey placeholder:text-base rounded-3xl py-3 pl-12 pr-4 outline-none focus:border-stone transition-all text-lg font-medium'
+                        />
+                        {query && (
+                            <button
+                                onClick={() => {
+                                    setQuery("");
+                                }}
+                                className="absolute right-4 text-xs font-bold text-dark-grey/40 hover:text-dark-grey/60 cursor-pointer"
+                            >
+                                CLEAR
+                            </button>
+                        )}
+                    </div>
                 </div>
 
-                <div className="max-h-[400px] overflow-y-auto no-scrollbar">
+                <div className="max-h-[420px] overflow-y-auto no-scrollbar">
                     <AnimatePresence mode="wait">
                         {isLoading ? (
                             <motion.div
@@ -149,7 +161,9 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                 {/* Tabs Switcher */}
                                 <div className="flex border-b border-dark-grey/5 mb-6 gap-6 px-1">
                                     <button
-                                        onClick={() => setActiveTab('books')}
+                                        onClick={() => {
+                                            setActiveTab('books');
+                                        }}
                                         className={`pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer ${
                                             activeTab === 'books'
                                                 ? 'border-stone text-dark-grey'
@@ -159,7 +173,9 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                         Books ({bookResults.length})
                                     </button>
                                     <button
-                                        onClick={() => setActiveTab('authors')}
+                                        onClick={() => {
+                                            setActiveTab('authors');
+                                        }}
                                         className={`pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer ${
                                             activeTab === 'authors'
                                                 ? 'border-stone text-dark-grey'
@@ -169,7 +185,9 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                         Authors ({authorResults.length})
                                     </button>
                                     <button
-                                        onClick={() => setActiveTab('genres')}
+                                        onClick={() => {
+                                            setActiveTab('genres');
+                                        }}
                                         className={`pb-3 text-xs font-bold uppercase tracking-widest border-b-2 transition-all cursor-pointer ${
                                             activeTab === 'genres'
                                                 ? 'border-stone text-dark-grey'
@@ -190,7 +208,8 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                                     title={item.title}
                                                     author={item.author}
                                                     coverUrl={item.coverUrl}
-                                                    onClick={() => setIsSearchOpen(false)}
+                                                    query={query}
+                                                    onClick={handleCloseSearch}
                                                 />
                                             ))}
                                         </div>
@@ -209,7 +228,8 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                                     name={item.name}
                                                     image={item.image}
                                                     topWork={item.topWork}
-                                                    onClick={() => setIsSearchOpen(false)}
+                                                    query={query}
+                                                    onClick={handleCloseSearch}
                                                 />
                                             ))}
                                         </div>
@@ -225,7 +245,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                                                 <GenreResultItem
                                                     key={`genre-${item.slug}-${i}`}
                                                     name={item.name}
-                                                    onClick={() => setIsSearchOpen(false)}
+                                                    onClick={handleCloseSearch}
                                                 />
                                             ))}
                                         </div>
@@ -241,7 +261,7 @@ const SearchModal = ({ isSearchOpen, setIsSearchOpen }: SearchModalProps) => {
                 </div>
             </div>
         </Modal>
-    )
-}
+    );
+};
 
 export default SearchModal;

@@ -11,10 +11,34 @@ interface AuthorResultItemProps {
     name: string;
     image: string | null;
     topWork?: string;
+    query?: string;
     onClick: () => void;
 }
 
-export default function AuthorResultItem({ slug, name, image, topWork, onClick }: AuthorResultItemProps) {
+const HighlightText = ({ text, query }: { text: string; query: string }) => {
+    if (!query || !query.trim()) return <span>{text}</span>;
+    
+    const words = query.trim().split(/\s+/).filter(Boolean);
+    if (words.length === 0) return <span>{text}</span>;
+    
+    const escapedWords = words.map(w => w.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
+    const regex = new RegExp(`(${escapedWords.join('|')})`, 'gi');
+    const parts = text.split(regex);
+    
+    return (
+        <span>
+            {parts.map((part, i) => 
+                regex.test(part) ? (
+                    <span key={i} className="font-extrabold text-dark-grey bg-stone/40 rounded-sm px-0.5">{part}</span>
+                ) : (
+                    <span key={i}>{part}</span>
+                )
+            )}
+        </span>
+    );
+};
+
+export default function AuthorResultItem({ slug, name, image, topWork, query = "", onClick }: AuthorResultItemProps) {
     return (
         <Link
             href={`/dashboard/authors/${slug}`}
@@ -27,7 +51,9 @@ export default function AuthorResultItem({ slug, name, image, topWork, onClick }
             >
                 <AuthorSearchAvatar name={name} coverUrl={image} />
                 <div className="flex-1">
-                    <p className="font-semibold text-dark-grey/90">{name}</p>
+                    <p className="font-semibold text-dark-grey/90">
+                        <HighlightText text={name} query={query} />
+                    </p>
                     {topWork && (
                         <p className="text-xs text-dark-grey/50 truncate max-w-[320px]">
                             Top Work: <span className="italic font-medium">{topWork}</span>

@@ -72,7 +72,7 @@ const BookCard = ({
                 </div>
 
                 <div className="absolute inset-0 p-4 flex flex-col justify-end z-20 bg-linear-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <p className="text-[10px] font-bold text-white uppercase tracking-widest truncate">{author}</p>
+                    <p className="text-xs font-bold text-white uppercase tracking-widest truncate">{author}</p>
                     <p className="text-xs font-serif font-bold text-white/90 leading-tight line-clamp-2">{title}</p>
                 </div>
             </motion.div>
