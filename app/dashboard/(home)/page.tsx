@@ -1,20 +1,20 @@
-'use client'
-
-import { useDraggableScroll } from "@/app/hooks/useDraggableScroll";
-import BookCard from "../(components)/book/BookCard";
+import BookCarousel from "../(components)/book/BookCarousel";
 import Wrapper from "@/app/components/Wrapper";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { MOCK_BOOKS } from "../../lib/books";
+import { getTrendingBooks } from "@/app/lib/utils/hardCover/GetTrendingBooks";
+import { getReadingBooks } from "@/app/lib/utils/hardCover/GetReadingBooks";
+import { getNewArrivals } from "@/app/lib/utils/hardCover/GetNewArrivals";
 
-const Page = () => {
-
-  const readingScroll = useDraggableScroll();
-  const trendingScroll = useDraggableScroll();
-  const arrivalsScroll = useDraggableScroll();
+const Page = async () => {
+  const [readingBooks, trendingBooks, arrivalsBooks] = await Promise.all([
+    getReadingBooks(),
+    getTrendingBooks(),
+    getNewArrivals()
+  ]);
 
   return (
-    <div className="mt-14">
+    <div className="mt-14 space-y-12">
 
       <section>
         <Wrapper>
@@ -23,65 +23,23 @@ const Page = () => {
             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform text-dark-grey/90" />
           </Link>
 
-          <div
-            ref={readingScroll.ref}
-            {...readingScroll.props}
-            className={`
-            flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
-            ${readingScroll.isDragging ? 'cursor-grabbing `**:pointer-events-none' : 'cursor-grab'}
-            select-none active:cursor-grabbing
-          `}
-          >
-            {MOCK_BOOKS.map((book) => (
-              <BookCard
-                key={book.id}
-                id={book.id}
-                slug={book.slug}
-                title={book.title}
-                author={book.author}
-                coverColor={book.color}
-                aspectRatio="aspect-video"
-                width="w-72"
-              />
-            ))}
-          </div>
+          <BookCarousel books={readingBooks} aspectRatio="aspect-video" width="w-72" />
         </Wrapper>
       </section>
 
       <section className="section-gradient">
         <Wrapper>
-
           <Link href="/dashboard/trending" className="flex items-center gap-1 group w-fit mb-4">
             <h2 className="text-xl">Trending</h2>
             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform text-dark-grey/90" />
           </Link>
 
-          <div
-            ref={trendingScroll.ref}
-            {...trendingScroll.props}
-            className={`
-            flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
-            ${trendingScroll.isDragging ? 'cursor-grabbing `**:pointer-events-none' : 'cursor-grab'}
-            select-none active:cursor-grabbing
-          `}
-          >
-            {MOCK_BOOKS.map((book) => (
-              <BookCard
-                key={book.id}
-                id={book.id}
-                slug={book.slug}
-                title={book.title}
-                author={book.author}
-                coverColor={book.color}
-              />
-            ))}
-          </div>
+          <BookCarousel books={trendingBooks} />
         </Wrapper>
       </section>
 
       <section className="section-gradient">
         <Wrapper>
-
           <h2 className="text-xl">Genre Spotlights</h2>
 
           <div className="flex flex-col lg:flex-row gap-10">
@@ -105,35 +63,14 @@ const Page = () => {
 
       <section className="section-gradient">
         <Wrapper>
-
           <Link href="/dashboard/new-arrivals" className="flex items-center gap-1 group w-fit mb-4">
             <h2 className="text-xl">New arrivals</h2>
             <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform text-dark-grey/90" />
           </Link>
 
-          <div
-            ref={arrivalsScroll.ref}
-            {...arrivalsScroll.props}
-            className={`
-            flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
-            ${arrivalsScroll.isDragging ? 'cursor-grabbing `**:pointer-events-none' : 'cursor-grab'}
-            select-none active:cursor-grabbing
-          `}
-          >
-            {MOCK_BOOKS.map((book) => (
-              <BookCard
-                key={book.id}
-                id={book.id}
-                slug={book.slug}
-                title={book.title}
-                author={book.author}
-                coverColor={book.color}
-              />
-            ))}
-          </div>
+          <BookCarousel books={arrivalsBooks} />
         </Wrapper>
       </section>
-
 
     </div>
   );

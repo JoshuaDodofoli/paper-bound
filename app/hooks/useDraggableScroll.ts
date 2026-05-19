@@ -23,7 +23,7 @@ export const useDraggableScroll = () => {
     if (!isDragging || !ref.current) return;
     e.preventDefault();
     const x = e.pageX - ref.current.offsetLeft;
-    const walk = (x - startX) * 2; // Multiply by 2 for faster scrolling
+    const walk = (x - startX) * 1; // Multiply by 2 for faster scrolling
     if (Math.abs(x - startX) > 5) {
       setDragged(true);
     }
@@ -40,6 +40,7 @@ export const useDraggableScroll = () => {
   return {
     ref,
     isDragging,
+    dragged,
     props: { onMouseDown, onMouseUp, onMouseLeave, onMouseMove, onClickCapture }
   };
 };

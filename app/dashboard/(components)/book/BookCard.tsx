@@ -16,13 +16,13 @@ interface BookCardProps {
     width?: string;
 }
 
-const BookCard = ({ 
-    id, 
+const BookCard = ({
+    id,
     slug,
-    title, 
-    author, 
+    title,
+    author,
     coverUrl,
-    coverColor = "bg-red-200", 
+    coverColor = "bg-red-200",
     aspectRatio = "aspect-3/4",
     width = "w-44"
 }: BookCardProps) => {

@@ -41,7 +41,9 @@ const BookClient = ({ book }: { book: Book }) => {
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 rounded-full bg-white/40 blur-3xl -z-10" />
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full bg-dark-grey/5 -z-20" />
 
-                        <Sidebar book={book} />
+                        <div className="h-f sticky top-0">
+                            <Sidebar book={book} />
+                        </div>
 
                     </div>
 
