@@ -1,22 +1,22 @@
 'use client'
 
 import React, { useState } from 'react'
-import Wrapper from '../../components/Wrapper'
-import { useCollectionStore } from '@/app/lib/store'
+import Wrapper from '@/components/primitives/Wrapper'
 import { motion } from 'framer-motion'
-import { LogOut, Trash2, Palette, ShieldAlert, MapPin, Calendar, Clock, BookOpen, Library, Edit3, ChevronRight, ChevronLeft, Share } from 'lucide-react'
+import { LogOut, Trash2, ShieldAlert, Calendar, Clock, BookOpen, Edit3, ChevronRight, Share } from 'lucide-react'
 import Image from 'next/image'
-import BackButton from '../(components)/ui/BackButton'
-import { useToast } from '@/app/lib/hooks/useToast'
-import Toast from '../(components)/ui/Toast'
-import EditProfileModal from '../(components)/ui/EditProfileModal'
+import BackButton from '@/components/primitives/BackButton'
+import { useToast } from '@/hooks/ui/useToast'
+import Toast from '@/components/overlays/Toast'
+import EditProfileModal from './_components/EditProfileModal'
+import { useShelfStore } from '@/features/shelf/state/useShelfStore'
+import { useUserPreferencesStore } from '@/features/profile/state/useUserPreferencesStore'
 
 const ProfilePage = () => {
-  const user = useCollectionStore((state) => state.user);
-  const collections = useCollectionStore((state) => state.collections);
-  const setTheme = useCollectionStore((state) => state.setTheme);
-  const logout = useCollectionStore((state) => state.logout);
-  const deleteAccount = useCollectionStore((state) => state.deleteAccount);
+  const user = useUserPreferencesStore((state) => state.user);
+  const collections = useShelfStore((state) => state.collections);
+  const logout = useUserPreferencesStore((state) => state.logout);
+  const deleteAccount = useUserPreferencesStore((state) => state.deleteAccount);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const { toast, showToast, hideToast } = useToast();
@@ -26,7 +26,7 @@ const ProfilePage = () => {
     try {
       await navigator.clipboard.writeText(shareUrl);
       showToast('Profile link copied to clipboard!');
-    } catch (err) {
+    } catch {
       showToast('Failed to copy link', 'error');
     }
   };
@@ -114,7 +114,7 @@ const ProfilePage = () => {
                   className='bg-ash/50 border border-stone/10 rounded-2xl p-4 flex flex-col gap-1 hover:border-stone/30 transition-all cursor-pointer'
                 >
                   <span className='text-sm font-sans font-bold text-dark-grey/90'>{shelf.name}</span>
-                  <span className='text-xs font-sans text-dark-grey/40'>({shelf.books || 0} books)</span>
+                  <span className='text-xs font-sans text-dark-grey/40'>({shelf.bookCount} books)</span>
                 </motion.div>
               ))}
 
@@ -231,5 +231,3 @@ const ProfilePage = () => {
 }
 
 export default ProfilePage
-
-

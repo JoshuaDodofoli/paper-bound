@@ -1,81 +1,7 @@
-import Wrapper from '@/app/components/Wrapper';
-import BackButton from '../../(components)/ui/BackButton';
-import BookCard from '../../(components)/book/BookCard';
-
-const MOCK_BOOKS = [
-    {
-        id: "1",
-        slug: "the-midnight-library",
-        title: "The Midnight Library",
-        author: "Matt Haig",
-        color: "bg-indigo-200",
-        rating: 4.2,
-        status: "Want to Read"
-    },
-    {
-        id: "2",
-        slug: "project-hail-mary",
-        title: "Project Hail Mary",
-        author: "Andy Weir",
-        color: "bg-orange-200",
-        rating: 4.8,
-        status: "Read"
-    },
-    {
-        id: "3",
-        slug: "the-song-of-achilles",
-        title: "The Song of Achilles",
-        author: "Madeline Miller",
-        color: "bg-red-200",
-        rating: 4.7,
-        status: "Read"
-    },
-    {
-        id: "4",
-        slug: "where-the-crawdads-sing",
-        title: "Where the Crawdads Sing",
-        author: "Delia Owens",
-        color: "bg-yellow-200",
-        rating: 4.5,
-        status: "Want to Read"
-    },
-    {
-        id: "5",
-        slug: "the-seven-husbands-of-evelyn-hugo",
-        title: "The Seven Husbands of Evelyn Hugo",
-        author: "Taylor Jenkins Reid",
-        color: "bg-purple-200",
-        rating: 4.6,
-        status: "Currently Reading"
-    },
-    {
-        id: "6",
-        slug: "atomic-habits",
-        title: "Atomic Habits",
-        author: "James Clear",
-        color: "bg-blue-200",
-        rating: 4.9,
-        status: "Read"
-    },
-    {
-        id: "7",
-        slug: "the-invisible-life-of-addie-larue",
-        title: "The Invisible Life of Addie LaRue",
-        author: "V. E. Schwab",
-        color: "bg-pink-200",
-        rating: 4.4,
-        status: "Want to Read"
-    },
-    {
-        id: "8",
-        slug: "circe",
-        title: "Circe",
-        author: "Madeline Miller",
-        color: "bg-green-200",
-        rating: 4.6,
-        status: "Read"
-    },
-];
+import Wrapper from '@/components/primitives/Wrapper';
+import BackButton from '@/components/primitives/BackButton';
+import BookCard from '@/components/domain/books/BookCard';
+import { MOCK_BOOKS } from '@/domain/books/fixtures';
 
 interface slugProps {
     params: Promise<{
@@ -83,12 +9,12 @@ interface slugProps {
     }>
 }
 
-const page = async ({ params }: slugProps) => {
+const ShelfCollectionPage = async ({ params }: slugProps) => {
 
     const { slug } = await params;
 
     return (
-        <div className='mt-12'>
+        <div className='mt-12' data-collection-slug={slug}>
             <Wrapper>
                 <BackButton label="Back to Library" className="mb-8" />
                 <div className="flex items-center justify-between mb-6">
@@ -117,4 +43,4 @@ const page = async ({ params }: slugProps) => {
     )
 }
 
-export default page
+export default ShelfCollectionPage
