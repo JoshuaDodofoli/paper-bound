@@ -1,8 +1,7 @@
-import Transition from "../components/Transition";
-import Wrapper from "../components/Wrapper";
-import Footer from "./(components)/footer/Footer";
-import Header from "./(components)/header/Header";
-import Navbar from "./(components)/navbar/Navbar";
+import Transition from "@/components/chrome/dashboard/Transition";
+import Footer from "@/components/chrome/dashboard/Footer";
+import Header from "@/components/chrome/dashboard/Header";
+import Navbar from "@/components/chrome/dashboard/Navbar";
 
 interface childrenProps {
   children: React.ReactNode
@@ -10,7 +9,6 @@ interface childrenProps {
 
 export default function DashboardLayout({ children }: childrenProps) {
   return (
-
     <div className="">
       <Header />
       <Transition>

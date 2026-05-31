@@ -1,27 +1,28 @@
 'use client'
 
 import React, { useState } from 'react'
-import Wrapper from '../../components/Wrapper'
-import { Ellipsis, LayoutGrid, List, Pencil, PlusCircle } from 'lucide-react'
+import Wrapper from '@/components/primitives/Wrapper'
+import { Ellipsis, LayoutGrid, List, PlusCircle } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
-import EditOptions from './(components)/EditOptions';
-import CreateCollectionModal from './(components)/CreateCollectionModal';
-import EditModal from './(components)/EditModal';
-import DeleteModal from './(components)/DeleteModal';
-import { useCollectionStore } from '@/app/lib/store';
-import CollectionCard from './(components)/CollectionCard';
+import EditOptions from './_components/EditOptions';
+import CreateCollectionModal from './_components/CreateCollectionModal';
+import EditModal from './_components/EditModal';
+import DeleteModal from './_components/DeleteModal';
+import { useShelfStore } from '@/features/shelf/state/useShelfStore';
+import { useShelfUiStore } from '@/features/shelf/state/useShelfUiStore';
+import CollectionCard from './_components/CollectionCard';
 
-const page = () => {
+const ShelfPage = () => {
 
-  const collections = useCollectionStore((state) => state.collections);
-  const addCollection = useCollectionStore((state) => state.addCollection);
-  const activeEditId = useCollectionStore((state) => state.activeEditId);
-  const setActiveEditId = useCollectionStore((state) => state.setActiveEditId);
-  const editingCollectionId = useCollectionStore((state) => state.editingCollectionId);
-  const deletingCollectionId = useCollectionStore((state) => state.deletingCollectionId);
-  const viewMode = useCollectionStore((state) => state.viewMode);
-  const setViewMode = useCollectionStore((state) => state.setViewMode);
+  const collections = useShelfStore((state) => state.collections);
+  const addCollection = useShelfStore((state) => state.addCollection);
+  const activeEditId = useShelfUiStore((state) => state.activeEditId);
+  const setActiveEditId = useShelfUiStore((state) => state.setActiveEditId);
+  const editingCollectionId = useShelfUiStore((state) => state.editingCollectionId);
+  const deletingCollectionId = useShelfUiStore((state) => state.deletingCollectionId);
+  const viewMode = useShelfUiStore((state) => state.viewMode);
+  const setViewMode = useShelfUiStore((state) => state.setViewMode);
 
   const [collectionName, setCollectionName] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -30,8 +31,8 @@ const page = () => {
     setShowModal(prev => !prev);
   }
 
-  const handleSaveCollection = (e: any) => {
-    e.preventDefault();
+  const handleSaveCollection = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     if (!collectionName.trim()) return;
 
     addCollection(collectionName);
@@ -135,12 +136,13 @@ const page = () => {
                   variants={itemVariants}
                   className='relative w-full group'
                 >
-                  <Link href={`/dashboard/shelf/${collection.name}`}>
+                  <Link href={`/dashboard/shelf/${collection.slug}`}>
                     <motion.div
                       whileTap={{ scale: 0.95 }}
                     >
                       <CollectionCard
                         collectionName={collection.name}
+                        bookCount={collection.bookCount}
                         viewMode={viewMode}
                       />
                     </motion.div>
@@ -185,4 +187,4 @@ const page = () => {
   )
 }
 
-export default page
+export default ShelfPage

@@ -1,0 +1,45 @@
+'use client'
+
+import { motion } from 'motion/react'
+import { useShelfStore } from '@/features/shelf/state/useShelfStore'
+import { useShelfUiStore } from '@/features/shelf/state/useShelfUiStore'
+
+import Modal from '@/components/overlays/Modal';
+
+interface ModalProps {
+    collectionId: number;
+}
+
+const DeleteModal = ({ collectionId }: ModalProps) => {
+    const deleteCollection = useShelfStore((state) => state.deleteCollection);
+    const setDeletingCollectionId = useShelfUiStore((state) => state.setDeletingCollectionId);
+    const clearActiveCollectionUi = useShelfUiStore((state) => state.clearActiveCollectionUi);
+
+    const toggleDeleteModal = () => setDeletingCollectionId(null);
+
+    const handleDelete = () => {
+        deleteCollection(collectionId);
+        clearActiveCollectionUi();
+    }
+
+    return (
+        <Modal
+            isOpen={true}
+            title="Delete Collection"
+            onClose={toggleDeleteModal}
+            className="aspect-video"
+        >
+            <div className="flex w-full h-full flex-col items-center justify-center pb-2 gap-4">
+                <p className='text-center text-dark-grey/80 text-sm'>Are you sure you want to delete this collection? This action cannot be undone.</p>
+                <motion.button
+                    onClick={handleDelete}
+                    whileTap={{ scale: 0.95 }}
+                    className='bg-rose-500 hover:bg-rose-600 transition-colors text-white w-full p-3 rounded-2xl cursor-pointer text-sm font-medium'>
+                    Delete Permanently
+                </motion.button>
+            </div>
+        </Modal>
+    )
+}
+
+export default DeleteModal
