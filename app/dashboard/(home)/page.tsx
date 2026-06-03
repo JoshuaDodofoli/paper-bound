@@ -1,11 +1,11 @@
 'use client'
 
-import { useDraggableScroll } from "@/app/hooks/useDraggableScroll";
+import { useDraggableScroll } from "@/hooks/gestures/useDraggableScroll";
 import BookCard from "../(components)/book/BookCard";
-import Wrapper from "@/app/components/Wrapper";
+import Wrapper from "@/components/primitives/Wrapper";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { MOCK_BOOKS } from "../../lib/books";
+import { MOCK_BOOKS } from "@/domain/books/fixtures";
 
 const Page = () => {
 

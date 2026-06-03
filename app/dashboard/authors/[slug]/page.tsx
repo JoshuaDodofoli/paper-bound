@@ -1,7 +1,7 @@
 import AuthorClient from '../(components)/AuthorClient'
-import BackButton from '../../(components)/ui/BackButton';
-import { getAuthor } from '@/app/lib/utils/HardCoverSearch';
-import { Author } from '@/app/lib/interface';
+import BackButton from '@/components/primitives/BackButton';
+import { getAuthor } from '@/domain/catalog/hardcover';
+import type { Author } from '@/domain/authors/types';
 
 interface AuthorPageProps {
   params: Promise<{ slug: string }>
