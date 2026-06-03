@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { LogOut, Trash2, Palette, ShieldAlert, MapPin, Calendar, Clock, BookOpen, Library, Edit3, ChevronRight, ChevronLeft, Share } from 'lucide-react'
 import Image from 'next/image'
 import BackButton from '../(components)/ui/BackButton'
-import { useToast } from '@/app/lib/hooks/useToast'
+import { useToast } from '@/app/hooks/useToast'
 import Toast from '../(components)/ui/Toast'
 import EditProfileModal from '../(components)/ui/EditProfileModal'
 
@@ -134,7 +134,7 @@ const ProfilePage = () => {
               </h3>
             </div>
 
-            <div className='bg-white border border-stone/20 rounded-[32px] p-6 shadow-sm flex flex-col md:flex-row gap-8 items-center md:items-start'>
+            <div className='bg-white border border-stone/20 rounded-4xl p-6 shadow-sm flex flex-col md:flex-row gap-8 items-center md:items-start'>
               <div className='w-32 aspect-3/4 bg-stone/10 rounded-lg shadow-book overflow-hidden relative group shrink-0'>
                 <div className='absolute inset-0 bg-linear-to-tr from-black/20 to-transparent' />
                 {/* Placeholder for book cover */}

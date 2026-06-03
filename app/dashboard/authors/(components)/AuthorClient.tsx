@@ -83,7 +83,7 @@ const AuthorClient = ({ author }: { author: Author }) => {
                     href={author.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-medium text-dark-grey/80 hover:underline truncate max-w-[200px]"
+                    className="text-sm font-medium text-dark-grey/80 hover:underline truncate max-w-50"
                   >
                     {author.website.replace('https://', '').replace('www.', '')}
                   </a>
@@ -92,7 +92,7 @@ const AuthorClient = ({ author }: { author: Author }) => {
               {author.topWork && (
                 <div className="flex flex-col gap-2">
                   <span className="text-xs uppercase font-bold text-dark-grey/60">Top Work</span>
-                  <span className="text-sm font-medium text-dark-grey/80 italic truncate max-w-[200px]">{author.topWork}</span>
+                  <span className="text-sm font-medium text-dark-grey/80 italic truncate max-w-50">{author.topWork}</span>
                 </div>
               )}
               {author.workCount !== undefined && author.workCount > 0 && (

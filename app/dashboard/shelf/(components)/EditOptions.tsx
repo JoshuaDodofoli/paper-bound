@@ -3,7 +3,7 @@
 import React from 'react'
 import { FolderPen, Share, Trash2 } from 'lucide-react'
 import { useCollectionStore } from '@/app/lib/store'
-import { useToast } from '@/app/lib/hooks/useToast';
+import { useToast } from '@/app/hooks/useToast';
 import Toast from '../../(components)/ui/Toast';
 import { DropdownItem } from '@/app/lib/interface';
 import Dropdown from '../../(components)/ui/Dropdown';
