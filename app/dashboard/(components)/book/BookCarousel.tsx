@@ -23,7 +23,7 @@ export default function BookCarousel({ books, aspectRatio, width }: BookCarousel
         select-none active:cursor-grabbing
       `}
     >
-      {books.map((book) => (
+      {books.map((book, index) => (
         <BookCard
           key={book.id}
           id={book.id ?? book.key}
@@ -34,6 +34,7 @@ export default function BookCarousel({ books, aspectRatio, width }: BookCarousel
           coverColor={book.color ?? 'bg-stone'}
           aspectRatio={aspectRatio}
           width={width}
+          priority={index < 2}
         />
       ))}
     </div>

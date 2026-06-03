@@ -54,7 +54,7 @@ const BookSeries = ({ book }: { book: Book }) => {
                             {...seriesScroll.props}
                             className="flex gap-6 overflow-x-auto no-scrollbar pb-4 pt-2"
                         >
-                            {book.seriesBooks.map((sb) => (
+                            {book.seriesBooks.map((sb, index) => (
                                 <div key={sb.key} className="relative shrink-0 select-none">
                                     <BookCard
                                         id={sb.key}
@@ -62,6 +62,7 @@ const BookSeries = ({ book }: { book: Book }) => {
                                         title={sb.title}
                                         author={sb.author}
                                         coverUrl={sb.coverUrl}
+                                        priority={index < 2}
                                     />
                                     {sb.position !== null && (
                                         <div className="absolute bottom-0 right-0 bg-[#F2A900] text-black px-3.5 py-1.5 text-sm font-black tracking-wide rounded-tl-md z-30 shadow-[0_-2px_8px_rgba(0,0,0,0.15)] pointer-events-none select-none">

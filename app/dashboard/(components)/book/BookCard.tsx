@@ -14,6 +14,7 @@ interface BookCardProps {
     coverColor?: string;
     aspectRatio?: string;
     width?: string;
+    priority?: boolean;
 }
 
 const BookCard = ({
@@ -24,7 +25,8 @@ const BookCard = ({
     coverUrl,
     coverColor = "bg-red-200",
     aspectRatio = "aspect-3/4",
-    width = "w-44"
+    width = "w-44",
+    priority = false
 }: BookCardProps) => {
     const [imageError, setImageError] = React.useState(false);
 
@@ -43,6 +45,7 @@ const BookCard = ({
                         className="object-cover object-center"
                         onError={() => setImageError(true)}
                         sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, 25vw"
+                        priority={priority}
                     />
                 ) : (
                     <div className="absolute inset-0 p-4 flex flex-col justify-between bg-[#fbfaf8] text-dark-grey border-l-4 border-l-amber-900/20 select-none">

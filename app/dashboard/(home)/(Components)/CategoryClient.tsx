@@ -29,7 +29,7 @@ const CategoryClient = ({ slug, books }: CategoryClientProps) => {
         </h1>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {books.map((book) => (
+          {books.map((book, index) => (
             <BookCard
               key={book.id ?? book.key}
               id={book.id ?? book.key}
@@ -40,6 +40,7 @@ const CategoryClient = ({ slug, books }: CategoryClientProps) => {
               coverColor={book.color}
               aspectRatio="aspect-3/4"
               width="w-full"
+              priority={index < 6}
             />
           ))}
         </div>

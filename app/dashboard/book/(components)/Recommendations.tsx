@@ -56,7 +56,7 @@ const Recommendations = ({ book }: { book: Book }) => {
                                     {...recScroll.props}
                                     className="flex gap-6 overflow-x-auto no-scrollbar pb-4 pt-2"
                                 >
-                                    {book.recommendations.map((rec) => (
+                                    {book.recommendations.map((rec, index) => (
                                         <div key={rec.key} className="relative shrink-0 select-none">
                                             <BookCard
                                                 id={rec.key}
@@ -64,6 +64,7 @@ const Recommendations = ({ book }: { book: Book }) => {
                                                 title={rec.title}
                                                 author={rec.author}
                                                 coverUrl={rec.coverUrl}
+                                                priority={index < 2}
                                             />
                                         </div>
                                     ))}

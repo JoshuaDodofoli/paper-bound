@@ -99,7 +99,7 @@ const page = async ({ params }: slugProps) => {
                 <div className='flex flex-col gap-8'>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {MOCK_BOOKS.map((book) => (
+                        {MOCK_BOOKS.map((book, index) => (
                             <BookCard
                                 key={book.id}
                                 id={book.id}
@@ -108,6 +108,7 @@ const page = async ({ params }: slugProps) => {
                                 author={book.author}
                                 coverColor={book.color}
                                 aspectRatio="aspect-3/4"
+                                priority={index < 6}
                             />
                         ))}
                     </div>

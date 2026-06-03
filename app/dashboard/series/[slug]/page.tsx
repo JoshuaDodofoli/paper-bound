@@ -72,7 +72,7 @@ const SeriesPage = async ({ params }: SeriesPageProps) => {
                     {/* Grid of Books */}
                     <div className="pt-8 border-t border-black/5">
                         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-10 gap-x-6">
-                            {seriesDetails.books.map((sb: any) => (
+                            {seriesDetails.books.map((sb: any, index: number) => (
                                 <div key={sb.key} className="relative select-none flex flex-col items-center">
                                     <BookCard
                                         id={sb.key}
@@ -82,6 +82,7 @@ const SeriesPage = async ({ params }: SeriesPageProps) => {
                                         coverUrl={sb.coverUrl}
                                         width="w-full"
                                         aspectRatio="aspect-2/3"
+                                        priority={index < 8}
                                     />
                                     {sb.position !== null && (
                                         <div className="absolute bottom-0 right-0 bg-[#F2A900] text-black px-3 py-1 text-xs font-black tracking-wide rounded-tl-md z-30 shadow-[0_-2px_8px_rgba(0,0,0,0.15)] pointer-events-none select-none">

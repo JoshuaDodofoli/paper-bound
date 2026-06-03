@@ -142,7 +142,7 @@ const AuthorClient = ({ author }: { author: Author }) => {
               {...worksScroll.props}
               className="flex gap-6 overflow-x-auto no-scrollbar pb-4"
             >
-              {author.works.map((book) => (
+              {author.works.map((book, index) => (
                 <BookCard
                   key={book.id || book.key}
                   id={book.id || book.key}
@@ -151,6 +151,7 @@ const AuthorClient = ({ author }: { author: Author }) => {
                   author={book.author}
                   coverUrl={book.coverUrl ?? undefined}
                   width="w-52"
+                  priority={index < 2}
                 />
               ))}
             </div>

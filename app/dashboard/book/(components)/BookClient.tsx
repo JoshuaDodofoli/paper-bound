@@ -53,9 +53,9 @@ const BookClient = ({ book }: { book: Book }) => {
                             animate={{ y: 0, opacity: 1 }}
                             className="space-y-4"
                         >
-                            {(book.rating || book.ratingsCount) && (
+                            {(book.rating !== undefined && book.rating !== null) || book.ratingsCount ? (
                                 <div className="flex items-center gap-4 mb-2">
-                                    {book.rating && (
+                                    {book.rating !== undefined && book.rating !== null && (
                                         <div className="flex items-center gap-1 bg-amber-400/10 text-amber-500 px-3 py-1 rounded-full text-sm font-bold w-fit">
                                             <Star size={16} fill="currentColor" className="fill-amber-500" />
                                             {Number(book.rating.toFixed(1))}
@@ -68,7 +68,7 @@ const BookClient = ({ book }: { book: Book }) => {
                                         </div>
                                     )}
                                 </div>
-                            )}
+                            ) : ''}
 
                             <h1 className="text-3xl md:text-4xl font-serif font-bold text-dark-grey leading-[1.1] tracking-tight">
                                 {book.title}

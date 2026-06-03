@@ -48,6 +48,7 @@ export default function SearchClient({ query, results }: SearchClientProps) {
                                     coverUrl={book.coverUrl}
                                     coverColor={coverColor}
                                     width="w-full"
+                                    priority={index < 8}
                                 />
                             );
                         })}
