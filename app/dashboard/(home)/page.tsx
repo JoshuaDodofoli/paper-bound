@@ -1,17 +1,28 @@
 'use client'
 
-import { useDraggableScroll } from "@/app/hooks/useDraggableScroll";
-import BookCard from "../(components)/book/BookCard";
-import Wrapper from "@/app/components/Wrapper";
+import { useDraggableScroll } from "@/hooks/gestures/useDraggableScroll";
+import { MOCK_BOOKS } from "@/domain/books/fixtures";
+import BookCard from "@/components/domain/books/BookCard";
+import Wrapper from "@/components/primitives/Wrapper";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { MOCK_BOOKS } from "../../lib/books";
 
 const Page = () => {
-
-  const readingScroll = useDraggableScroll();
-  const trendingScroll = useDraggableScroll();
-  const arrivalsScroll = useDraggableScroll();
+  const {
+    containerRef: readingContainerRef,
+    dragHandlers: readingDragHandlers,
+    isDragging: isReadingDragging,
+  } = useDraggableScroll();
+  const {
+    containerRef: trendingContainerRef,
+    dragHandlers: trendingDragHandlers,
+    isDragging: isTrendingDragging,
+  } = useDraggableScroll();
+  const {
+    containerRef: arrivalsContainerRef,
+    dragHandlers: arrivalsDragHandlers,
+    isDragging: isArrivalsDragging,
+  } = useDraggableScroll();
 
   return (
     <div className="mt-14">
@@ -24,11 +35,11 @@ const Page = () => {
           </Link>
 
           <div
-            ref={readingScroll.ref}
-            {...readingScroll.props}
+            ref={readingContainerRef}
+            {...readingDragHandlers}
             className={`
             flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
-            ${readingScroll.isDragging ? 'cursor-grabbing `**:pointer-events-none' : 'cursor-grab'}
+            ${isReadingDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
           >
@@ -57,11 +68,11 @@ const Page = () => {
           </Link>
 
           <div
-            ref={trendingScroll.ref}
-            {...trendingScroll.props}
+            ref={trendingContainerRef}
+            {...trendingDragHandlers}
             className={`
             flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
-            ${trendingScroll.isDragging ? 'cursor-grabbing `**:pointer-events-none' : 'cursor-grab'}
+            ${isTrendingDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
           >
@@ -112,11 +123,11 @@ const Page = () => {
           </Link>
 
           <div
-            ref={arrivalsScroll.ref}
-            {...arrivalsScroll.props}
+            ref={arrivalsContainerRef}
+            {...arrivalsDragHandlers}
             className={`
             flex gap-6 overflow-x-auto pt-2 pb-8 px-4 -mt-2 -mb-8 -mx-4 flex-nowrap no-scrollbar carousel-fade
-            ${arrivalsScroll.isDragging ? 'cursor-grabbing `**:pointer-events-none' : 'cursor-grab'}
+            ${isArrivalsDragging ? 'cursor-grabbing' : 'cursor-grab'}
             select-none active:cursor-grabbing
           `}
           >

@@ -1,4 +1,4 @@
-import CategoryClient from "../(Components)/CategoryClient";
+import CategoryClient from "../_components/CategoryClient";
 
 export default async function CategoryPage({
   params,

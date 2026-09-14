@@ -1,6 +1,6 @@
-import { MOCK_BOOKS } from '../../../lib/books'
-import BookClient from '../(components)/BookClient'
-import BackButton from '../../(components)/ui/BackButton'
+import { getBookBySlug } from '@/domain/books/queries'
+import BookClient from '../_components/BookClient'
+import BackButton from '@/components/primitives/BackButton'
 
 interface bookPageProps {
     params: Promise<{ slug: string }>
@@ -9,7 +9,7 @@ interface bookPageProps {
 const BookDetailsPage = async ({ params }: bookPageProps) => {
 
     const { slug } = await params;
-    const book = MOCK_BOOKS.find(b => b.slug === slug);
+    const book = getBookBySlug(slug);
 
     if (!book) {
         return (
