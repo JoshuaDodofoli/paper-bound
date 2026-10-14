@@ -1,8 +1,6 @@
 # Paper Bound
 
 **Paper Bound**
-I'll update this later.
-
-Lol.
+A platform where readers can explore, find, share interesting books, and create collections.  
 
 <!-- Built with ❤️ for book lovers. -->
